@@ -10,4 +10,9 @@ class Credential extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function alamat()
+    {
+        return $this->belongsTo(Alamat::class);
+    }
 }

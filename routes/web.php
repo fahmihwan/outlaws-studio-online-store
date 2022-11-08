@@ -11,7 +11,7 @@ use App\Http\Controllers\Toko\Cart_WishlistController;
 use App\Http\Controllers\Toko\CheckoutController;
 use App\Http\Controllers\Toko\CustomerController;
 use App\Http\Controllers\Toko\LandingpageController;
-
+use App\Http\Controllers\Toko\RajaOngkirController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,14 +48,20 @@ Route::middleware(['auth'])->group(function () {
 
     // checkout
     Route::get('/checkout/pengiriman', [CheckoutController::class, 'pengiriman']);
+    Route::put('/checkout/pengiriman/{id_alamat}/set_alamat_primary', [CheckoutController::class, 'set_alamat_primary_customer']);
+    Route::get('/checkout/alamat-pengiriman/province', [RajaOngkirController::class, 'get_province']);
+    Route::get('/checkout/alamat-pengiriman/province/{id}/city', [RajaOngkirController::class, 'get_city']);
+    Route::get('/checkout/alamat-pengiriman/province/{city_id}/city/{province_id}', [RajaOngkirController::class, 'get_postal_code']);
+    Route::get('/checkout/alamat-pengiriman/{courier}/cost', [RajaOngkirController::class, 'get_cost']);
+
     Route::get('/checkout/cart', [CheckoutController::class, 'keranjang']);
     Route::put('/checkout/cart/{id}/ajax', [Cart_WishlistController::class, 'update_cart_ajax']);
     Route::get('/checkout/cart/{id}/edit-cart', [Cart_WishlistController::class, 'edit_cart']);
 
     // alaamt
     Route::post('/alamat', [AlamatController::class, 'store']);
-
-    Route::get('/checkout/pay',[CheckoutController::class,'payment_midtrans']);
+    Route::get('/checkout/pembayaran', [CheckoutController::class, 'pembayaran']);
+    Route::get('/checkout/pembayaran/pay', [CheckoutController::class, 'pay']);
 });
 
 Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');

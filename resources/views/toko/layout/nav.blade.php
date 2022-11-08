@@ -305,7 +305,7 @@
                     <div class="">
                         <button type="submit"
                             class="w-full mb-0  text-white bg-black border-2 border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm px-5 py-3 text-center
-                        hover:bg-white hover:text-black 
+                        hover:bg-white hover:text-black
                         hover:duration-300
                         ">
                             Masuk

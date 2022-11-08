@@ -16,13 +16,13 @@ class AlamatController extends Controller
             'alamat' => 'required',
             'provinsi' => 'required',
             'kota' => 'required',
-            'kecamatan' => 'required',
-            'kode_pos' => 'required',
+            'kode_pos' => 'required|numeric',
             'telp' => 'required|numeric'
         ]);
 
         $validated['telp'] = '62' . $validated['telp'];
         $validated['user_id'] = auth()->user()->id;
+
         Alamat::create($validated);
         return redirect()->back();
     }

@@ -17,10 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama_depan');
             $table->string('nama_belakang');
-            $table->string('alamat');
             $table->string('provinsi');
             $table->string('kota');
-            $table->string('kecamatan');
+            $table->string('alamat');
             $table->string('kode_pos');
             $table->foreignId('user_id')->nullable();
             $table->string('telp');

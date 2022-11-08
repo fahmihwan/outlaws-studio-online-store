@@ -1,7 +1,7 @@
 @extends('toko.layout.main_checkout')
 
 @section('container-checkout')
-    <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-0  ">
+    <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-14  ">
         <div class="border h-full">
 
             {{-- tabs --}}
@@ -17,14 +17,34 @@
             </div>
 
 
+            @if ($errors->any())
+                <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                    role="alert">
+                    <div>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span class="font-medium">Ensure that these requirements are met:</span>
+                        <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
 
             <div class="pt-10 border-b-2 border-gray-200 pb-3  mx-5 ">
                 ALAMAT PENGIRIMAN
             </div>
             <div class="flex flex-wrap " id="radio-group">
-                {{-- @foreach ($alamats as $alamat)
-                    <section class="cek-alamat text-sm border-2 p-3 border-black flex w-full md:w-1/3 m-3 cursor-pointer">
-                        <article class="w-5/6">
+
+                @foreach ($alamats as $alamat)
+                    <section class="cek-alamat text-sm  w-full md:w-1/3 m-3 cursor-pointer relative">
+                        <input type="radio" name="alamat" value="{{ $alamat->id }}" id="alamat-{{ $loop->iteration }}"
+                            class="input-alamat peer hidden absolute top-0 right-0"
+                            {{ $alamat->credential != null ? 'checked' : '' }}>
+                        <i class="hidden peer-checked:block fa-solid fa-check absolute  top-0 right-3 text-2xl"></i>
+                        <label for="alamat-{{ $loop->iteration }}"
+                            class="label-alamat  peer-checked:border-black peer-checked:text-black  text-gray-300 border-gray-300 cursor-pointer label-alamat w-full h-full  border-2  p-3 flex ">
                             <ul>
                                 <li class="mb-1">
                                     {{ $alamat->nama_depan }} {{ $alamat->nama_belakang }}
@@ -33,92 +53,16 @@
                                     {{ $alamat->alamat }}
                                 </li>
                                 <li class="mb-1">
-                                    {{ $alamat->kota }}/{{ $alamat->kecamatan }}, {{ $alamat->provinsi }}
+                                    {{ $alamat->kota }}, {{ $alamat->provinsi }}
                                     {{ $alamat->kode_pos }}
                                 </li>
                                 <li class="mb-1">
                                     {{ $alamat->telp }}
                                 </li>
                             </ul>
-                        </article>
-                        <div class=" w-1/6 text-center">
-                            <input class="radio-box-alamat" type="radio" name="alamat" value="1">
-                        </div>
+                        </label>
                     </section>
-                @endforeach --}}
-
-
-                {{-- <label class="cek-alamat text-sm border-2 p-3 border-black flex w-full md:w-1/3 m-3 cursor-pointer"
-                    for="alamat-1">
-                    <div class="w/5/6">
-                        <ul>
-                            <li class="mb-1">
-                                bumi balakosa
-                            </li>
-                            <li class="mb-1">
-                                maospati, kraton
-                            </li>
-                            <li class="mb-1">
-                                Kab. Kepahiang/Seberang Musi, Bengkulu 63392
-                            </li>
-                            <li class="mb-1">
-                                082334337393
-                            </li>
-                        </ul>
-                    </div>
-
-                </label>
-                <div class=" w-1/6 text-center">
-                    <input id="alamat-1" class="radio-box-alamat" type="radio" name="alamat" value="1">
-                </div> --}}
-
-
-                <section class="cek-alamat text-sm  w-full md:w-1/3 m-3 cursor-pointer relative">
-                    <label for="alamat-1" class="label-alamat w-full border-2 p-3 flex ">
-                        <ul>
-                            <li class="mb-1">
-                                bumi balakosa
-                            </li>
-                            <li class="mb-1">
-                                maospati, kraton
-                            </li>
-                            <li class="mb-1">
-                                Kab. Kepahiang/Seberang Musi, Bengkulu 63392
-                            </li>
-                            <li class="mb-1">
-                                082334337393
-                            </li>
-                        </ul>
-                    </label>
-                    {{-- <i class="fa-solid fa-check absolute top-0 right-5 text-2xl"></i> --}}
-                    <input id="alamat-1" class="radio-alamat absolute top-0 right-0" type="radio" name="alamat"
-                        value="1">
-                </section>
-
-                <section class="cek-alamat text-sm  w-full md:w-1/3 m-3 cursor-pointer relative">
-                    <label for="alamat-2" class="label-alamat w-full border-2 p-3 flex ">
-                        <ul>
-                            <li class="mb-1">
-                                bumi balakosa
-                            </li>
-                            <li class="mb-1">
-                                maospati, kraton
-                            </li>
-                            <li class="mb-1">
-                                Kab. Kepahiang/Seberang Musi, Bengkulu 63392
-                            </li>
-                            <li class="mb-1">
-                                082334337393
-                            </li>
-                        </ul>
-                    </label>
-                    {{-- <i class="fa-solid fa-check absolute top-0 right-5 text-2xl"></i> --}}
-                    <input id="alamat-2" class="radio-alamat absolute top-0 right-0" type="radio" name="alamat"
-                        value="2">
-                </section>
-
-
-
+                @endforeach
 
 
             </div>
@@ -126,44 +70,42 @@
             <button class="block px-4  underline focus:ring-0" type="button" data-modal-toggle="authentication-modal">
                 Tambah alamat baru
             </button>
+
+
+            <div class="pt-2 border-b-2  mt-16 border-gray-200 pb-3  mx-5 mb-4">
+                <p class="font-extrabold">METODE PENGEIRIMAN</p>
+            </div>
+
+
+            <div class="mx-5 mb-5">
+                <label for="" class="mb-1 inline-block">Metode pengiriman <span class="text-red-600 ">*</span>
+                </label><br>
+
+                <select id="metode_pengiriman" class="border-2 bg-white border-black" name="">
+                    <option value="">pilih metode pengiriman</option>
+                    <option value="jne">JNE</option>
+                    <option value="pos">POS</option>
+                    <option value="tiki">TIKI</option>
+                </select>
+            </div>
+
+            <div id="list-layanan-ongkir">
+                {{-- layana --}}
+
+            </div>
+
+
+
+            <a href="/checkout/pembayaran"
+                class="bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
+                Selanjutnya
+            </a>
         </div>
+
     </div>
 
+    @include('toko.components.sidebarCheckout')
 
-    <div class="border w-full md:w-1/3">
-        <div class="w-[90%] pt-5 mx-auto font-bold">
-            Ringkasan Berbelanja
-        </div>
-        <div class="w-90% p-3  ">
-            @foreach ($items as $item)
-                <div class="flex border-t-2 pt-2 pb-7">
-                    <img class="w-24 mr-3" src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
-                    <article>
-                        {{ $item->item->nama }}<br>
-                        Jumlah : {{ $item->qty }} <br>
-                        Size : {{ $item->ukuran->nama }} <br>
-                    </article>
-                </div>
-            @endforeach
-
-            {{-- <div class="flex border-t-2 pt-2 pb-7">
-                <img class="w-24" src="/src/img-outlaws/2.jpg" alt="">
-                <article>
-                    Converse tes tes tes <br>
-                    Jumlah : 1 <br>
-                    Size : 2 <br>
-                </article>
-            </div> --}}
-        </div>
-        <div class="flex justify-between p-3">
-            <span class="font-light text-sm">Sub Total</span>
-            <span>Rp. 2.399.000</span>
-        </div>
-        <div class="border flex justify-between p-3 ">
-            <span class="font-light text-sm">Total</span>
-            <span class="font-extrabold">Rp. 2.399.000</span>
-        </div>
-    </div>
 
     <!-- Main modal -->
     <div id="authentication-modal" tabindex="-1" aria-hidden="true"
@@ -201,19 +143,13 @@
                                     class=" w-3/4 border border-gray-400   text-gray-900 text-sm  h-8"
                                     placeholder="Nama Belakang" required="">
                             </div>
-                            <div class=" w-full mb-2 md:mb-8">
-                                <label for="alamat" class="block mb-1 text-xs font-normal text-gray-900 ">Alamat
-                                    <span class="text-red-700">*</span></label>
-                                <input type="text" name="alamat" id="alamat"
-                                    class=" w-3/4 border border-gray-400   text-gray-900 text-sm  h-8" placeholder="Alamat"
-                                    required="">
-                            </div>
+
                             <div class=" w-full  mb-2 md:mb-8">
                                 <label for="" class="block mb-1 text-xs font-normal text-gray-900 ">Negara
                                     <span class="text-red-700">*</span></label>
                                 <input type="text" name="" id=""
-                                    class=" w-3/4 border border-gray-400  text-gray-900 text-sm  h-8" placeholder="negara"
-                                    value="Indonesia" readonly required="">
+                                    class=" w-3/4 border border-gray-400 bg-gray-50 text-gray-900 text-sm  h-8"
+                                    placeholder="negara" value="Indonesia" readonly required="">
                             </div>
                             <div class=" w-full mb-2 md:mb-8">
                                 <label for="provinsi" class="block mb-1 text-xs font-normal text-gray-900 ">Provinsi
@@ -232,19 +168,20 @@
                                 </select>
                             </div>
                             <div class=" w-full mb-2 md:mb-8">
-                                <label for="kecamatan" class="block mb-1 text-xs font-normal text-gray-900 ">Kecamatan
-                                    <span class="text-red-700">*</span></label>
-                                <select name="kecamatan" id="kecamatan"
-                                    class=" w-3/4 py-0 border border-gray-400  text-gray-900 text-sm  h-8" required>
-                                </select>
+                                <label for="kode_pos" class="block mb-1 text-xs font-normal text-gray-900 ">Kode Pos
+                                    <span class="text-red-700">*</span> </label>
+                                <input type="text" name="kode_pos" id="kode_pos"
+                                    class=" w-3/4 border border-gray-400 bg-gray-100   text-gray-900 text-sm  h-8"
+                                    placeholder="Kode pos" required readonly>
                             </div>
                             <div class=" w-full mb-2 md:mb-8">
-                                <label for="kode_pos" class="block mb-1 text-xs font-normal text-gray-900 ">Kode Pos
-                                    <span class="text-red-700">*</span></label>
-                                <input type="text" name="kode_pos" id="kode_pos"
-                                    class=" w-3/4 border border-gray-400   text-gray-900 text-sm  h-8"
-                                    placeholder="Kode pos" required>
+                                <label for="alamat" class="block mb-1 text-xs font-normal text-gray-900 ">Alamat
+                                    <span class="text-red-700">* tuliskan alamat secara detail</span></label>
+                                <input type="text" name="alamat" id="alamat"
+                                    class=" w-3/4 border  border-gray-400   text-gray-900 text-sm  h-20"
+                                    placeholder="Alamat" required="">
                             </div>
+
                             <div class=" w-full mb-2 md:mb-8">
                                 <label for="nama_depan" class="block mb-1 text-xs font-normal text-gray-900 ">Nomor
                                     Telepon
@@ -274,126 +211,161 @@
                             <button type="submit"
                                 class="w-full text-white mt-7 ml-2 bg-black border border-black hover:bg-white hover:text-black duration-300 focus:ring-0 focus:outline-none  font-medium  text-sm px-5 py-2.5 text-center ">Tambahkan</button>
                         </div>
+                    </form>
                 </div>
-                </form>
 
 
             </div>
         </div>
     </div>
-    </div>
+
 @endsection
 
 @section('script')
-    <script id="midtrans-script" type="text/javascript" src="https://api.midtrans.com/v2/assets/js/midtrans-new-3ds.min.js"
-        data-environment="sandbox" data-client-key="SB-Mid-client-8TLIpQcwFzXQGo9i"></script>
     <script>
-
-        
         $(document).ready(function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            const active = "border-black text-black";
-            const nonActive = "border-gray-300 text-gray-400";
-
-            $('.radio-alamat').each(function() {
-                if ($('.radio-alamat').is(':checked')) {
-                    console.log($(this))
-                    $(this)
-                } else {
-                    console.log($(this))
+            let id_provinsi = '';
+            let id_kota = '';
+            $.ajax({
+                url: '/checkout/alamat-pengiriman/province',
+                type: 'GET',
+                dataType: "json",
+                success: function(res) {
+                    let prov = '';
+                    $('#provinsi').append(prov)
+                    if (res.rajaongkir.status.code != 400) {
+                        let prov = '';
+                        res.rajaongkir.results.forEach(e => {
+                            prov +=
+                                `<option value="${e.province}" data-id="${e.province_id}">${e.province}</option>`;
+                        });
+                        $('#provinsi').append(prov)
+                    }
+                },
+                error: function(err) {
+                    alert(err)
                 }
             })
 
 
-
-
-
-
-
-
-
-
-
-
-
-            $.ajax({
-                url: 'http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json',
-                type: 'GET',
-                success: function(res) {
-                    let prov = '';
-                    res.forEach(data => {
-                        prov +=
-                            `<option value="${data.name}" data-id="${data.id}">${data.name}</option>`;
-                    });
-                    $('#provinsi').append(prov)
-                }
-            });
-
             $('#provinsi').change(function() {
                 let id = $(this).find(':selected').attr('data-id')
+                id_provinsi = id;
                 $.ajax({
-                    url: `http://www.emsifa.com/api-wilayah-indonesia/api/regencies/${id}.json`,
+                    url: `/checkout/alamat-pengiriman/province/${id}/city`,
                     type: 'GET',
+                    dataType: "json",
                     success: function(res) {
                         let kota = ''
                         $('#kota').html('')
-                        $('#kota').append(
-                            `<option value="" selected> Pilih kota </option>`
-                        )
-                        res.forEach(data => {
+                        $('#kota').append(`<option value="" > Pilih Kabupate / Kota</option>`)
+                        res.rajaongkir.results.forEach(e => {
                             kota +=
-                                `<option value="${data.name}" data-id="${data.id}">${data.name}</option>`;
+                                `<option value="${e.city_name}" data-id="${e.city_id}">${e.city_name}</option>`;
                         });
                         $('#kota').append(kota)
+                    },
+                    error: function(err) {
+                        alert(err)
                     }
                 })
             })
 
             $('#kota').change(function() {
                 let id = $(this).find(':selected').attr('data-id')
+                id_kota = id
                 $.ajax({
-                    url: `http://www.emsifa.com/api-wilayah-indonesia/api/districts/${id}.json`,
+                    url: `/checkout/alamat-pengiriman/province/${id_kota}/city/${id_provinsi}`,
                     type: 'GET',
+                    dataType: "json",
                     success: function(res) {
-                        $('#kecamatan').html('')
-                        $('#kecamatan').append(
-                            `<option value="" selected> Pilih kecamatan </option>`
-                        )
-                        let kecamatan = '';
-                        res.forEach(data => {
-                            kecamatan +=
-                                `<option value="${data.name}" data-id="${data.id}">${data.name}</option>`;
-                        });
-                        $('#kecamatan').append(kecamatan)
+                        $('#kode_pos').val('')
+                        $('#kode_pos').val(res.rajaongkir.results.postal_code)
+                    },
+                    error: function(err) {
+                        alert(err)
                     }
+                })
+            })
+
+
+            $('#metode_pengiriman').change(function() {
+                $.ajax({
+                    url: `/checkout/alamat-pengiriman/${$(this).val()}/cost`,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(res) {
+                        let listText = ''
+                        $('#list-layanan-ongkir').html('')
+                        let response = res.rajaongkir.results;
+
+                        response[0].costs.forEach((data, increment) => {
+                            listText += `<div class="relative mb-3 ">
+                        <input type="radio" name='ongkir' id="paket-${increment+1}" class="absolute top-8 left-8 lg:left-11">
+                        <label for="paket-${increment+1}" class="border-2  mx-5 h-20 cursor-pointer flex justify-end">
+                            <div class=" flex items-center justify-between w-11/12 pr-5">
+                                <div class="flex items-center">
+                                    <p class="text-xl font-bold mr-3 border-r-2 py-3 pr-2">${data.service}</p>
+                                    <div>
+                                        <p class="text-xs">${data.description}</p>
+                                        <p class="text-xs">Estimasi : ${data.cost[0].etd} Hari</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    Rp ${data.cost[0].value}
+                                </div>
+                            </div>
+                        </label>
+                     </div>`
+                        });
+
+                        $('#list-layanan-ongkir').append(listText)
+
+
+                    },
+                    error: function(err) {
+                        alert(err)
+                    }
+                })
+            })
+
+            $('.label-alamat').each(function() {
+                $(this).click(function() {
+                    let idAlamat = $(this).closest('.cek-alamat').find('.input-alamat').val()
+                    $.ajax({
+                        url: `/checkout/pengiriman/${idAlamat}/set_alamat_primary`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(res) {
+                            // console.log(res)
+                            window.location.href = '/checkout/pengiriman';
+                            alert('alamat pengiriman anda sekarang : ' + res.data)
+                            // alert('alamat utama sudah di ubah: ' + res.data)
+                        },
+                        error: function(err) {
+                            alert(err)
+                        }
+
+                    })
                 })
             })
 
 
 
 
+            // const boxes = document.querySelectorAll('.label-alamat');
+
+            // boxes.forEach(box => {
+            //     box.addEventListener('click', function handleClick(event) {
+            //         console.log(event.tar)
+            //     });
+            // });
         })
     </script>
 @endsection
