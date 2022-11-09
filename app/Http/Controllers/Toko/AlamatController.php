@@ -16,6 +16,7 @@ class AlamatController extends Controller
             'alamat' => 'required',
             'provinsi' => 'required',
             'kota' => 'required',
+            'kota_id' => 'required|numeric',
             'kode_pos' => 'required|numeric',
             'telp' => 'required|numeric'
         ]);

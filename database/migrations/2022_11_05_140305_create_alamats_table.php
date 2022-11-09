@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_belakang');
             $table->string('provinsi');
             $table->string('kota');
+            $table->integer('kota_id');
             $table->string('alamat');
             $table->string('kode_pos');
             $table->foreignId('user_id')->nullable();

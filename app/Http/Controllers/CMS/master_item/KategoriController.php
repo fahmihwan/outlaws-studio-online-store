@@ -40,7 +40,8 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required'
+            'nama' => 'required',
+            'berat' => 'required|numeric'
         ]);
 
         Kategori::create($validated);
@@ -83,7 +84,8 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama' => 'required'
+            'nama' => 'required',
+            'berat' => 'required|numeric'
         ]);
 
         Kategori::where('id', $id)->update($validated);

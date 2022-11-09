@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;
+use App\Models\Credential;
 use Illuminate\Http\Request;
 
 class RajaOngkirController extends Controller
@@ -21,7 +22,7 @@ class RajaOngkirController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "key: 727526adb2fe205d15356397b2d42eda"
+                "key: " . env('RAJA_ONGKIR_KEY')
             ),
         ));
 
@@ -49,7 +50,7 @@ class RajaOngkirController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "key: 727526adb2fe205d15356397b2d42eda"
+                "key: " . env('RAJA_ONGKIR_KEY')
             ),
         ));
 
@@ -77,7 +78,7 @@ class RajaOngkirController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                "key: 727526adb2fe205d15356397b2d42eda"
+                "key: " . env('RAJA_ONGKIR_KEY')
             ),
         ));
 
@@ -96,15 +97,14 @@ class RajaOngkirController extends Controller
 
     public function get_cost($courier)
     {
-        $origin = 501; //tempat asal
-        $destination = 114; //tujuan
+        // tampung ke session
+
+
+        $destination = Credential::select(['id', 'alamat_id'])->with('alamat:id,kota_id')->where('id', auth()->user()->credential_id)->first()->alamat->kota_id;
+        $origin = 501; //tempat asal jogja
         $weight = 1700;
 
         $curl = curl_init();
-
-
-
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
             CURLOPT_RETURNTRANSFER => true,
@@ -113,11 +113,11 @@ class RajaOngkirController extends Controller
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            // CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=pos",
+            CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=pos",
             CURLOPT_POSTFIELDS => "origin=" . $origin . "&destination=" . $destination . "&weight=" . $weight . "&courier=" . $courier,
             CURLOPT_HTTPHEADER => array(
                 "content-type: application/x-www-form-urlencoded",
-                "key: 727526adb2fe205d15356397b2d42eda"
+                "key: " . env('RAJA_ONGKIR_KEY')
             ),
         ));
 

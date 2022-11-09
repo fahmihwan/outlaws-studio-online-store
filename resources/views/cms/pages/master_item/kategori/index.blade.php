@@ -93,6 +93,14 @@
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
                                                     required="" autocomplete="off" placeholder="input kategori">
                                             </div>
+                                            <div>
+                                                <label for="kategori" class="block mb-2 text-sm font-medium text-gray-900 ">
+                                                    berat</label>
+                                                <input type="number" name="berat" id="kategori"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                                                    required="" autocomplete="off" placeholder="berat (gram)">
+                                            </div>
+
 
 
                                             <button type="submit"
@@ -118,6 +126,9 @@
                                     Kategori
                                 </th>
                                 <th scope="col" class="py-3 px-6">
+                                    Berat
+                                </th>
+                                <th scope="col" class="py-3 px-6">
                                     Created at
                                 </th>
                                 <th scope="col" class="py-3 px-6">
@@ -136,6 +147,9 @@
                                     </td>
                                     <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
                                         {{ $item->nama }}
+                                    </th>
+                                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
+                                        {{ $item->berat }}
                                     </th>
                                     <td class="py-4 px-6">
                                         {{ $item->created_at }}

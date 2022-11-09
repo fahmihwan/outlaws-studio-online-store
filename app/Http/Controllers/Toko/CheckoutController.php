@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Keranjang;
-use Illuminate\Http\Request;
+use App\Models\User;
+// use App\Mail\DemoMail;
+
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -30,6 +34,8 @@ class CheckoutController extends Controller
 
     public function pengiriman()
     {
+        // kota_id
+        //
 
         $alamats = Alamat::with('credential:id,alamat_id')->where('user_id', auth()->user()->id)->get();
 
@@ -41,8 +47,9 @@ class CheckoutController extends Controller
 
     public function pembayaran()
     {
+
         // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-M-Ef7A7rQPSKOwbvEW4VkO9s';
+        \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
@@ -72,52 +79,61 @@ class CheckoutController extends Controller
     }
 
 
-
+    // midtrans
     public function pay()
     {
 
-        $data = [
-            "payment_type" => "bank_transfer",
-            "transaction_details" => [
-                "order_id" => "order-107",
-                "gross_amount" => 44000
-            ],
-            "bank_transfer" => [
-                "bank" => "bca"
-            ]
+        $mailData = [
+            'title' => 'Mail from ItSolutionStuff.com',
+            'body' => 'This is for testing email using smtp.'
         ];
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/charge",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
-                'Accept: application/json',
-                'Authorization: Basic U0ItTWlkLXNlcnZlci1NLUVmN0E3clFQU0tPd2J2RVc0VmtPOXM6',
-                'Content-Type: application/json',
-            ),
-        ));
+        // Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($mailData));
+        // bca, bni, bri
+        // $data = [
+        //     "payment_type" => "bank_transfer",
+        //     "transaction_details" => [
+        //         "order_id" => rand(),
+        //         "gross_amount" => 44000
+        //     ],
+        //     "bank_transfer" => [
+        //         "bank" => "bri"
+        //     ]
+        // ];
 
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
+        // $curl = curl_init();
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
-            // return $err;
-        } else {
-            // dd($response);
-            return $response;
-        }
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/charge",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30000,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "POST",
+        //     CURLOPT_POSTFIELDS => json_encode($data),
+        //     CURLOPT_HTTPHEADER => array(
+        //         // Set Here Your Requesred Headers
+        //         'Accept: application/json',
+        //         'Authorization: Basic U0ItTWlkLXNlcnZlci1NLUVmN0E3clFQU0tPd2J2RVc0VmtPOXM6',
+        //         'Content-Type: application/json',
+        //     ),
+        // ));
+
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+        // curl_close($curl);
+
+        // if ($err) {
+        //     echo "cURL Error #:" . $err;
+        //     // return $err;
+        // } else {
+        //     // dd($response);
+        //     return $response;
+        // }
+        return view('toko.layout.transaksi_success');
     }
 
     public function set_alamat_primary_customer($idAlamat)
