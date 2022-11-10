@@ -3,20 +3,6 @@
 @section('container-checkout')
     <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-14  ">
         <div class="border h-full">
-
-            {{-- tabs --}}
-            <div class=" md:flex hidden ">
-                <div class=" border-t-2 p-3  border-emerald-500 w-1/2 inline-block text-center">
-                    <span
-                        class="bg-emerald-500 inline-block  rounded-full w-6 text-center  text-white mr-1">1</span>Pengiriman
-                </div>
-                <div class=" border-t-2 p-3 bg-gray-100  w-1/2 inline-block text-center">
-                    <span class="bg-gray-700 inline-block  rounded-full w-6 text-center text-white mr-1">2
-                    </span>Pembayaran
-                </div>
-            </div>
-
-
             @if ($errors->any())
                 <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
                     role="alert">
@@ -31,6 +17,19 @@
                     </div>
                 </div>
             @endif
+
+
+            {{-- tabs --}}
+            <div class=" md:flex hidden ">
+                <div class=" border-t-2 p-3  border-emerald-500 w-1/2 inline-block text-center">
+                    <span
+                        class="bg-emerald-500 inline-block  rounded-full w-6 text-center  text-white mr-1">1</span>Pengiriman
+                </div>
+                <div class=" border-t-2 p-3 bg-gray-100  w-1/2 inline-block text-center">
+                    <span class="bg-gray-700 inline-block  rounded-full w-6 text-center text-white mr-1">2
+                    </span>Pembayaran
+                </div>
+            </div>
 
             <div class="pt-10 border-b-2 border-gray-200 pb-3  mx-5 ">
                 ALAMAT PENGIRIMAN
@@ -76,50 +75,97 @@
                 <p class="font-extrabold">METODE PENGEIRIMAN</p>
             </div>
 
+            <form action="/checkout/pembayaran" method="GET">
+                <div class="mx-5 mb-5">
+                    <label for="" class="mb-1 inline-block">Metode pengiriman <span class="text-red-600 ">*</span>
+                    </label><br>
 
-            <div class="mx-5 mb-5">
-                <label for="" class="mb-1 inline-block">Metode pengiriman <span class="text-red-600 ">*</span>
-                </label><br>
+                    <select id="metode_pengiriman" required
+                        class="border {{ $alamats->count() == 0 ? 'bg-gray-200' : 'bg-white' }}  border-black"
+                        name="metode_pengiriman" {{ $alamats->count() == 0 ? 'disabled' : '' }}>
+                        <option disabled selected value>pilih metode pengiriman</option>
+                        <option value="jne">JNE</option>
+                        <option value="pos">POS</option>
+                        <option value="tiki">TIKI</option>
+                    </select>
+                </div>
 
-                <select id="metode_pengiriman"
-                    class="border {{ $alamats->count() == 0 ? 'bg-gray-200' : 'bg-white' }}  border-black" name=""
-                    {{ $alamats->count() == 0 ? 'disabled' : '' }}>
-                    <option value="">pilih metode pengiriman</option>
-                    <option value="jne">JNE</option>
-                    <option value="pos">POS</option>
-                    <option value="tiki">TIKI</option>
-                </select>
-            </div>
+                <div id="list-layanan-ongkir">
 
-            <div id="list-layanan-ongkir">
-
-                {{-- <div role="status" class="mx-20 border flex items-ce">
-                    <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-300 animate-spin  fill-blue-600"
-                        viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor" />
-                        <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill" />
-                    </svg>
-                    <span class="">Loading...</span>
-                </div> --}}
-
-
-            </div>
+                    {{-- <div role="status" class="mx-20 border flex items-ce">
+                        <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-300 animate-spin  fill-blue-600"
+                            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                fill="currentColor" />
+                            <path
+                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                fill="currentFill" />
+                        </svg>
+                        <span class="">Loading...</span>
+                    </div> --}}
 
 
+                </div>
 
-            <a href="/checkout/pembayaran"
-                class="bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
-                Selanjutnya
-            </a>
+
+                {{-- <a href="/checkout/pembayaran"
+                    class=" bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
+                    Selanjutnya
+                </a> --}}
+
+                <button
+                    class="bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
+                    Selanjutnya
+                </button>
+            </form>
         </div>
-
     </div>
 
-    @include('toko.components.sidebarCheckout')
+    {{-- @include('toko.components.sidebarCheckout') --}}
+
+    <div class="border h-fit w-full md:w-1/3">
+        <div class="w-[90%] pt-5 mx-auto font-bold">
+            Ringkasan Berbelanja
+        </div>
+        <div class="w-90% p-3  ">
+            @foreach ($items as $item)
+                <div class="flex border-t-2 pt-2 pb-7">
+                    <img class="w-24 mr-3" src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
+                    <article>
+                        {{ $item->item->nama }}<br>
+                        Jumlah : {{ $item->qty }} <br>
+                        Size : {{ $item->ukuran->nama }} <br>
+                    </article>
+                </div>
+            @endforeach
+
+        </div>
+        <div class="flex justify-between px-3 pb-2">
+            <span class="font-light text-sm">Subtotal Belanja</span>
+            <span>Rp. {{ number_format($sub_total, 0, '', '.') }}</span>
+        </div>
+        <div id="info-pengiriman">
+            {{-- <div class="flex justify-between pb-3 px-3">
+            <div class=" text-sm">
+                <p>Pengiriman</p>
+                <p class="text-sm uppercase"> {{ $info_pengiriman['code'] }}<span class="normal-case"> -
+                        {{ $info_pengiriman['service'] }}
+                        ({{ $info_pengiriman['description'] }})
+                    </span>
+                </p>
+            </div>
+            <span>Rp. <span id="sub-total">{{ number_format($info_pengiriman['value'], 0, '', '.') }}</span></span>
+        </div> --}}
+        </div>
+        <div class="border-t flex justify-between p-3 ">
+            <span class="font-light text-sm">Total</span>
+            <span class="font-extrabold">Rp. <span>{{ number_format($sub_total, 0, '', '.') }}</span></span>
+        </div>
+    </div>
+
+
+
 
 
     <!-- Main modal -->
@@ -241,8 +287,6 @@
     <script>
         $(document).ready(function() {
 
-
-
             let id_provinsi = '';
             let id_kota = '';
             $.ajax({
@@ -312,6 +356,8 @@
 
 
             $('#metode_pengiriman').change(function() {
+                console.log($(this).val())
+
                 $.ajax({
                     url: `/checkout/alamat-pengiriman/${$(this).val()}/cost`,
                     type: "GET",
@@ -341,10 +387,12 @@
                         $('#list-layanan-ongkir').html('')
                         let response = res.rajaongkir.results;
 
+                        let dataCode = response[0].code;
+
                         response[0].costs.forEach((data, increment) => {
-                            listText += `<div class="relative mb-3 ">
-                        <input type="radio" name='ongkir' id="paket-${increment+1}" class="absolute top-8 left-8 lg:left-11">
-                        <label for="paket-${increment+1}" class="border-2  mx-5 h-20 cursor-pointer flex justify-end">
+                            listText += `<div class="opsi-pengiriman relative mb-3 ">
+                        <input type="radio" name='ongkir' id="paket-${increment+1}"  value="${data.cost[0].value}"  data-service="${data.service}" class="radio-pengiriman absolute top-8 left-8 lg:left-11">
+                        <label for="paket-${increment+1}" class="label-pengiriman border-2  mx-5 h-20 cursor-pointer flex justify-end">
                             <div class=" flex items-center justify-between w-11/12 pr-5">
                                 <div class="flex items-center">
                                     <p class="text-xl font-bold mr-3 border-r-2 py-3 pr-2">${data.service}</p>
@@ -362,6 +410,36 @@
                         });
 
                         $('#list-layanan-ongkir').append(listText)
+
+                        $('.label-pengiriman').each(function() {
+                            $(this).click(function() {
+                                let opsiPengiriman = $(this).closest(
+                                    '.opsi-pengiriman').find(
+                                    '.radio-pengiriman');
+
+
+                                $.ajax({
+                                    url: '/checkout/store-session-from-ajax',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        _token: '{{ csrf_token() }}',
+                                        code: dataCode,
+                                        service: opsiPengiriman.attr(
+                                            'data-service')
+                                    },
+                                    success: function(res) {
+                                        console.log(res)
+                                    },
+                                    error: function(err) {
+                                        alert(err)
+                                    }
+                                })
+
+                            })
+
+
+                        })
 
 
                     },
@@ -394,15 +472,10 @@
             })
 
 
+            // ok
+            // console.log($('#total').attr('data-total'))
 
 
-            // const boxes = document.querySelectorAll('.label-alamat');
-
-            // boxes.forEach(box => {
-            //     box.addEventListener('click', function handleClick(event) {
-            //         console.log(event.tar)
-            //     });
-            // });
         })
     </script>
 @endsection

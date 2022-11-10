@@ -14,6 +14,7 @@ class Bill_mail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $data;
     /**
      * Create a new message instance.
      *
@@ -32,7 +33,7 @@ class Bill_mail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('outlawsstuido@gmail.com', 'Jeffrey Way'),
+            from: new Address('outlawsstuido@gmail.com', 'outlaws studio'),
             subject: 'Bill Mail',
         );
     }
@@ -45,7 +46,10 @@ class Bill_mail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'email.payment_email',
+            view: 'toko.layout.email.bill_email',
+            with: [
+                'data' => $this->data
+            ]
         );
     }
 

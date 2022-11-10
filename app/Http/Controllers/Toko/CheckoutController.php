@@ -8,9 +8,12 @@ use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Keranjang;
 use App\Models\User;
+use GuzzleHttp\Psr7\Request;
 // use App\Mail\DemoMail;
 
 use Illuminate\Support\Facades\Mail;
+
+use function PHPUnit\Framework\returnSelf;
 
 class CheckoutController extends Controller
 {
@@ -34,47 +37,80 @@ class CheckoutController extends Controller
 
     public function pengiriman()
     {
-        // kota_id
-        //
+
+
+
 
         $alamats = Alamat::with('credential:id,alamat_id')->where('user_id', auth()->user()->id)->get();
 
+
+        $keranjang = Keranjang::with([
+            'item:id,nama,gambar,harga,kategori_id',
+            'item.kategori',
+            'ukuran:id,nama'
+        ])->where('user_id', auth()->user()->id)->get();
+
+        $sub_total = $keranjang->sum(function ($item) {
+            return $item->qty * $item->item->harga;
+        });
+
         return view('toko.pages.checkout.pengiriman', [
             'alamats' => $alamats,
+            'items' => $keranjang,
+            'sub_total' => $sub_total
         ]);
     }
 
 
+
+
     public function pembayaran()
     {
+        // get session
+        $get_sesssion_rajaongkir = session()->get('rajaongkir');
+        $get_session_credential = session()->get('rajaongkir_credential');
 
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
+        if (request('metode_pengiriman') == null || request('ongkir') == null) {
+            return redirect()->back()->withErrors('pilih layanan paket');
+        }
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => 10000,
-            ),
-            'customer_details' => array(
-                'first_name' => 'budi',
-                'last_name' => 'pratama',
-                'email' => 'budi.pra@example.com',
-                'phone' => '08111222333',
-            ),
-        );
+        if ($get_sesssion_rajaongkir == null || $get_session_credential == null) {
+            return redirect()->back()->withErrors('pilih metode pengiriman');
+        }
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        if ($get_sesssion_rajaongkir[0]['code'] == $get_session_credential['code']) {
+            foreach ($get_sesssion_rajaongkir[0]['costs'] as $service) {
+                if ($service['service'] == $get_session_credential['service']) {
+                    $get_detail_rajaongkir = $service;
+                }
+            }
+        } else {
+            return redirect()->back()->withErrors('terjadi kesalahan');
+        }
 
+        $keranjang = Keranjang::with([
+            'item:id,nama,gambar,harga,kategori_id',
+            'item.kategori',
+            'ukuran:id,nama'
+        ])->where('user_id', auth()->user()->id)->get();
+
+        $sub_total = $keranjang->sum(function ($item) {
+            return $item->qty * $item->item->harga;
+        });
+
+        $total =  $sub_total +  $get_detail_rajaongkir['cost'][0]['value'];
 
         return view('toko.pages.checkout.pembayaran', [
-            'snap_token' => $snapToken,
+            'items' => $keranjang,
+            'sub_total' =>  $sub_total,
+            'total' => $total,
+            'info_pengiriman' => [
+                'code' => $get_session_credential['code'],
+                'value' => $get_detail_rajaongkir['cost'][0]['value'],
+                'service' => $get_session_credential['service'],
+                'description' => $get_detail_rajaongkir['description']
+            ]
+
         ]);
     }
 
@@ -83,12 +119,23 @@ class CheckoutController extends Controller
     public function pay()
     {
 
-        $mailData = [
-            'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp.'
-        ];
+        // dd(session()->get('rajaongkir_credential'));
+        dd(session()->get('rajaongkir'));
 
-        // Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($mailData));
+
+        // $rajaOngkir = json_decode(session()->get('rajaongkir'), true);
+
+        // $arr = [];
+        // foreach ($rajaOngkir['rajaongkir']['results'][0]['costs'] as $service) {
+
+        //     if ($service['service'] == session()->get('service')) {
+        //         $arr[] = $service['service'];
+        //     }
+        // }
+        // dd($arr);
+
+
+
         // bca, bni, bri
         // $data = [
         //     "payment_type" => "bank_transfer",
@@ -100,7 +147,6 @@ class CheckoutController extends Controller
         //         "bank" => "bri"
         //     ]
         // ];
-
 
         // $curl = curl_init();
 
@@ -130,8 +176,9 @@ class CheckoutController extends Controller
         //     echo "cURL Error #:" . $err;
         //     // return $err;
         // } else {
-        //     // dd($response);
-        //     return $response;
+
+        //     $response_success = json_decode($response, true);
+        //     // Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($response_success));
         // }
         return view('toko.layout.transaksi_success');
     }

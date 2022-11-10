@@ -19,8 +19,17 @@
         <span class="font-light text-sm">Sub Total</span>
         <span>Rp. {{ number_format($total_harga, 0, '', '.') }}</span>
     </div>
+    <div class="flex justify-between pb-3 px-3">
+        <div class="font-light text-sm">
+            <p>Pengiriman</p>
+            <p class="text-sm"><span id="kurir">JNE - regular</span></p>
+        </div>
+
+        <span>Rp. <span id="sub-total">12.000</span></span>
+    </div>
     <div class="border-t flex justify-between p-3 ">
         <span class="font-light text-sm">Total</span>
-        <span class="font-extrabold">Rp. Rp. {{ number_format($total_harga, 0, '', '.') }}</span>
+        <span class="font-extrabold">Rp. <span id="total"
+                data-total="{{ $total_harga }}">{{ number_format($total_harga, 0, '', '.') }}</span></span>
     </div>
 </div>

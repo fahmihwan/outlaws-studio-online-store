@@ -25,6 +25,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/tes', function () {
+    $json = [
+        "status_code" => "201",
+        "status_message" => "Success, Bank Transfer transaction is created",
+        "transaction_id" => "be03df7d-2f97-4c8c-a53c-8959f1b67295",
+        "order_id" => "1571823229",
+        "merchant_id" => "G812785002",
+        "gross_amount" => "44000.00",
+        "currency" => "IDR",
+        "payment_type" => "bank_transfer",
+        "transaction_time" => "2019-10-23 16:33:49",
+        "transaction_status" => "pending",
+        "va_numbers" => [
+            [
+                "bank" => "bca",
+                "va_number" => "812785002530231"
+            ]
+        ],
+        "fraud_status" => "accept"
+    ];
+
+    // $json['transaction_time']=
+
+    return view('toko.layout.email.bill_email', [
+        'data' => $json
+    ]);
+});
+
 // user
 Route::middleware(['guest'])->group(function () {
     Route::get('/customer/account/create', [AuthUserController::class, 'register']);
@@ -53,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/alamat-pengiriman/province/{id}/city', [RajaOngkirController::class, 'get_city']);
     Route::get('/checkout/alamat-pengiriman/province/{city_id}/city/{province_id}', [RajaOngkirController::class, 'get_postal_code']);
     Route::get('/checkout/alamat-pengiriman/{courier}/cost', [RajaOngkirController::class, 'get_cost']);
+    Route::post('/checkout/store-session-from-ajax', [RajaOngkirController::class, 'retireve_sessoin_service']);
 
     Route::get('/checkout/cart', [CheckoutController::class, 'keranjang']);
     Route::put('/checkout/cart/{id}/ajax', [Cart_WishlistController::class, 'update_cart_ajax']);

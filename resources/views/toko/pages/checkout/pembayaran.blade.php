@@ -1,17 +1,17 @@
 @extends('toko.layout.main_checkout')
 
-@section('head')
+{{-- @section('head')
     <!-- @TODO: replace SET_YOUR_CLIENT_KEY_HERE with your client key -->
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="SB-Mid-client-8TLIpQcwFzXQGo9i"></script>
     <!-- Note: replace with src="https://app.midtrans.com/snap/snap.js" for Production environment -->
-@endsection
+@endsection --}}
 
 @section('container-checkout')
     <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-0  ">
         <div class="border h-full">
-
             {{-- tabs --}}
+
             <div class=" md:flex hidden ">
                 <a href="/checkout/pengiriman" class=" border-t-2 p-3 block bg-gray-100  w-1/2 text-center">
                     <span class="bg-gray-700 inline-block  rounded-full w-6 text-center  text-white mr-1">1</span>
@@ -58,36 +58,41 @@
     </div>
 
 
-    @include('toko.components.sidebarCheckout')
-@endsection
+    {{-- @include('toko.components.sidebarCheckout') --}}
+    <div class="border h-fit w-full md:w-1/3">
+        <div class="w-[90%] pt-5 mx-auto font-bold">
+            Ringkasan Berbelanja
+        </div>
+        <div class="w-90% p-3  ">
+            @foreach ($items as $item)
+                <div class="flex border-t-2 pt-2 pb-7">
+                    <img class="w-24 mr-3" src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
+                    <article>
+                        {{ $item->item->nama }}<br>
+                        Jumlah : {{ $item->qty }} <br>
+                        Size : {{ $item->ukuran->nama }} <br>
+                    </article>
+                </div>
+            @endforeach
 
-@section('script')
-    <script type="text/javascript">
-        // For example trigger on button clicked, or any time you need
-        var payButton = document.getElementById('pay-button');
-        payButton.addEventListener('click', function() {
-            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-            window.snap.pay('{{ $snap_token }}', {
-                onSuccess: function(result) {
-                    /* You may add your own implementation here */
-                    alert("payment success!");
-                    console.log(result);
-                },
-                onPending: function(result) {
-                    /* You may add your own implementation here */
-                    alert("wating your payment!");
-                    console.log(result);
-                },
-                onError: function(result) {
-                    /* You may add your own implementation here */
-                    alert("payment failed!");
-                    console.log(result);
-                },
-                onClose: function() {
-                    /* You may add your own implementation here */
-                    alert('you closed the popup without finishing the payment');
-                }
-            })
-        });
-    </script>
+        </div>
+        <div class="flex justify-between px-3 pb-2">
+            <span class="font-light text-sm">Subtotal Belanja</span>
+            <span>Rp. {{ number_format($sub_total, 0, '', '.') }}</span>
+        </div>
+        <div class="flex justify-between pb-3 px-3">
+            <div class=" text-sm">
+                <p>Pengiriman</p>
+                <p class="text-sm uppercase"> {{ $info_pengiriman['code'] }}<span class="normal-case"> -
+                        {{ $info_pengiriman['service'] }}
+                        ({{ $info_pengiriman['description'] }})</span></p>
+            </div>
+
+            <span>Rp. <span id="sub-total">{{ number_format($info_pengiriman['value'], 0, '', '.') }}</span></span>
+        </div>
+        <div class="border-t flex justify-between p-3 ">
+            <span class="font-light text-sm">Total</span>
+            <span class="font-extrabold">Rp. <span>{{ number_format($total, 0, '', '.') }}</span></span>
+        </div>
+    </div>
 @endsection

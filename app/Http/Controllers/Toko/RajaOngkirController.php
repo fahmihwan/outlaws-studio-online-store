@@ -129,7 +129,23 @@ class RajaOngkirController extends Controller
         if ($err) {
             echo "cURL Error #:" . $err;
         } else {
+            $results = json_decode($response, true)['rajaongkir']['results'];
+            session(['rajaongkir' => $results]);
             echo $response;
         }
+    }
+
+    public function retireve_sessoin_service(Request $request)
+    {
+        session(['rajaongkir_credential' => [
+            'code' => $request->code,
+            'service' => $request->service
+        ]]);
+
+        return response()->json([
+            'response' => 'success',
+            'code' => $request->code,
+            'service' => $request->service,
+        ]);
     }
 }
