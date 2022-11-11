@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 
 class Bill_mail extends Mailable
 {
@@ -60,6 +61,8 @@ class Bill_mail extends Mailable
      */
     public function attachments()
     {
-        return [];
+        return [
+            // Attachment::fromStorage('./image-items/rL0kN4y53JqGxvvsmLdGJUMqhp3s3kkBD8tcGKzj.jpg'),
+        ];
     }
 }

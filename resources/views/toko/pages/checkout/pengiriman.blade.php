@@ -109,11 +109,6 @@
                 </div>
 
 
-                {{-- <a href="/checkout/pembayaran"
-                    class=" bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
-                    Selanjutnya
-                </a> --}}
-
                 <button
                     class="bg-black hover:bg-white hover:text-black border-2 duration-300 border-black text-white p-2 w-40 text-center float-right m-3">
                     Selanjutnya
@@ -146,21 +141,12 @@
             <span>Rp. {{ number_format($sub_total, 0, '', '.') }}</span>
         </div>
         <div id="info-pengiriman">
-            {{-- <div class="flex justify-between pb-3 px-3">
-            <div class=" text-sm">
-                <p>Pengiriman</p>
-                <p class="text-sm uppercase"> {{ $info_pengiriman['code'] }}<span class="normal-case"> -
-                        {{ $info_pengiriman['service'] }}
-                        ({{ $info_pengiriman['description'] }})
-                    </span>
-                </p>
-            </div>
-            <span>Rp. <span id="sub-total">{{ number_format($info_pengiriman['value'], 0, '', '.') }}</span></span>
-        </div> --}}
+
         </div>
         <div class="border-t flex justify-between p-3 ">
             <span class="font-light text-sm">Total</span>
-            <span class="font-extrabold">Rp. <span>{{ number_format($sub_total, 0, '', '.') }}</span></span>
+            <span class="font-extrabold">Rp. <span id="total"
+                    data-total="{{ $sub_total }}">{{ number_format($sub_total, 0, '', '.') }}</span></span>
         </div>
     </div>
 
@@ -321,7 +307,7 @@
                     success: function(res) {
                         let kota = ''
                         $('#kota').html('')
-                        $('#kota').append(`<option value="" > Pilih Kabupate / Kota</option>`)
+                        $('#kota').append(`<option disabled> Pilih Kabupate / Kota</option>`)
                         res.rajaongkir.results.forEach(e => {
                             kota +=
                                 `<option value="${e.city_name}" data-id="${e.city_id}">${e.city_name}</option>`;
@@ -356,7 +342,8 @@
 
 
             $('#metode_pengiriman').change(function() {
-                console.log($(this).val())
+                $('#info-pengiriman').html('')
+                $('#total').text(($('#total').attr('data-total') / 1000).toFixed(3))
 
                 $.ajax({
                     url: `/checkout/alamat-pengiriman/${$(this).val()}/cost`,
@@ -391,7 +378,7 @@
 
                         response[0].costs.forEach((data, increment) => {
                             listText += `<div class="opsi-pengiriman relative mb-3 ">
-                        <input type="radio" name='ongkir' id="paket-${increment+1}"  value="${data.cost[0].value}"  data-service="${data.service}" class="radio-pengiriman absolute top-8 left-8 lg:left-11">
+                        <input type="radio" name='ongkir' id="paket-${increment+1}"  value="${data.cost[0].value}"  data-service="${data.service}" data-description="${data.description}" class="radio-pengiriman absolute z-[-2] top-8 left-8 lg:left-11">
                         <label for="paket-${increment+1}" class="label-pengiriman border-2  mx-5 h-20 cursor-pointer flex justify-end">
                             <div class=" flex items-center justify-between w-11/12 pr-5">
                                 <div class="flex items-center">
@@ -402,7 +389,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    Rp ${data.cost[0].value}
+                                    Rp ${ (data.cost[0].value/1000).toFixed(3)}
                                 </div>
                             </div>
                         </label>
@@ -416,8 +403,6 @@
                                 let opsiPengiriman = $(this).closest(
                                     '.opsi-pengiriman').find(
                                     '.radio-pengiriman');
-
-
                                 $.ajax({
                                     url: '/checkout/store-session-from-ajax',
                                     type: 'POST',
@@ -429,7 +414,31 @@
                                             'data-service')
                                     },
                                     success: function(res) {
-                                        console.log(res)
+                                        $('#info-pengiriman').html(
+                                            `<div class="flex justify-between pb-3 px-3">
+                                                <div class=" text-sm">
+                                                <p>Pengiriman</p>
+                                                <p class="text-sm uppercase"> ${res.code} <span class="normal-case"> -
+                                                ${res.service}   (${opsiPengiriman.attr('data-description')})
+                                                </span>
+                                                </p>
+                                                </div>
+                                                <span>Rp. <span id="sub-total"> ${ (opsiPengiriman.val()/1000).toFixed(3)} </span></span>
+                                            </div> `
+                                        )
+
+                                        let sub_total = Number(
+                                            opsiPengiriman.val()
+                                        )
+
+                                        let total = Number($(
+                                                '#total')
+                                            .attr('data-total'))
+
+                                        total += sub_total
+                                        $('#total').text((total /
+                                            1000).toFixed(
+                                            3))
                                     },
                                     error: function(err) {
                                         alert(err)
@@ -473,7 +482,8 @@
 
 
             // ok
-            // console.log($('#total').attr('data-total'))
+
+
 
 
         })

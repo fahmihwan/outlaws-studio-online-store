@@ -40,13 +40,28 @@ Route::get('/tes', function () {
         "va_numbers" => [
             [
                 "bank" => "bca",
-                "va_number" => "812785002530231"
+                "va_number" => "812785002"
             ]
         ],
         "fraud_status" => "accept"
     ];
 
-    // $json['transaction_time']=
+    // $json = [
+    //     "status_code" => "201",
+    //     "status_message" => "OK,
+    //      Mandiri Bill transaction is successful",
+    //     "transaction_id" => "abb2d93f-dae3-4183-936d-4145423ad72f",
+    //     "order_id" => "1571823332",
+    //     "merchant_id" => "G812785002",
+    //     "gross_amount" => "44000.00",
+    //     "currency" => "IDR",
+    //     "payment_type" => "echannel",
+    //     "transaction_time" => "2019-10-23 16:35:31",
+    //     "transaction_status" => "pending",
+    //     "fraud_status" => "accept",
+    //     "bill_key" => "778347787706",
+    //     "biller_code" => "70012"
+    // ];
 
     return view('toko.layout.email.bill_email', [
         'data' => $json
@@ -90,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
     // alaamt
     Route::post('/alamat', [AlamatController::class, 'store']);
     Route::get('/checkout/pembayaran', [CheckoutController::class, 'pembayaran']);
-    Route::get('/checkout/pembayaran/pay', [CheckoutController::class, 'pay']);
+    Route::post('/checkout/pembayaran/pay', [CheckoutController::class, 'pay']);
 });
 
 Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');

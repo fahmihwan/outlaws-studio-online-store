@@ -7,13 +7,14 @@ use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Keranjang;
+use App\Models\Penjualan;
 use App\Models\User;
-use GuzzleHttp\Psr7\Request;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 // use App\Mail\DemoMail;
 
 use Illuminate\Support\Facades\Mail;
 
-use function PHPUnit\Framework\returnSelf;
 
 class CheckoutController extends Controller
 {
@@ -37,10 +38,6 @@ class CheckoutController extends Controller
 
     public function pengiriman()
     {
-
-
-
-
         $alamats = Alamat::with('credential:id,alamat_id')->where('user_id', auth()->user()->id)->get();
 
 
@@ -73,20 +70,7 @@ class CheckoutController extends Controller
         if (request('metode_pengiriman') == null || request('ongkir') == null) {
             return redirect()->back()->withErrors('pilih layanan paket');
         }
-
-        if ($get_sesssion_rajaongkir == null || $get_session_credential == null) {
-            return redirect()->back()->withErrors('pilih metode pengiriman');
-        }
-
-        if ($get_sesssion_rajaongkir[0]['code'] == $get_session_credential['code']) {
-            foreach ($get_sesssion_rajaongkir[0]['costs'] as $service) {
-                if ($service['service'] == $get_session_credential['service']) {
-                    $get_detail_rajaongkir = $service;
-                }
-            }
-        } else {
-            return redirect()->back()->withErrors('terjadi kesalahan');
-        }
+        $get_detail_rajaongkir =  $this->cek_session_rajaongkir($get_sesssion_rajaongkir, $get_session_credential);
 
         $keranjang = Keranjang::with([
             'item:id,nama,gambar,harga,kategori_id',
@@ -110,44 +94,54 @@ class CheckoutController extends Controller
                 'service' => $get_session_credential['service'],
                 'description' => $get_detail_rajaongkir['description']
             ]
-
         ]);
+    }
+
+    private function cek_session_rajaongkir($get_sesssion_rajaongkir, $get_session_credential)
+    {
+        if ($get_sesssion_rajaongkir == null || $get_session_credential == null) {
+            return redirect()->back()->withErrors('pilih metode pengiriman');
+        }
+        if ($get_sesssion_rajaongkir[0]['code'] == $get_session_credential['code']) {
+            foreach ($get_sesssion_rajaongkir[0]['costs'] as $service) {
+                if ($service['service'] == $get_session_credential['service']) {
+                    $get_detail_rajaongkir = $service;
+                }
+            }
+            return $get_detail_rajaongkir;
+        } else {
+            return redirect()->back()->withErrors('terjadi kesalahan');
+        }
     }
 
 
     // midtrans
-    public function pay()
+    public function pay(Request $request)
     {
 
-        // dd(session()->get('rajaongkir_credential'));
-        dd(session()->get('rajaongkir'));
+        //  nota
+        $nota = $this->create_nota();
+
+        $get_sesssion_rajaongkir = session()->get('rajaongkir');
+        $get_session_credential = session()->get('rajaongkir_credential');
+
+        // ongkir
+        $get_detail_rajaongkir =  $this->cek_session_rajaongkir($get_sesssion_rajaongkir, $get_session_credential);
+
+        // subtotal
+        $sub_total = Keranjang::where('user_id', auth()->user()->id)
+            ->join('items', 'keranjangs.item_id', '=', 'items.id')
+            ->selectRaw('sum(keranjangs.qty * items.harga) as sub_total')
+            ->first();
+
+        // total
+        $gross_amount = $sub_total['sub_total'] + $get_detail_rajaongkir['cost'][0]['value'];
 
 
-        // $rajaOngkir = json_decode(session()->get('rajaongkir'), true);
-
-        // $arr = [];
-        // foreach ($rajaOngkir['rajaongkir']['results'][0]['costs'] as $service) {
-
-        //     if ($service['service'] == session()->get('service')) {
-        //         $arr[] = $service['service'];
-        //     }
-        // }
-        // dd($arr);
 
 
-
-        // bca, bni, bri
-        // $data = [
-        //     "payment_type" => "bank_transfer",
-        //     "transaction_details" => [
-        //         "order_id" => rand(),
-        //         "gross_amount" => 44000
-        //     ],
-        //     "bank_transfer" => [
-        //         "bank" => "bri"
-        //     ]
-        // ];
-
+        // // sini
+        // $data = $this->cek_metode_pembayaran($request->bank, $gross_amount);
         // $curl = curl_init();
 
         // curl_setopt_array($curl, array(
@@ -160,13 +154,11 @@ class CheckoutController extends Controller
         //     CURLOPT_CUSTOMREQUEST => "POST",
         //     CURLOPT_POSTFIELDS => json_encode($data),
         //     CURLOPT_HTTPHEADER => array(
-        //         // Set Here Your Requesred Headers
         //         'Accept: application/json',
         //         'Authorization: Basic U0ItTWlkLXNlcnZlci1NLUVmN0E3clFQU0tPd2J2RVc0VmtPOXM6',
         //         'Content-Type: application/json',
         //     ),
         // ));
-
 
         // $response = curl_exec($curl);
         // $err = curl_error($curl);
@@ -174,13 +166,107 @@ class CheckoutController extends Controller
 
         // if ($err) {
         //     echo "cURL Error #:" . $err;
-        //     // return $err;
+        //     return $err;
         // } else {
 
         //     $response_success = json_decode($response, true);
-        //     // Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($response_success));
+        //     Mail::to(auth()->user()->email)->send(new Bill_mail($response_success));
         // }
-        return view('toko.layout.transaksi_success');
+        return view('toko.layout.transaksi_success', [
+            'nomor_order' => $nota,
+            'status_pesanan' => 'belum',
+            'nominal_pesanan' => $gross_amount,
+            'metode_pembayaran' => $request->bank,
+            'batas_akhir_pembayaran' => 'belum',
+            'kode_pembayaran' => 'belum',
+        ]);
+    }
+
+
+
+    private function cek_metode_pembayaran($bank, $gross_amount)
+    {
+        if ($bank == 'echannel') {
+            $data = [
+                "payment_type" => $bank,
+                "transaction_details" => [
+                    "order_id" => rand(),
+                    "gross_amount" => $gross_amount
+                ], "echannel" => [
+                    "bill_info1" => "Payment:",
+                    "bill_info2" => "Online purchase"
+                ]
+            ];
+        } else {
+            $data = [
+                "payment_type" => "bank_transfer",
+                "transaction_details" => [
+                    "order_id" => rand(),
+                    "gross_amount" => $gross_amount
+                ],
+                "bank_transfer" => [
+                    "bank" => $bank
+                ],
+            ];
+        }
+        $keranjang = Keranjang::with([
+            'item:id,nama,harga'
+        ])
+            ->select(['id', 'user_id', 'qty', 'item_id'])
+            ->where('user_id', auth()->user()->id)
+            ->get();
+
+        foreach ($keranjang as $item) {
+            $data['items_details'][] = [
+                "id" => $item->item->id,
+                "price" => $item->item->harga,
+                "quantity" => $item->qty,
+                "name" => $item->item->nama
+            ];
+        }
+        $user = User::with([
+            'credential.alamat',
+        ])->get()->first();
+
+
+        $data['customer_details'] =   [
+            "first_name" => $user->credential->nama_depan,
+            "last_name" => $user->credential->nama_belakang,
+            "email" => $user->email,
+            "phone" => $user->credential->telp,
+            "shipping_address" => [
+                "first_name" => $user->credential->nama_depan,
+                "last_name" => $user->credential->nama_belakang,
+                "email" => $user->email,
+                "phone" => $user->credential->alamat->telp,
+                "address" => $user->credential->alamat->alamat,
+                "city" => $user->credential->alamat->kota,
+                "postal_code" => $user->credential->alamat->kode_pos,
+                "country_code" => "IDN"
+            ]
+        ];
+        $data["custom_expiry"] = [
+            "order_time" => Carbon::now(),
+            "expiry_duration" => 1440,
+            "unit" => "minute"
+        ];
+
+        return $data;
+    }
+
+    private function create_nota()
+    {
+        $notaDB = Penjualan::select('nota')->latest()->first();
+        if ($notaDB == null) {
+            $nota = 'OS' . date('m') . '-' . date('Y') . '0001' . date('d') . 'E';
+        } elseif (substr($notaDB->nota, 2, 2) != date('m')) {
+            $nota = 'OS' . date('m') . '-' . date('Y') . '0001' . date('d') . 'E';
+        } else {
+            $cut =  substr($notaDB->nota, 10, -3);
+            $number = str_pad($cut + 1, 4, "0", STR_PAD_LEFT);;
+            $nota = 'OS' . date('m') . '-' . date('Y') . $number . date('d') . 'E';
+        }
+        return $nota;
     }
 
     public function set_alamat_primary_customer($idAlamat)
@@ -204,28 +290,3 @@ class CheckoutController extends Controller
         ]);
     }
 }
-
-
-
-
-// curl 'https://api.sandbox.midtrans.com/v2/token?client_key={YOUR-CLIENT-KEY}&card_cvv=123&gross_amount=20000&currency=IDR&card_number=4811111111111114&card_exp_month=02&card_exp_year=2025'
-// response midtrans BCA
-// {
-//     "status_code": "201",
-//     "status_message": "Success, Bank Transfer transaction is created",
-//     "transaction_id": "07d90a8a-ad55-400e-b5f9-d66762ab5035",
-//     "order_id": "order-105",
-//     "merchant_id": "G712224979",
-//     "gross_amount": "44000.00",
-//     "currency": "IDR",
-//     "payment_type": "bank_transfer",
-//     "transaction_time": "2022-11-06 23:59:34",
-//     "transaction_status": "pending",
-//     "va_numbers": [
-//       {
-//         "bank": "bca",
-//         "va_number": "24979148978"
-//       }
-//     ],
-//     "fraud_status": "accept"
-//   }

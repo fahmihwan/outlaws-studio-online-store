@@ -8,7 +8,7 @@
 @endsection --}}
 
 @section('container-checkout')
-    <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-0  ">
+    <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-24 ">
         <div class="border h-full">
             {{-- tabs --}}
 
@@ -24,36 +24,52 @@
                 </div>
             </div>
 
-            <div class="p-5 h-72">
-                <div class=" relative mb-3">
-                    <label for="bca" class="border border-gray-300 w-full flex h-14 items-center justify-between">
-                        <p class="ml-12 font-semibold"> BCA Virtual Account</p>
-                        <img src="{{ asset('./logo-bank/bca.png') }}" alt="" class="w-20 h-6 mr-3">
-                    </label>
-                    <input id="bca" type="radio" name="bank" class="absolute top-5 left-5">
-                </div>
-                <div class=" relative mb-3">
-                    <label for="bni" class="border border-gray-300 w-full flex h-14 items-center justify-between">
-                        <p class="ml-12 font-semibold"> BNI Virtual Account</p>
-                        <img src="{{ asset('./logo-bank/bni.png') }}" alt="" class="w-20 h-6 mr-3">
-                    </label>
-                    <input id="bni" type="radio" name="bank" class="absolute top-5 left-5">
-                </div>
-                <div class=" relative mb-3">
-                    <label for="bri" class="border border-gray-300 w-full flex h-14 items-center justify-between">
-                        <p class="ml-12 font-semibold"> BRI Virtual Account</p>
-                        <img src="{{ asset('./logo-bank/bri.png') }}" alt="" class="w-20 h-6 mr-3">
-                    </label>
-                    <input id="bri" type="radio" name="bank" class="absolute top-5 left-5">
-                </div>
+            <form action="/checkout/pembayaran/pay" method="POST">
+                @csrf
+                <div class="p-5 ">
+                    <p class="font-bold border-b-2 py-2 block mb-5">METODE PEMBAYARAN</p>
+                    <p class="block mb-3">Pilih metode pembayaran Anda</p>
+                    <div class=" relative mb-3">
+                        <label for="mandiri" class="border border-gray-300 w-full flex h-14 items-center justify-between">
+                            <p class="ml-12 font-semibold">Mandiri Virtual Account</p>
+                            <img src="{{ asset('./logo-bank/mandiri.png') }}" alt="" class="w-20 h-6 mr-3">
+                        </label>
+                        <input id="mandiri" type="radio" name="bank" value="echannel" required
+                            class="absolute top-5 left-5">
+                    </div>
+                    <div class=" relative mb-3">
+                        <label for="bca" class="border border-gray-300 w-full flex h-14 items-center justify-between">
+                            <p class="ml-12 font-semibold">BCA Virtual Account</p>
+                            <img src="{{ asset('./logo-bank/bca.png') }}" alt="" class="w-20 h-6 mr-3">
+                        </label>
+                        <input id="bca" type="radio" name="bank" value="bca" required
+                            class="absolute top-5 left-5">
+                    </div>
+                    <div class=" relative mb-3">
+                        <label for="bni" class="border border-gray-300 w-full flex h-14 items-center justify-between">
+                            <p class="ml-12 font-semibold">BNI Virtual Account</p>
+                            <img src="{{ asset('./logo-bank/bni.png') }}" alt="" class="w-20 h-6 mr-3">
+                        </label>
+                        <input id="bni" type="radio" name="bank" value="bni" required
+                            class="absolute top-5 left-5">
+                    </div>
+                    <div class=" relative mb-3">
+                        <label for="bri" class="border border-gray-300 w-full flex h-14 items-center justify-between">
+                            <p class="ml-12 font-semibold">BRI Virtual Account</p>
+                            <img src="{{ asset('./logo-bank/bri.png') }}" alt="bri" class="w-20 h-6 mr-3">
+                        </label>
+                        <input id="bri" type="radio" name="bank" value="bca" required
+                            class="absolute top-5 left-5">
+                    </div>
 
-            </div>
-            <div class="flex justify-end items-end p-5">
-                <button
-                    class="border-black border p-2 w-52 bg-black text-white hover:bg-white hover:text-black duration-300">Buat
-                    Pesanan</button>
-            </div>
-
+                </div>
+                <div class="flex justify-end items-end p-5">
+                    <button
+                        class="border-black border p-2 w-52 bg-black text-white hover:bg-white hover:text-black duration-300">Buat
+                        Pesanan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -69,8 +85,8 @@
                     <img class="w-24 mr-3" src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
                     <article>
                         {{ $item->item->nama }}<br>
-                        Jumlah : {{ $item->qty }} <br>
-                        Size : {{ $item->ukuran->nama }} <br>
+                        <span class="text-gray-500 text-sm">Jumlah : {{ $item->qty }}</span> <br>
+                        <span class="text-gray-500 text-sm">Size : {{ $item->ukuran->nama }}</span> <br>
                     </article>
                 </div>
             @endforeach

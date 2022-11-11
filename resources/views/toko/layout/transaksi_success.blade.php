@@ -34,15 +34,15 @@
                     <table class=" w-full">
                         <tr class="border-t ">
                             <td class="text-sm md:text-lg font-semibold py-3">Nomor Order</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">CONV5000022033</td>
+                            <td class="text-end text-sm md:text-lg font-semibold">{{ $nomor_order }}</td>
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Status Pesanan</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">Pending</td>
+                            <td class="text-end text-sm md:text-lg font-semibold">{{ $status_pesanan }}</td>
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Nominal Pesanan</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">Rp. 1.299.000</td>
+                            <td class="text-end text-sm md:text-lg font-semibold">Rp. {{ number_format() }}</td>
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Metode Pembayaran</td>
