@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('kurirs', function (Blueprint $table) {
             $table->id();
-            $table->string('kurir');
-            $table->string('jenis_layanan');
+            $table->string('code');
+            $table->string('service');
+            $table->string('deskripsi');
             $table->integer('tarif');
+            $table->string('estimasi');
             $table->timestamps();
         });
     }

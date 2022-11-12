@@ -7,14 +7,17 @@ use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Keranjang;
+use App\Models\Kurir;
 use App\Models\Penjualan;
 use App\Models\User;
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 // use App\Mail\DemoMail;
 
 use Illuminate\Support\Facades\Mail;
 
+use function PHPUnit\Framework\returnCallback;
 
 class CheckoutController extends Controller
 {
@@ -63,9 +66,13 @@ class CheckoutController extends Controller
 
     public function pembayaran()
     {
+
+
         // get session
         $get_sesssion_rajaongkir = session()->get('rajaongkir');
         $get_session_credential = session()->get('rajaongkir_credential');
+
+
 
         if (request('metode_pengiriman') == null || request('ongkir') == null) {
             return redirect()->back()->withErrors('pilih layanan paket');
@@ -128,63 +135,112 @@ class CheckoutController extends Controller
         // ongkir
         $get_detail_rajaongkir =  $this->cek_session_rajaongkir($get_sesssion_rajaongkir, $get_session_credential);
 
+        // return $get_detail_rajaongkir;
         // subtotal
         $sub_total = Keranjang::where('user_id', auth()->user()->id)
             ->join('items', 'keranjangs.item_id', '=', 'items.id')
             ->selectRaw('sum(keranjangs.qty * items.harga) as sub_total')
             ->first();
-
         // total
         $gross_amount = $sub_total['sub_total'] + $get_detail_rajaongkir['cost'][0]['value'];
 
 
-
-
-        // // sini
-        // $data = $this->cek_metode_pembayaran($request->bank, $gross_amount);
-        // $curl = curl_init();
-
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/charge",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 30000,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "POST",
-        //     CURLOPT_POSTFIELDS => json_encode($data),
-        //     CURLOPT_HTTPHEADER => array(
-        //         'Accept: application/json',
-        //         'Authorization: Basic U0ItTWlkLXNlcnZlci1NLUVmN0E3clFQU0tPd2J2RVc0VmtPOXM6',
-        //         'Content-Type: application/json',
-        //     ),
-        // ));
-
-        // $response = curl_exec($curl);
-        // $err = curl_error($curl);
-        // curl_close($curl);
-
-        // if ($err) {
-        //     echo "cURL Error #:" . $err;
-        //     return $err;
-        // } else {
-
-        //     $response_success = json_decode($response, true);
-        //     Mail::to(auth()->user()->email)->send(new Bill_mail($response_success));
-        // }
-        return view('toko.layout.transaksi_success', [
-            'nomor_order' => $nota,
-            'status_pesanan' => 'belum',
-            'nominal_pesanan' => $gross_amount,
-            'metode_pembayaran' => $request->bank,
-            'batas_akhir_pembayaran' => 'belum',
-            'kode_pembayaran' => 'belum',
+        Kurir::create([
+            'code' => $get_session_credential['code'],
+            'service' => $get_detail_rajaongkir['service'],
+            'deskripsi' => $get_detail_rajaongkir['description'],
+            'tarif' => $get_detail_rajaongkir['cost'][0]['value'],
+            'estimasi' => $get_detail_rajaongkir['cost'][0]['etd'],
         ]);
+
+        return 'ok';
+
+
+
+        $keranjang = Keranjang::with([
+            'item:id,nama,harga,gambar',
+            'ukuran:id,nama'
+        ])
+            ->select(['id', 'user_id', 'qty', 'item_id', 'ukuran_id'])
+            ->where('user_id', auth()->user()->id)
+            ->get();
+
+
+        $user = User::with([
+            'credential.alamat',
+        ])->get()->first();
+
+
+        // cek metode pembayaran
+        $data = $this->cek_data_midtrans($request->bank, $gross_amount, $keranjang, $user);
+
+
+        $batas_akhir_pembayaran = Carbon::parse($data['custom_expiry']['order_time'])
+            ->addHour(24)
+            ->format('d F Y H:i:s');
+
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/charge",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Accept: application/json',
+                'Authorization: Basic U0ItTWlkLXNlcnZlci1NLUVmN0E3clFQU0tPd2J2RVc0VmtPOXM6',
+                'Content-Type: application/json',
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+            return $err;
+        } else {
+            $response_success = json_decode($response, true);
+
+            $data = [
+                'response' => $response_success,
+                'batas_akhir_pembayaran' => $batas_akhir_pembayaran,
+                'user' => $user,
+                'keranjang' => $keranjang,
+                'pengiriman' => $get_session_credential['code'] . ' - ' . $get_session_credential['service'] . ' ' . $get_detail_rajaongkir['description'],
+                'ongkir' => $get_detail_rajaongkir['cost'][0]['value'],
+                'sub_total' => $sub_total['sub_total']
+            ];
+
+
+
+
+            Mail::to(auth()->user()->email)->send(new Bill_mail($data));
+            return view('toko.layout.transaksi_success', [
+                'nomor_order' => $nota,
+                'status_pesanan' => $response_success['transaction_status'],
+                'nominal_pesanan' => $gross_amount,
+                'metode_pembayaran' => $request->bank,
+                'batas_akhir_pembayaran' => $batas_akhir_pembayaran,
+                'kode_pembayaran' => [
+                    'va_number' => isset($response_success['va_numbers']) != null ? $response_success['va_numbers'][0]['va_number'] : null,
+                    'bill_key' => isset($response_success['bill_key']) != null ? $response_success['bill_key'] : null,
+                    'biller_code' => isset($response_success['biller_code']) != null ? $response_success['biller_code'] : null
+                ]
+            ]);
+        }
     }
 
 
 
-    private function cek_metode_pembayaran($bank, $gross_amount)
+    private function cek_data_midtrans($bank, $gross_amount, $keranjang, $user)
     {
         if ($bank == 'echannel') {
             $data = [
@@ -209,13 +265,6 @@ class CheckoutController extends Controller
                 ],
             ];
         }
-        $keranjang = Keranjang::with([
-            'item:id,nama,harga'
-        ])
-            ->select(['id', 'user_id', 'qty', 'item_id'])
-            ->where('user_id', auth()->user()->id)
-            ->get();
-
         foreach ($keranjang as $item) {
             $data['items_details'][] = [
                 "id" => $item->item->id,
@@ -224,10 +273,6 @@ class CheckoutController extends Controller
                 "name" => $item->item->nama
             ];
         }
-        $user = User::with([
-            'credential.alamat',
-        ])->get()->first();
-
 
         $data['customer_details'] =   [
             "first_name" => $user->credential->nama_depan,
@@ -246,7 +291,7 @@ class CheckoutController extends Controller
             ]
         ];
         $data["custom_expiry"] = [
-            "order_time" => Carbon::now(),
+            "order_time" => Carbon::now()->format('Y-m-d H:i:s O'),
             "expiry_duration" => 1440,
             "unit" => "minute"
         ];

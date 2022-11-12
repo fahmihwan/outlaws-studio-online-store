@@ -42,23 +42,40 @@
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Nominal Pesanan</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">Rp. {{ number_format() }}</td>
+                            <td class="text-end text-sm md:text-lg font-semibold">Rp.
+                                {{ number_format($nominal_pesanan, 0, '', '.') }}</td>
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Metode Pembayaran</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">Virtual Account Mandiri</td>
+                            @if ($metode_pembayaran == 'echannel')
+                                <td class="text-end text-sm md:text-lg font-semibold">Virtual Account Mandiri</td>
+                            @endif
+                            @if ($metode_pembayaran == 'bca')
+                                <td class="text-end text-sm md:text-lg font-semibold">Virtual Account BCA</td>
+                            @endif
+                            @if ($metode_pembayaran == 'bni')
+                                <td class="text-end text-sm md:text-lg font-semibold">Virtual Account BNI</td>
+                            @endif
+                            @if ($metode_pembayaran == 'bri')
+                                <td class="text-end text-sm md:text-lg font-semibold">Virtual Account BRI</td>
+                            @endif
                         </tr>
                         <tr class="border-t">
                             <td class="text-sm md:text-lg font-semibold py-3">Batas Akhir Pembayaran</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">11 November 2022 01.32.02 WIB </td>
+                            <td class="text-end text-sm md:text-lg font-semibold">{{ $batas_akhir_pembayaran }}</td>
                         </tr>
                         <tr class="border-t">
-                            <td class="text-sm md:text-lg font-semibold py-3">Kode Pembayaran</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">8969600900013749</td>
-                        </tr>
-                        <tr class="border-y">
-                            <td class="text-sm md:text-lg font-semibold py-3">Nomor Order</td>
-                            <td class="text-end text-sm md:text-lg font-semibold">CONV5000022033</td>
+                            <td class="text-sm md:text-lg font-semibold py-3 ">Kode Pembayaran</td>
+                            @if (isset($kode_pembayaran['va_number']) != null)
+                                <td class="text-end text-sm md:text-lg font-semibold">
+                                    {{ $kode_pembayaran['va_number'] }}</td>
+                            @endif
+                            @if (isset($kode_pembayaran['bill_key']) != null)
+                                <td class="text-end  font-semibold ">
+                                    <span class="mr-2 "> bill key : {{ $kode_pembayaran['bill_key'] }}</span>
+                                    <span class=""> biller code : {{ $kode_pembayaran['biller_code'] }}</span>
+                                </td>
+                            @endif
                         </tr>
                     </table>
 
@@ -68,10 +85,10 @@
                         08.00 - 21.00 WIB
                     </div>
                     <div class="mt-4 flex justify-center">
-                        <button
+                        <a href="/"
                             class="border border-black bg-white hover:bg-black hover:text-white duration-300  px-5 py-2 mx-auto">
                             Lanjut Berbelanja
-                        </button>
+                        </a>
                     </div>
 
                 </div>

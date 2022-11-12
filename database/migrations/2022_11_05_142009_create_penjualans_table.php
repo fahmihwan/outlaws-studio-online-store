@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('penjualans', function (Blueprint $table) {
             $table->id();
             $table->string('nota');
-            $table->dateTime('tanggal_penjualan');
+            $table->dateTime('tanggal_pembelian');
             $table->foreignId('pembayaran_id');
             $table->foreignId('alamat_id');
             $table->foreignId('kurir_id');
