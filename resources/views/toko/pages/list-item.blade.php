@@ -41,22 +41,27 @@
                     </a>
                     <div class="p-2 border flex justify-between bg-white ">
                         <div class="">{{ $item->nama }} <br>
-                            <span class="text-gray-400">Rp {{ $item->harga }}</span>
+                            <span class="text-gray-400">Rp {{ number_format($item->harga, 0, '', '.') }}</span>
                         </div>
                         <div class="text-right">
                             <span class="mb-3 text-gray-500">
                                 {{ $item->kategori->nama }}
                             </span><br>
-                            {{-- @if () --}}
-                                
-                            {{-- @endif --}}
-                            <form method="POST" action="/list-item/wish_list/{{ $item->id }}">
-                                @csrf
-                                <button type="submit" class="mr-2"><i class="text-xl far fa-heart"></i></button>
-                            </form>
+                            @if ($item->wish_list == null)
+                                <form method="POST" action="/list-item/wish_list/{{ $item->id }}">
+                                    @csrf
+                                    <button type="submit" class="mr-2"><i class="text-xl far fa-heart"></i></button>
+                                </form>
+                            @endif
 
-                            {{-- /list-item/wish_list/{id}/destroy --}}
-                            {{-- <i class="fa-solid fa-heart text-xl"></i> --}}
+                            @if ($item->wish_list != null)
+                                <form action="/list-item/wish_list/{{ $item->id }}/destroy" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="mr-2"> <i
+                                            class="fa-solid fa-heart text-xl"></i></button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\CMS\ItemController;
 use App\Http\Controllers\CMS\ListCustomerController;
 use App\Http\Controllers\CMS\master_item\KategoriController;
 use App\Http\Controllers\CMS\master_item\UkuranController;
+use App\Http\Controllers\CMS\TransactionController;
 use App\Http\Controllers\Toko\AlamatController;
 use App\Http\Controllers\Toko\AuthUserController;
 use App\Http\Controllers\Toko\Cart_WishlistController;
@@ -87,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/list-item/cart/{id}', [Cart_WishlistController::class, 'store_cart']);
     Route::delete('/list-item/cart/{id}/destroy', [Cart_WishlistController::class, 'destroy_cart']);
     Route::post('/list-item/wish_list/{id}', [Cart_WishlistController::class, 'store_wishlist']);
-    Route::delete('/list-item/wish_list/{id}/destroy', [Cart_WishlistController::class, 'destroy_cart']);
+    Route::delete('/list-item/wish_list/{id}/destroy', [Cart_WishlistController::class, 'destroy_wish_list']);
 
     // checkout
     Route::get('/checkout/pengiriman', [CheckoutController::class, 'pengiriman']);
@@ -129,3 +130,6 @@ Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_l
 //list customer
 Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);
 Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show']);
+
+// transaction
+Route::get("/admin/transaction/user", [TransactionController::class, 'index']);

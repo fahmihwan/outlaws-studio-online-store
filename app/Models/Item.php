@@ -20,4 +20,9 @@ class Item extends Model
     {
         return $this->hasMany(List_ukuran::class);
     }
+
+    public function wish_list()
+    {
+        return $this->hasOne(Wish_list::class);
+    }
 }

@@ -7,127 +7,140 @@
         @include('toko.components.sidebar-account')
 
         {{-- informasi  --}}
-        {{-- <div class=" md:w-full">
-            <div class=" m-2 py-4 px-10">
-                <h1 class="font-bold text-2xl mb-7">Akun Saya</h1>
-                <h1 class="font-bold text-2xl mb-6">INFORMASI AKUN & ALAMAT</h1>
+        <div class=" md:w-full px-10 ">
+            <div class="m-2 py-4 ">
+                <h1 class="font-bold text-2xl mb-7">Alamat</h1>
 
-                <div class="overflow-x-auto relative mb-14">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700  uppercase bg-gray-200">
-                            <tr>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Nomor Pesanan
+                <h1 class="font-bold text-2xl pb-5 border-b-2">ALAMAT</h1>
+            </div>
+            <div class="mb-5">
+                <h1 class="font-bold mb-4">Alamat Pengiriman</h1>
+                <p class="font-light text-sm pb-2">fahmi Ihwan</p>
+                <p class="font-light text-sm pb-2">magetan</p>
+                <p class="font-light text-sm pb-2">Amlapura/Amlapura, Bali, 63392</p>
+                <p class="font-light text-sm pb-2">82334331234</p>
+                <a href="" class="underline text-xs hover:text-red-500">Ubah Alamat Pengiriman</a>
+            </div>
+            <div class="">
+                <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">Alamat Tambahan</h1>
+
+                <div class="">
+                    <table class="w-full text-left text-gray-500  text-xs">
+                        <thead class="text-xs text-gray-900  ">
+                            <tr class="border-b">
+                                <th scope="col" class="py-2 px-0">
+                                    Nama Depan
                                 </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Tanggal Pemesanan
+                                <th scope="col" class="py-2 px-0">
+                                    Nama Belakang
                                 </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Kirim Ke
+                                <th scope="col" class="py-2 px-0">
+                                    Alamat
                                 </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Total
+                                <th scope="col" class="py-2 px-0">
+                                    Provinsi
                                 </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Status
+                                <th scope="col" class="py-2 px-0">
+                                    Kota
                                 </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Action
+                                <th scope="col" class="py-2 px-0">
+                                    Kode Pos
+                                </th>
+                                <th scope="col" class="py-2 px-0">
+                                    Nomor Telp
+                                </th>
+                                <th scope="col" class="py-2 px-0">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
+                            <tr class="border-b ">
+                                <th scope="row" class="py-2 px-0 font-medium text-gray-900 whitespace-nowrap ">
+                                    fahmi
                                 </th>
-                                <td class="py-4 px-6">
-                                    Sliver
+                                <td class="py-2 px-0">
+                                    ihwan
                                 </td>
-                                <td class="py-4 px-6">
-                                    Laptop
+                                <td class="py-2 px-0">
+                                    Magetan
                                 </td>
-                                <td class="py-4 px-6">
-                                    $2999
+                                <td class="py-2 px-0">
+                                    Jatim
                                 </td>
-                                <td class="py-4 px-6">
-                                    $2999
+                                <td class="py-2 px-0">
+                                    Surabaya
                                 </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
+                                <td class="py-2 px-0">
+                                    9213
+                                </td>
+                                <td class="py-2 px-0">
+                                    081232133312
+                                </td>
+                                <td class="py-2 px-0 flex ">
+                                    <a class="text-red-500" href="">Ubah</a> &nbsp;| &nbsp;
+                                    <form action="">
+                                        <button class="text-red-500">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
+                            <tr class="border-b ">
+                                <th scope="row" class="py-2 px-0 font-medium text-gray-900 whitespace-nowrap ">
+                                    fahmi
                                 </th>
-                                <td class="py-4 px-6">
-                                    Sliver
+                                <td class="py-2 px-0">
+                                    ihwan
                                 </td>
-                                <td class="py-4 px-6">
-                                    Laptop
+                                <td class="py-2 px-0">
+                                    Magetan
                                 </td>
-                                <td class="py-4 px-6">
-                                    $2999
+                                <td class="py-2 px-0">
+                                    Jatim
                                 </td>
-                                <td class="py-4 px-6">
-                                    $2999
+                                <td class="py-2 px-0">
+                                    Surabaya
                                 </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
+                                <td class="py-2 px-0">
+                                    9213
+                                </td>
+                                <td class="py-2 px-0">
+                                    081232133312
+                                </td>
+                                <td class="py-2 px-0 flex ">
+                                    <a class="text-red-500" href="">Ubah</a> &nbsp;| &nbsp;
+                                    <form action="">
+                                        <button class="text-red-500">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
+
+                    <div class="float-right mt-5 mb-5 text-sm">
+                        <label for="">Show</label>
+                        <select name="" id="" class="border border-gray-300 rounded-sm w-14 p-2 text-sm">
+                            <option value="">10</option>
+                            <option value="">20</option>
+                            <option value="">50</option>
+                        </select>
+                        <label for="">Per Page</label>
+                    </div>
+
                 </div>
+                <a href=""
+                    class="mt-20 inline-block border border-black p-2 w-40 text-center bg-black text-white hover:bg-white hover:text-black">Tambah
+                    Alamat</a>
 
-                <section class="mb-16">
-                    <h1 class="font-bold text-2xl mb-2">INFORMASI AKUN</h1>
-                    <hr class="mb-4">
-                    <h5 class="font-bold text-sm">Informasi Kontak</h5>
-                    <p class="text-sm text-gray-600">fahmi ihwan</p>
-                    <p class="text-sm text-gray-600">fahmiihwan86@gmail.com</p>
-                    <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Lihat Detail </a>&nbsp; | &nbsp;
-                        <a href="" class="underline hover:text-red-900">Pesan Ulang </a>
-                    </div>
-                </section>
 
-                <section>
-                    <div class="flex mb-2">
-                        <h1 class="font-bold text-2xl mr-10">ALAMAT</h1>
-                        <a href=""
-                            class="border-2 flex items-center px-10 text-xs border-black hover:bg-black hover:text-white">
-                            Pengaturan
-                            Alamat
-                        </a>
-                    </div>
-                    <hr class="mb-4">
-                    <h5 class="font-bold text-sm">Alamat Pengiriman</h5>
-                    <p class="text-sm text-gray-600">pak sulthon</p>
-                    <p class="text-sm text-gray-600">maospati, kraton</p>
-                    <p class="text-sm text-gray-600">kab bengkulu 93392</p>
-                    <p class="text-sm text-gray-600">Indonesia</p>
-                    <p class="text-sm text-gray-600">082334338392</p>
-
-                    <!-- Alamat Penagihan
-                                                            bumi balakosa
-                                                            maospati, kraton
-                                                            Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
-                                                            Indonesia
-                                                            T: 082334337393 -->
-                    <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
-                    </div>
-                </section>
-
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
             </div>
-        </div> --}}
-        addres
+
+        </div>
     </div>
 @endsection

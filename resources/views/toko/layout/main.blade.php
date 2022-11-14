@@ -50,7 +50,7 @@
     <div class=" h-screen flex w-full">
         <!-- sidebar -->
         @if (request()->is('list-item'))
-            <aside class="w-80 border-r-2  transition-width" id="sidebar" aria-label="Sidebar">
+            <aside class="md:w-80 border-r-2  transition-width" id="sidebar" aria-label="Sidebar">
                 <button class="p-4 flex justify-between font-light  w-full btn-filter-toggle">
                     <span class="text-sm">Sembunyikan Filter </span><i class="fa-solid fa-bars"></i>
                 </button>

@@ -82,6 +82,18 @@
 
                         </tbody>
                     </table>
+
+                    <div class="float-right mt-5 mb-5 text-sm">
+                        <label for="">Show</label>
+                        <select name="" id="" class="border border-gray-300 rounded-sm w-14 p-2 text-sm">
+                            <option value="">10</option>
+                            <option value="">20</option>
+                            <option value="">50</option>
+                        </select>
+                        <label for="">Per Page</label>
+                    </div>
+
+
                 </div>
 
 

@@ -19,7 +19,7 @@
             <!-- title & price -->
             <section class="mb-2">
                 <p class="text-lg font-normal mb-2">{{ $item->nama }}</p>
-                <p class="font-semibold">Rp. {{ $item->harga }}</p>
+                <p class="font-semibold">Rp. {{ number_format($item->harga, 0, '', '.') }}</p>
             </section>
 
             <!-- description -->

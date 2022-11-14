@@ -7,127 +7,136 @@
         @include('toko.components.sidebar-account')
 
         {{-- informasi  --}}
-        {{-- <div class=" md:w-full">
-            <div class=" m-2 py-4 px-10">
-                <h1 class="font-bold text-2xl mb-7">Akun Saya</h1>
-                <h1 class="font-bold text-2xl mb-6">INFORMASI AKUN & ALAMAT</h1>
+        <div class=" md:w-full px-10 ">
+            <div class="m-2 py-4 ">
+                <h1 class="font-bold text-2xl mb-7">Ubah Informasi Akun</h1>
 
-                <div class="overflow-x-auto relative mb-14">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700  uppercase bg-gray-200">
-                            <tr>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Nomor Pesanan
-                                </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Tanggal Pemesanan
-                                </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Kirim Ke
-                                </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Total
-                                </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Status
-                                </th>
-                                <th scope="col" class="py-3 px-6 font-extrabold">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
 
-                        </tbody>
-                    </table>
-                </div>
+                <form class="" action="/customer/account/store" method="POST">
+                    <div class="w-full flex">
+                        <div class="w-1/2 pr-20">
+                            <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">Informasi Akun</h1>
+                            <div class="mb-6  w-full  ">
+                                <label class="mb-2 font-normal block" for="">Nama Depan <span
+                                        class="text-red-600">*</span></label>
+                                <input type="text" name="nama_depan" placeholder="Masukan nama Depan Anda"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+                            <div class="mb-6 w-full  ">
+                                <label class="mb-2 block" for="">Nama Belakang <span
+                                        class="text-red-600">*</span></label>
+                                <input type="text" name="nama_belakang" placeholder="Masukan nama Depan Belakang"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+                            <div class="mb-6 w-full  ">
+                                <label class="mb-2 block" for="">Tanggal Lahir <span
+                                        class="text-red-600">*</span></label>
+                                <div class="flex">
+                                    <select name="tanggal" id="tanggal"
+                                        class="bg-gray-100 mr-3 w-4/12 lg:w-4/12 border-b border-x-0 border-t-0">
+                                        <option value="">Tanggal</option>
+                                    </select>
+                                    <select name="bulan" id="bulan"
+                                        class="bg-gray-100 mr-3 w-4/12 lg:w-6/12 border-b border-x-0 border-t-0">
+                                        <option value="">Bulan</option>
+                                    </select>
+                                    <select name="tahun" id="tahun"
+                                        class="bg-gray-100 w-4/12 lg:w-4/12 border-b border-x-0 border-t-0">
+                                        <option value="">Tahun</option>
 
-                <section class="mb-16">
-                    <h1 class="font-bold text-2xl mb-2">INFORMASI AKUN</h1>
-                    <hr class="mb-4">
-                    <h5 class="font-bold text-sm">Informasi Kontak</h5>
-                    <p class="text-sm text-gray-600">fahmi ihwan</p>
-                    <p class="text-sm text-gray-600">fahmiihwan86@gmail.com</p>
-                    <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Lihat Detail </a>&nbsp; | &nbsp;
-                        <a href="" class="underline hover:text-red-900">Pesan Ulang </a>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-6 w-full ">
+                                <label class="mb-2 block" for="">Jenis kelamin <span
+                                        class="text-red-600">*</span></label>
+                                <select name="jenis_kelamin" id=""
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                                    <option value=""></option>
+                                    <option value="pria">Pria</option>
+                                    <option value="wanita">Wanita</option>
+                                </select>
+                            </div>
+                            <div class="mb-6 w-full ">
+                                <label class="mb-2 block" for="">Nomor Telepon <span
+                                        class="text-red-600">*</span></label>
+                                <div class="relative">
+                                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                        62
+                                    </div>
+                                    <input type="number" name="telp" id="telp"
+                                        class="bg-gray-100 border-b border-x-0 border-t-0  text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
+                                        placeholder="">
+                                </div>
+                            </div>
+
+
+
+                            <div class="mb-6 w-full lg:w-10/12 ">
+                                <input type="checkbox" class="mr-5" id="ganti-email"> <label for="ganti-email"> Ganti
+                                    Email</label><br><br>
+                                <input type="checkbox" class="mr-5" id="gant-sandi"> <label for="gant-sandi"> Ubah Kata
+                                    Sandi</label><br>
+
+
+                            </div>
+                            <div class="mb-6 w-32 ">
+                                <button type="submit"
+                                    class="w-full mb-0  text-white bg-black border-2 border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm px-5 py-3 text-center
+                                hover:bg-white hover:text-black 
+                                hover:duration-300
+                                ">
+                                    Simpan
+                                </button>
+                            </div>
+                        </div>
+
+
+                        {{-- password --}}
+                        <div class="w-1/2">
+                            <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">
+                                Ganti Alamat Email & Password
+
+                            </h1>
+                            <div class="mb-6 w-full lg:w-10/12 ">
+                                <label class="mb-2 font-normal block" for="">Email <span
+                                        class="text-red-600">*</span></label>
+                                <input type="email" name="email" placeholder="Masukan Email Anda"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+                            <div class="mb-6 w-full lg:w-10/12 ">
+                                <label class="mb-2 font-normal block" for="">Kata Sandi Sekarang<span
+                                        class="text-red-600">*</span></label>
+                                <input type="password" name="password" placeholder="Masukan password Anda"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+                            <div class="mb-6 w-full lg:w-10/12 ">
+                                <label class="mb-2 font-normal block" for="">Kata Sandi Baru<span
+                                        class="text-red-600">*</span></label>
+                                <input type="password" name="password" placeholder="Masukan password Anda"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+                            <div class="mb-6 w-full lg:w-10/12 ">
+                                <label class="mb-2 font-normal block" for="">Konfirmasi Kata Sandi <span
+                                        class="text-red-600">*</span></label>
+                                <input type="password" name="confirm_password"
+                                    placeholder="Masukan password Anda kembali"
+                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                            </div>
+
+                        </div>
                     </div>
-                </section>
 
-                <section>
-                    <div class="flex mb-2">
-                        <h1 class="font-bold text-2xl mr-10">ALAMAT</h1>
-                        <a href=""
-                            class="border-2 flex items-center px-10 text-xs border-black hover:bg-black hover:text-white">
-                            Pengaturan
-                            Alamat
-                        </a>
-                    </div>
-                    <hr class="mb-4">
-                    <h5 class="font-bold text-sm">Alamat Pengiriman</h5>
-                    <p class="text-sm text-gray-600">pak sulthon</p>
-                    <p class="text-sm text-gray-600">maospati, kraton</p>
-                    <p class="text-sm text-gray-600">kab bengkulu 93392</p>
-                    <p class="text-sm text-gray-600">Indonesia</p>
-                    <p class="text-sm text-gray-600">082334338392</p>
 
-                    <!-- Alamat Penagihan
-                                                            bumi balakosa
-                                                            maospati, kraton
-                                                            Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
-                                                            Indonesia
-                                                            T: 082334337393 -->
-                    <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
-                    </div>
-                </section>
 
+
+
+
+                </form>
             </div>
-        </div> --}}
-        informasi account
+
+
+
+        </div>
     </div>
 @endsection

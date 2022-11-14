@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Toko;
 
+use App\Console\Kernel;
 use App\Http\Controllers\Controller;
 use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
+use App\Models\Detail_penjualan;
 use App\Models\Keranjang;
 use App\Models\Kurir;
+use App\Models\Pembayaran;
 use App\Models\Penjualan;
 use App\Models\User;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 // use App\Mail\DemoMail;
 
 use Illuminate\Support\Facades\Mail;
@@ -29,9 +33,12 @@ class CheckoutController extends Controller
             'ukuran:id,nama'
         ])->where('user_id', auth()->user()->id)->latest()->get();
 
+
         $total_keranjang = $items->sum(function ($item) {
             return $item->qty * $item->item->harga;
         });
+
+
 
         return view('toko.pages.checkout.keranjang', [
             'items' => $items,
@@ -85,9 +92,12 @@ class CheckoutController extends Controller
             'ukuran:id,nama'
         ])->where('user_id', auth()->user()->id)->get();
 
+
         $sub_total = $keranjang->sum(function ($item) {
             return $item->qty * $item->item->harga;
         });
+
+
 
         $total =  $sub_total +  $get_detail_rajaongkir['cost'][0]['value'];
 
@@ -126,6 +136,10 @@ class CheckoutController extends Controller
     public function pay(Request $request)
     {
 
+        $request->validate([
+            'bank' => 'required',
+        ]);
+
         //  nota
         $nota = $this->create_nota();
 
@@ -135,27 +149,19 @@ class CheckoutController extends Controller
         // ongkir
         $get_detail_rajaongkir =  $this->cek_session_rajaongkir($get_sesssion_rajaongkir, $get_session_credential);
 
-        // return $get_detail_rajaongkir;
+        // sum qty keranjang
+        $sum_qty_keranjang = Keranjang::where('user_id', auth()->user()->id)
+            ->selectRaw('sum(qty) as qty_keranjang')
+            ->first()->qty_keranjang;
+
         // subtotal
         $sub_total = Keranjang::where('user_id', auth()->user()->id)
             ->join('items', 'keranjangs.item_id', '=', 'items.id')
             ->selectRaw('sum(keranjangs.qty * items.harga) as sub_total')
             ->first();
-        // total
+
+        // total = subtotal + ongkir
         $gross_amount = $sub_total['sub_total'] + $get_detail_rajaongkir['cost'][0]['value'];
-
-
-        Kurir::create([
-            'code' => $get_session_credential['code'],
-            'service' => $get_detail_rajaongkir['service'],
-            'deskripsi' => $get_detail_rajaongkir['description'],
-            'tarif' => $get_detail_rajaongkir['cost'][0]['value'],
-            'estimasi' => $get_detail_rajaongkir['cost'][0]['etd'],
-        ]);
-
-        return 'ok';
-
-
 
         $keranjang = Keranjang::with([
             'item:id,nama,harga,gambar',
@@ -165,21 +171,17 @@ class CheckoutController extends Controller
             ->where('user_id', auth()->user()->id)
             ->get();
 
-
         $user = User::with([
             'credential.alamat',
-        ])->get()->first();
-
+        ])->where('id', auth()->user()->id)
+            ->get()->first();
 
         // cek metode pembayaran
         $data = $this->cek_data_midtrans($request->bank, $gross_amount, $keranjang, $user);
 
-
         $batas_akhir_pembayaran = Carbon::parse($data['custom_expiry']['order_time'])
             ->addHour(24)
             ->format('d F Y H:i:s');
-
-
 
         $curl = curl_init();
 
@@ -208,8 +210,62 @@ class CheckoutController extends Controller
             return $err;
         } else {
             $response_success = json_decode($response, true);
+            // pembayaran
+            try {
+                DB::beginTransaction();
+                $pembayaran_id = Pembayaran::create([
+                    'code_transaction' => $response_success['transaction_id'],
+                    'code_order' => $response_success['order_id'],
+                    'code_merchant' => $response_success['merchant_id'],
+                    'code_bank' => $request->bank == 'echannel' ? 'mandiri' : $request->bank,
+                    'transaction_status' => $response_success['transaction_status'],
+                    'va_number' => isset($response_success['va_numbers'][0]['va_number']) ? $response_success['va_numbers'][0]['va_number'] : null,
+                    'bill_key' => isset($response_success['bill_key']) ? $response_success['bill_key'] : null,
+                    'biller_code' => isset($response_success['biller_code']) ? $response_success['biller_code'] : null,
+                ])->id;
 
-            $data = [
+                // kurir
+                $kurir_id = Kurir::create([
+                    'code' => $get_session_credential['code'],
+                    'service' => $get_detail_rajaongkir['service'],
+                    'deskripsi' => $get_detail_rajaongkir['description'],
+                    'tarif' => $get_detail_rajaongkir['cost'][0]['value'],
+                    'estimasi' => $get_detail_rajaongkir['cost'][0]['etd'],
+                ])->id;
+
+                $penjualan_id = Penjualan::create([
+                    'nota' => $nota,
+                    'tanggal_pembelian' => Carbon::now(),
+                    'pembayaran_id' => $pembayaran_id,
+                    'alamat_id' => $user->credential->alamat_id,
+                    'kurir_id' => $kurir_id,
+                    'qty' => $sum_qty_keranjang,
+                    'total' => $gross_amount,
+                    'user_id' => auth()->user()->id,
+                ])->id;
+
+                foreach ($keranjang as $krj) {
+                    Detail_penjualan::create([
+                        'penjualan_id' => $penjualan_id,
+                        'item_id' => $krj['item_id'],
+                        'ukuran_id' => $krj['ukuran_id'],
+                        'qty' => $krj['qty']
+                    ]);
+
+                    Keranjang::where([
+                        'user_id' => auth()->user()->id,
+                        'item_id' => $krj->item_id
+                    ])->delete();
+                }
+                DB::commit();
+            } catch (\Throwable $th) {
+                //throw $th;
+                DB::rollBack();
+                return redirect()->back()->withErrors($th->getMessage());
+            }
+
+
+            Mail::to(auth()->user()->email)->send(new Bill_mail([
                 'response' => $response_success,
                 'batas_akhir_pembayaran' => $batas_akhir_pembayaran,
                 'user' => $user,
@@ -217,12 +273,8 @@ class CheckoutController extends Controller
                 'pengiriman' => $get_session_credential['code'] . ' - ' . $get_session_credential['service'] . ' ' . $get_detail_rajaongkir['description'],
                 'ongkir' => $get_detail_rajaongkir['cost'][0]['value'],
                 'sub_total' => $sub_total['sub_total']
-            ];
+            ]));
 
-
-
-
-            Mail::to(auth()->user()->email)->send(new Bill_mail($data));
             return view('toko.layout.transaksi_success', [
                 'nomor_order' => $nota,
                 'status_pesanan' => $response_success['transaction_status'],

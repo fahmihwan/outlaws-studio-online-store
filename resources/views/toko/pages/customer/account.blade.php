@@ -9,9 +9,19 @@
         {{-- informasi  --}}
         <div class=" md:w-full">
             <div class=" m-2 py-4 px-10">
-                <h1 class="font-bold text-2xl mb-7">Akun Saya</h1>
-                <h1 class="font-bold text-2xl mb-6">INFORMASI AKUN & ALAMAT</h1>
+                <div class=" flex">
+                    <div>
+                        <h1 class="font-bold text-2xl mb-7">Akun Saya</h1>
+                        <h1 class="font-bold text-2xl mb-6">INFORMASI AKUN & ALAMAT</h1>
+                    </div>
+                    <div class="flex ml-8 mb-5 items-end">
+                        <a href="/customer/order-history"
+                            class="border h-6 flex items-center px-10 text-xs border-black hover:bg-black hover:text-white">
+                            Lihat Semua
+                        </a>
+                    </div>
 
+                </div>
                 <div class="overflow-x-auto relative mb-14">
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700  uppercase bg-gray-200">
@@ -37,50 +47,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
+                            @foreach ($items as $item)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $item->nota }}
+                                    </th>
+                                    <td class="py-4 px-6">
+                                        {{ $item->tanggal_pembelian }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ $item->alamat->nama_depan }} {{ $item->alamat->nama_belakang }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        Rp. {{ number_format($item->total, 0, '', '.') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ $item->pembayaran->transaction_status }}
+                                    </td>
+                                    <td class="py-4 px-3 text-xs">
+                                        <a href="">Lihat Detail </a>&nbsp; | &nbsp;
+                                        <a href="">Pesan Ulang </a>
+                                    </td>
+                                </tr>
+                            @endforeach
 
                         </tbody>
                     </table>
@@ -119,11 +109,11 @@
                     <p class="text-sm text-gray-600">082334338392</p>
 
                     <!-- Alamat Penagihan
-                                                                                                                                                    bumi balakosa
-                                                                                                                                                    maospati, kraton
-                                                                                                                                                    Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
-                                                                                                                                                    Indonesia
-                                                                                                                                                    T: 082334337393 -->
+                                                                                                                                                                                                                                                                                                                                                        bumi balakosa
+                                                                                                                                                                                                                                                                                                                                                        maospati, kraton
+                                                                                                                                                                                                                                                                                                                                                        Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
+                                                                                                                                                                                                                                                                                                                                                        Indonesia
+                                                                                                                                                                                                                                                                                                                                                        T: 082334337393 -->
                     <div class="text-gray-500 text-xs mt-5">
                         <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
                     </div>

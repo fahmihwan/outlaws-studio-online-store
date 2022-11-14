@@ -10,6 +10,7 @@ use App\Models\Wish_list;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\Diff\Chunk;
 
 class Cart_WishlistController extends Controller
 {
@@ -66,30 +67,6 @@ class Cart_WishlistController extends Controller
     {
         Keranjang::where('id', $id)->delete();
         return redirect()->back();
-    }
-
-    public function store_wishlist($id)
-    {
-        $check = Wish_list::where([
-            'user_id' => auth()->user()->id,
-            'item_id' => $id
-        ])->count();
-
-
-        if ($check > 0) {
-            return redirect()->back();
-        }
-
-        Wish_list::create([
-            'user_id' => auth()->user()->id,
-            'item_id' => $id
-        ]);
-        return redirect()->back();
-    }
-
-    public function destroy_wishlist($id)
-    {
-        dd($id);
     }
 
 
@@ -153,5 +130,41 @@ class Cart_WishlistController extends Controller
             'item' => $keranjang,
             'select_ukurans' => $item->list_ukurans
         ]);
+    }
+
+    public function store_wishlist($id)
+    {
+        $check = Wish_list::where([
+            'user_id' => auth()->user()->id,
+            'item_id' => $id
+        ])->count();
+
+
+        if ($check > 0) {
+            return redirect()->back();
+        }
+
+        Wish_list::create([
+            'user_id' => auth()->user()->id,
+            'item_id' => $id
+        ]);
+        return redirect()->back();
+    }
+
+    public function destroy_wish_list($id)
+    {
+        $check = Wish_list::where([
+            'user_id' => auth()->user()->id,
+            'item_id' => $id
+        ])->count();
+
+        if ($check == 0) {
+            return redirect()->back();
+        }
+        Wish_list::where([
+            'user_id' => auth()->user()->id,
+            'item_id' => $id
+        ])->delete();
+        return redirect()->back();
     }
 }

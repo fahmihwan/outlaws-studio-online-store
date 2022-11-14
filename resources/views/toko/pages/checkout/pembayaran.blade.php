@@ -11,6 +11,21 @@
     <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-24 ">
         <div class="border h-full">
             {{-- tabs --}}
+            @if ($errors->any())
+                <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                    role="alert">
+                    <div>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span class="font-medium">Ensure that these requirements are met:</span>
+                        <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
 
             <div class=" md:flex hidden ">
                 <a href="/checkout/pengiriman" class=" border-t-2 p-3 block bg-gray-100  w-1/2 text-center">
@@ -90,7 +105,6 @@
                     </article>
                 </div>
             @endforeach
-
         </div>
         <div class="flex justify-between px-3 pb-2">
             <span class="font-light text-sm">Subtotal Belanja</span>
