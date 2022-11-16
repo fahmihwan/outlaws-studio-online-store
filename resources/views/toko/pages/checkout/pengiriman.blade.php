@@ -1,5 +1,7 @@
 @extends('toko.layout.main_checkout')
 
+
+
 @section('container-checkout')
     <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-14  ">
         <div class="border h-full">

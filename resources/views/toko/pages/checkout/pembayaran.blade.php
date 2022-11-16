@@ -7,6 +7,7 @@
     <!-- Note: replace with src="https://app.midtrans.com/snap/snap.js" for Production environment -->
 @endsection --}}
 
+
 @section('container-checkout')
     <div class="w-full md:w-2/3 pr-0 md:pr-8 mb-5 md:mb-24 ">
         <div class="border h-full">
