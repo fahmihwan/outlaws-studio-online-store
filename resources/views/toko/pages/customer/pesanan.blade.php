@@ -35,50 +35,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Apple MacBook Pro 17"
-                                </th>
-                                <td class="py-4 px-6">
-                                    Sliver
-                                </td>
-                                <td class="py-4 px-6">
-                                    Laptop
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-6">
-                                    $2999
-                                </td>
-                                <td class="py-4 px-3 text-xs">
-                                    <a href="">Lihat Detail </a>&nbsp; | &nbsp;
-                                    <a href="">Pesan Ulang </a>
-                                </td>
-                            </tr>
+                            @foreach ($items as $item)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $item->nota }}
+                                    </th>
+                                    <td class="py-4 px-6">
+                                        {{ $item->tanggal_pembelian }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ $item->alamat->nama_depan }} {{ $item->alamat->nama_belakang }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        Rp. {{ number_format($item->total, 0, '', '.') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ $item->pembayaran->transaction_status }}
+                                    </td>
+                                    <td class="py-4 px-3 text-xs">
+                                        <a href="">Lihat Detail </a>&nbsp; | &nbsp;
+                                        <a href="">Pesan Ulang </a>
+                                    </td>
+                                </tr>
+                            @endforeach
 
                         </tbody>
                     </table>

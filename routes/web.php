@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');
 Route::get('/list-item', [LandingpageController::class, 'list_item']);
+Route::post('/list-item-ajax', [LandingpageController::class, 'ajax_list_items']);
 Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail_item']);
 
 
@@ -132,4 +133,5 @@ Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);
 Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show']);
 
 // transaction
-Route::get("/admin/transaction/user", [TransactionController::class, 'index']);
+Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
+Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);

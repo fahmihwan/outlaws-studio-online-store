@@ -20,7 +20,7 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="#"
-                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900  ">
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -34,13 +34,13 @@
                 <div class="flex items-center">
                     <i class="fa-solid fa-chevron-right"></i>
                     <a href="#"
-                        class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white">Projects</a>
+                        class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2  ">Projects</a>
                 </div>
             </li>
             <li aria-current="page">
                 <div class="flex items-center ">
                     <i class="fa-solid fa-chevron-right"></i>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Flowbite</span>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 ">Flowbite</span>
                 </div>
             </li>
         </ol>
@@ -49,71 +49,9 @@
     <!-- conetent -->
     <div class=" h-screen flex w-full">
         <!-- sidebar -->
-        @if (request()->is('list-item'))
-            <aside class="md:w-80 border-r-2  transition-width" id="sidebar" aria-label="Sidebar">
-                <button class="p-4 flex justify-between font-light  w-full btn-filter-toggle">
-                    <span class="text-sm">Sembunyikan Filter </span><i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#"
-                                class=" text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <div class="flex items-center p-2">
+        @yield('sidebar-kategori')
 
-                                    <span class="flex-1 ml-3 whitespace-nowrap">Kategori</span>
-                                    <br>
-                                </div>
-                                <ul class="px-5">
-                                    <li>
-                                        <div class="flex items-center mb-4">
-                                            <input id="default-checkbox" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="default-checkbox"
-                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                Sepatu</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex items-center mb-4">
-                                            <input id="default-checkbox" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="default-checkbox"
-                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                Kaos</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex items-center mb-4">
-                                            <input id="default-checkbox" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="default-checkbox"
-                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                Hodie</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="flex items-center mb-4">
-                                            <input id="default-checkbox" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="default-checkbox"
-                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                Topi</label>
-                                        </div>
-                                    </li>
-
-                                </ul>
-
-
-
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </aside>
-        @endif
-
+        {{-- container --}}
         @yield('container')
 
     </div>
@@ -137,7 +75,9 @@
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+    @yield('search_script')
     @yield('script')
+
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 </body>
 

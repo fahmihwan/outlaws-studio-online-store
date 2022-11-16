@@ -19,13 +19,15 @@
                             <div class="mb-6  w-full  ">
                                 <label class="mb-2 font-normal block" for="">Nama Depan <span
                                         class="text-red-600">*</span></label>
-                                <input type="text" name="nama_depan" placeholder="Masukan nama Depan Anda"
+                                <input type="text" name="nama_depan" value="{{ $user->credential->nama_depan }}"
+                                    placeholder="Masukan nama Depan Anda"
                                     class="bg-gray-100 w-full border-b border-x-0 border-t-0">
                             </div>
                             <div class="mb-6 w-full  ">
                                 <label class="mb-2 block" for="">Nama Belakang <span
                                         class="text-red-600">*</span></label>
-                                <input type="text" name="nama_belakang" placeholder="Masukan nama Depan Belakang"
+                                <input type="text" name="nama_belakang" value="{{ $user->credential->nama_belakang }}"
+                                    placeholder="Masukan nama Depan Belakang"
                                     class="bg-gray-100 w-full border-b border-x-0 border-t-0">
                             </div>
                             <div class="mb-6 w-full  ">
@@ -52,7 +54,8 @@
                                         class="text-red-600">*</span></label>
                                 <select name="jenis_kelamin" id=""
                                     class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                                    <option value=""></option>
+                                    <option value="{{ $user->credential->jenis_kelamin }}">
+                                        {{ $user->credential->jenis_kelamin }}</option>
                                     <option value="pria">Pria</option>
                                     <option value="wanita">Wanita</option>
                                 </select>
@@ -66,14 +69,13 @@
                                     </div>
                                     <input type="number" name="telp" id="telp"
                                         class="bg-gray-100 border-b border-x-0 border-t-0  text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
-                                        placeholder="">
+                                        placeholder="" value="{{ $user->credential->telp }}">
                                 </div>
                             </div>
 
-
-
                             <div class="mb-6 w-full lg:w-10/12 ">
-                                <input type="checkbox" class="mr-5" id="ganti-email"> <label for="ganti-email"> Ganti
+                                <input type="checkbox" class="mr-5" id="ganti-email" value=""> <label
+                                    for="ganti-email"> Ganti
                                     Email</label><br><br>
                                 <input type="checkbox" class="mr-5" id="gant-sandi"> <label for="gant-sandi"> Ubah Kata
                                     Sandi</label><br>
@@ -96,12 +98,12 @@
                         <div class="w-1/2">
                             <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">
                                 Ganti Alamat Email & Password
-
                             </h1>
                             <div class="mb-6 w-full lg:w-10/12 ">
                                 <label class="mb-2 font-normal block" for="">Email <span
                                         class="text-red-600">*</span></label>
-                                <input type="email" name="email" placeholder="Masukan Email Anda"
+                                <input type="email" name="email" value="{{ $user->email }}"
+                                    placeholder="Masukan Email Anda"
                                     class="bg-gray-100 w-full border-b border-x-0 border-t-0">
                             </div>
                             <div class="mb-6 w-full lg:w-10/12 ">

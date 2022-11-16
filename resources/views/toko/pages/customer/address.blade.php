@@ -54,64 +54,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b ">
-                                <th scope="row" class="py-2 px-0 font-medium text-gray-900 whitespace-nowrap ">
-                                    fahmi
-                                </th>
-                                <td class="py-2 px-0">
-                                    ihwan
-                                </td>
-                                <td class="py-2 px-0">
-                                    Magetan
-                                </td>
-                                <td class="py-2 px-0">
-                                    Jatim
-                                </td>
-                                <td class="py-2 px-0">
-                                    Surabaya
-                                </td>
-                                <td class="py-2 px-0">
-                                    9213
-                                </td>
-                                <td class="py-2 px-0">
-                                    081232133312
-                                </td>
-                                <td class="py-2 px-0 flex ">
-                                    <a class="text-red-500" href="">Ubah</a> &nbsp;| &nbsp;
-                                    <form action="">
-                                        <button class="text-red-500">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <tr class="border-b ">
-                                <th scope="row" class="py-2 px-0 font-medium text-gray-900 whitespace-nowrap ">
-                                    fahmi
-                                </th>
-                                <td class="py-2 px-0">
-                                    ihwan
-                                </td>
-                                <td class="py-2 px-0">
-                                    Magetan
-                                </td>
-                                <td class="py-2 px-0">
-                                    Jatim
-                                </td>
-                                <td class="py-2 px-0">
-                                    Surabaya
-                                </td>
-                                <td class="py-2 px-0">
-                                    9213
-                                </td>
-                                <td class="py-2 px-0">
-                                    081232133312
-                                </td>
-                                <td class="py-2 px-0 flex ">
-                                    <a class="text-red-500" href="">Ubah</a> &nbsp;| &nbsp;
-                                    <form action="">
-                                        <button class="text-red-500">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
+
+                            @foreach ($alamats as $alamat)
+                                <tr class="border-b ">
+                                    <th scope="row" class="py-2 px-0 font-medium text-gray-900 whitespace-nowrap ">
+                                        {{ $alamat->nama_depan }}
+                                    </th>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->nama_belakang }}
+                                    </td>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->alamat }}
+                                    </td>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->provinsi }}
+                                    </td>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->kota }}
+                                    </td>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->kode_pos }}
+                                    </td>
+                                    <td class="py-2 px-0">
+                                        {{ $alamat->telp }}
+                                    </td>
+                                    <td class="py-2 px-0 flex ">
+                                        <a class="text-red-500" href="">Ubah</a> &nbsp;| &nbsp;
+                                        <form action="">
+                                            <button class="text-red-500">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+
                         </tbody>
                     </table>
 

@@ -3,6 +3,7 @@
 // namespace App\View\Composers;
 namespace App\ViewComposers;
 
+use App\Models\Item;
 use App\Models\Keranjang;
 use Illuminate\View\View;
 
@@ -26,12 +27,16 @@ class NavbarComposer
                 return $item->qty * $item->item->harga;
             });
 
+
             $data = [
                 'data_cart' => $keranjang,
                 'count' => $keranjang->count(),
                 'total_harga' => $total_harga,
             ];
         }
+        $items = Item::select('id', 'nama', 'gambar')->get();
+        $data['items'] = $items;
+
         $view->with($data);
     }
 }

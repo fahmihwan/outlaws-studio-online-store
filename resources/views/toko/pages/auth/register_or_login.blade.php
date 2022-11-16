@@ -75,7 +75,7 @@
                                 <label class="mb-2 font-light text-sm block" for="">Nama Depan <span
                                         class="text-red-600">*</span></label>
                                 <input type="text" name="nama_depan" placeholder="Masukan nama Depan Anda"
-                                    class="bg-white border-gray-300 w-full py-1 placeholder:italic placeholder:text-gray-400 placeholder:font-normal placeholder:text-sm placeholder:italic placeholder:text-gray-400 placeholder:font-normal placeholder:text-sm">
+                                    class="bg-white border-gray-300 w-full py-1 placeholder:italic placeholder:text-gray-400 placeholder:font-normal placeholder:text-sm  ">
                             </div>
                             <div class="mb-6 w-full  ">
                                 <label class="font-ligth text-sm mb-2 block" for="">Nama Belakang <span

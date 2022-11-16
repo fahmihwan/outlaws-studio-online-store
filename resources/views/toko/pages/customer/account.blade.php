@@ -86,8 +86,8 @@
                         {{ $user->email }}
                     </p>
                     <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Ubah </a>&nbsp; | &nbsp;
-                        <a href="" class="underline hover:text-red-900">Ubah Kata Sandi </a>
+                        <a href="/customer/account/edit" class="underline hover:text-red-900">Ubah </a>&nbsp; | &nbsp;
+                        <a href="/customer/account/edit" class="underline hover:text-red-900">Ubah Kata Sandi </a>
                     </div>
                 </section>
 
@@ -109,11 +109,11 @@
                     <p class="text-sm text-gray-600">082334338392</p>
 
                     <!-- Alamat Penagihan
-                                                                                                                                                                                                                                                                                                                                                        bumi balakosa
-                                                                                                                                                                                                                                                                                                                                                        maospati, kraton
-                                                                                                                                                                                                                                                                                                                                                        Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
-                                                                                                                                                                                                                                                                                                                                                        Indonesia
-                                                                                                                                                                                                                                                                                                                                                        T: 082334337393 -->
+                                                                                                                                                                                                                                                                                                                                                            bumi balakosa
+                                                                                                                                                                                                                                                                                                                                                            maospati, kraton
+                                                                                                                                                                                                                                                                                                                                                            Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
+                                                                                                                                                                                                                                                                                                                                                            Indonesia
+                                                                                                                                                                                                                                                                                                                                                            T: 082334337393 -->
                     <div class="text-gray-500 text-xs mt-5">
                         <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
                     </div>

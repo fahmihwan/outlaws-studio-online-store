@@ -25,4 +25,20 @@ class Item extends Model
     {
         return $this->hasOne(Wish_list::class);
     }
+
+    public function scopeFilter($query, array $filter)
+    {
+        $query->when($filter['filter'] ?? false, function ($q, $f) {
+            $q->when($f != 'latest' ?? false, function ($q) use ($f) {
+                return $q->orderBy('harga', $f);
+            }, function ($q) {
+                return $q->latest();
+            });
+        }, function ($q) {
+            return $q;
+        });
+        $query->when($filter['isChecked']  ? $filter['isChecked'] : false, function ($q, $c) {
+            return $q->whereIn('kategori_id', $c);
+        });
+    }
 }

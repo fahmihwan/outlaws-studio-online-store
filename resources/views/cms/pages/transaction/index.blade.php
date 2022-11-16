@@ -5,13 +5,13 @@
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
-                List Customer
+                Kelola Transaksi
             </div>
             <div>
                 <ol class="inline-flex items-center space-x-1 md:space-x-3  ">
                     <li class="inline-flex items-center">
                         <a href="#" class="inline-flex items-center text-sm font-medium  hover:text-gray-900">
-                            List Customer
+                            kelola transaksi
                         </a>
                     </li>
                 </ol>
@@ -30,7 +30,7 @@
                 {{-- header --}}
                 <div class="overflow-x-auto relative :rounded-lg">
                     <div class="mb-3 font-bold flex justify-between  items-center ">
-                        List Kategori
+                        List Transaksi
                     </div>
 
 
@@ -42,16 +42,20 @@
                                     No
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    nama
+                                    Nomor Pesanan
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    email
+                                    Tanggal
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    status
+                                    Email
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    Created at
+                                    Total
+                                </th>
+                                <th scope="col" class="py-3 px-6">
+                                    Status <br>
+                                    Pembayaran
                                 </th>
                                 <th scope="col" class="py-3 px-6">
                                     Action
@@ -61,13 +65,27 @@
                         <tbody>
                             @foreach ($items as $item)
                                 <tr class="bg-white hover:bg-gray-50 ">
-                                    <td class="py-4 px-6">
+                                    <td class="py-4 px-2">
+                                        {{ $loop->iteration }}
                                     </td>
-                                    <td class="py-4 px-6">
+                                    <td class="py-4 px-2">
+                                        {{ $item->nota }}
                                     </td>
-                                    <td class="py-4 px-6">
+                                    <td class="py-4 px-2">
+                                        {{ $item->tanggal_pembelian }}
                                     </td>
-                                    <td class="py-4 px-6 flex ">
+                                    <td class="py-4 px-2">
+                                        {{ $item->user->email }}
+                                    </td>
+                                    <td class="py-4 px-2">
+                                        Rp. {{ number_format($item->total, 0, '', '.') }}
+                                    </td>
+                                    <td class="py-4 px-2">
+                                        {{ $item->pembayaran->transaction_status }}
+                                    </td>
+                                    <td class="py-4 px-2">
+                                        <a href="/admin/list-transaction/{{ $item->id }}/detail"
+                                            class="underline text-blue-500">Lihat Detail</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -83,7 +101,7 @@
                         <ul class="inline-flex items-center -space-x-px">
                             <li>
                                 <a href="#"
-                                    class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">
+                                    class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                                     <span class="sr-only">Previous</span>
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -95,27 +113,27 @@
                             </li>
                             <li>
                                 <a href="#"
-                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">1</a>
+                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">2</a>
+                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
                             </li>
                             <li>
                                 <a href="#" aria-current="page"
-                                    class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700  ">3</a>
+                                    class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700   ">3</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">...</a>
+                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">...</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">100</a>
+                                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">100</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700   ">
+                                    class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                                     <span class="sr-only">Next</span>
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">

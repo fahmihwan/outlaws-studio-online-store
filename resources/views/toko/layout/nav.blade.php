@@ -1,8 +1,8 @@
 <nav class="bg-white">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl  ">
         <a href="/" class="flex pl-5 items-center">
-            <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo">
-            <span class="self-center text-xl font-semibold whitespace-nowrap ">Outlaws Studio</span>
+            <img src="{{ asset('./logo-bank/outlaws-logo.png') }}" class="w-28 mr-3" alt="Flowbite Logo">
+            <span class="self-center text-xl font-semibold whitespace-nowrap "> Outlaws Studio</span>
         </a>
         <button data-collapse-toggle="mega-menu-full" type="button"
             class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
@@ -168,16 +168,7 @@
                         @endif
                         {{-- koosong --}}
 
-
-
-
-
-
-
-
-
                     </div>
-
                 </li>
                 <li>
                     <!-- drawer Cari -->
@@ -195,10 +186,10 @@
                         tabindex="-1" aria-labelledby="drawer-right-label" aria-hidden="true">
 
                         <form action="" method="POST">
-                            <label for="default-search"
+                            <label for="input-search-items"
                                 class="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
                             <div class="relative">
-                                <input type="search" id="default-search"
+                                <input type="search" id="input-search-items"
                                     class="block p-4 pl-10 w-full text-sm text-gray-900 border-b-2 border-black  focus:border-black border-0 ring-0  "
                                     placeholder="CARI...." autocomplete="off">
                                 <div type="submit"
@@ -209,35 +200,15 @@
                         </form>
 
                         <!-- auto complete  -->
-                        <div class="flex flex-wrap justify-between bg-gray-100 p-12">
-                            <div class="w-5/12 mb-5">
-                                <img src="/src/img-outlaws/3.jpg" alt="">
+                        <div id="search-items" class="flex flex-wrap justify-between bg-gray-100 h-full p-12">
+
+                            {{-- <div class="w-5/12 mb-5">
+                                <img src="{{ asset('./img-tes/3.jpg') }}" alt="">
                                 <article class="text-center">
                                     Convers bla bla bla
                                     sadsdadasdadasdsa
                                 </article>
-                            </div>
-                            <div class="w-5/12 mb-5">
-                                <img src="/src/img-outlaws/3.jpg" alt="">
-                                <article class="text-center">
-                                    Convers bla bla bla
-                                    sadsdadasdadasdsa
-                                </article>
-                            </div>
-                            <div class="w-5/12 mb-5">
-                                <img src="/src/img-outlaws/3.jpg" alt="">
-                                <article class="text-center">
-                                    Convers bla bla bla
-                                    sadsdadasdadasdsa
-                                </article>
-                            </div>
-                            <div class="w-5/12 mb-5">
-                                <img src="/src/img-outlaws/3.jpg" alt="">
-                                <article class="text-center">
-                                    Convers bla bla bla
-                                    sadsdadasdadasdsa
-                                </article>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -322,3 +293,33 @@
         </div>
     </div>
 </div>
+
+
+@section('search_script')
+    <script>
+        $(document).ready(function() {
+            let dataItems = {{ Js::from($items) }};
+            $('#input-search-items').keyup(function(e) {
+                let valInput = $(this).val().toLowerCase();
+                let resultItems = dataItems.filter(items => items.nama.toLowerCase().indexOf(valInput) > -1)
+                if (dataItems.length != resultItems.length) {
+                    let elemetsSearch = ''
+                    $('#search-items').html('')
+                    resultItems.forEach(e => {
+                        elemetsSearch += `<div class="w-5/12 mb-5">
+                            <img src="{{ asset('./storage/${e.gambar}') }}" alt="">
+                            <article class="text-center text-xl ">
+                            ${e.nama}
+                            </article>
+                            </div>`
+                        $('#search-items').html(elemetsSearch)
+                    });
+
+                } else {
+                    $('#search-items').html('cari items')
+                }
+            })
+
+        })
+    </script>
+@endsection

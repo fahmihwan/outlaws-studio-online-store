@@ -132,38 +132,41 @@ class Cart_WishlistController extends Controller
         ]);
     }
 
-    public function store_wishlist($id)
+    // proses ajax
+    public function store_wishlist(Request $request)
     {
         $check = Wish_list::where([
             'user_id' => auth()->user()->id,
-            'item_id' => $id
+            'item_id' => $request->id
         ])->count();
 
 
         if ($check > 0) {
-            return redirect()->back();
+            return 'fail';
         }
 
         Wish_list::create([
             'user_id' => auth()->user()->id,
-            'item_id' => $id
+            'item_id' => $request->id
         ]);
-        return redirect()->back();
+        return 'success';
     }
 
-    public function destroy_wish_list($id)
+    // proses ajax
+    public function destroy_wish_list(Request $request)
     {
         $check = Wish_list::where([
             'user_id' => auth()->user()->id,
-            'item_id' => $id
+            'item_id' => $request->id
         ])->count();
 
         if ($check == 0) {
-            return redirect()->back();
+            return 'fail';
         }
+
         Wish_list::where([
             'user_id' => auth()->user()->id,
-            'item_id' => $id
+            'item_id' => $request->id
         ])->delete();
         return redirect()->back();
     }
