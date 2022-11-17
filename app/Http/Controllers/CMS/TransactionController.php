@@ -38,13 +38,14 @@ class TransactionController extends Controller
         // ->havingRaw('SUM(price) > ?', [2500])
         // ->get();
 
-        $quary = "sum(detail_penjualans.qty * harga) AS qty, detail_penjualans.id";
 
 
-        return Detail_penjualan::selectRaw($quary)
-            ->join('items', 'detail_penjualans.item_id', '=', 'items.id')
-            ->where('penjualan_id', $id)
+
+        return Detail_penjualan::join('items', 'detail_penjualans.item_id', '=', 'items.id')
+            // ->where('penjualan_id', $id)
+            ->withSum('item', 'harga')
             ->get();
+
 
         return view(
             'cms.pages.transaction.detail_pembelian',

@@ -6,15 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LandingpageController extends Controller
 {
 
     public function landing_page()
     {
-
-
-
+        // return $token;
         return view('toko.pages.landing_page');
     }
 
@@ -68,6 +67,8 @@ class LandingpageController extends Controller
             'kategori:id,nama',
             'list_ukurans.ukuran:id,nama',
         ])->where('id', $id)->first();
+
+
 
         return view('toko.pages.detail-item', [
             'item' => $item,

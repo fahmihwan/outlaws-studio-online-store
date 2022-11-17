@@ -53,26 +53,17 @@
                     Home
                 </a>
             </li>
-            {{-- <li>
-                <div class="flex items-center">
-                    <i class="fa-solid fa-chevron-right"></i>
-                    <a href="#"
-                        class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2  ">Projects</a>
-                </div>
-            </li>
-            <li aria-current="page">
-                <div class="flex items-center ">
-                    <i class="fa-solid fa-chevron-right"></i>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 ">Flowbite</span>
-                </div>
-            </li> --}}
+
         </ol>
     </nav>
+
+    {{-- resend_email --}}
+    @include('toko.components.resend_email_confirmation')
 @endsection
 
 @section('container')
+    {{-- This account is not confirmed. Click Here to resend confirmation email. --}}
     <div class="w-full  ">
-
         {{-- <div class="h-96 text-center absolute w-full " id="particles-js"></div> --}}
         <div id="particles-js"></div>
         <div class=" w-full border-b h-96 flex justify-center items-center">

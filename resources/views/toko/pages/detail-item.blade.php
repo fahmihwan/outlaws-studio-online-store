@@ -29,6 +29,8 @@
             </li>
         </ol>
     </nav>
+    {{-- resend_email --}}
+    @include('toko.components.resend_email_confirmation')
 @endsection
 
 @section('container')

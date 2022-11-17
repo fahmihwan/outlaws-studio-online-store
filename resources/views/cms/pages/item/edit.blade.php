@@ -1,10 +1,14 @@
 @extends('cms.layouts.main')
 
+
 @section('style')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
+
 @section('container')
+    {{-- @dd($kategories[1]->id) --}}
+    {{-- @dd($item->kategori->id) --}}
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
@@ -80,9 +84,12 @@
                                         Kategori
                                     </label>
                                     <select class="js-example-basic-single w-full" name="kategori_id">
-                                        <option value="{{ $item->kategori->id }}">{{ $item->kategori->nama }}</option>
+                                        {{-- <option value="{{ $item->kategori->id }}">{{ $item->kategori->nama }}</option> --}}
                                         @foreach ($kategories as $kategori)
-                                            <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                                            <option {{ $kategori->id == $item->kategori->id ? 'selected' : '' }}
+                                                value="{{ $kategori->id }}">
+                                                {{ $kategori->nama }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -112,10 +119,6 @@
                                 </div>
 
                             </div>
-
-
-
-
 
 
                             <div class="mb-4 mt-4">

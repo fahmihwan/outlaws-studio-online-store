@@ -28,6 +28,12 @@
             </li>
         </ol>
     </nav>
+    @if (session('thanks'))
+        <div class="bg-green-200 text-green-800 mx-5 absolute left-1 right-1  z-10 py-2 px-2 ">
+            <i class="fa-solid fa-circle-check"></i>
+            {{ session('thanks') }}
+        </div>
+    @endif
 @endsection
 
 @section('container')
@@ -35,6 +41,7 @@
     <div class=" md:flex w-full mt-10">
         <!-- sidebar -->
         @include('toko.components.sidebar-account')
+
 
         {{-- informasi  --}}
         <div class=" md:w-full">
@@ -138,12 +145,7 @@
                     <p class="text-sm text-gray-600">Indonesia</p>
                     <p class="text-sm text-gray-600">082334338392</p>
 
-                    <!-- Alamat Penagihan
-                                                                                                                                                                                                                                                                                                                                                                                bumi balakosa
-                                                                                                                                                                                                                                                                                                                                                                                maospati, kraton
-                                                                                                                                                                                                                                                                                                                                                                                Kab. Kepahiang/Seberang Musi, Bengkulu, 63392
-                                                                                                                                                                                                                                                                                                                                                                                Indonesia
-                                                                                                                                                                                                                                                                                                                                                                                T: 082334337393 -->
+
                     <div class="text-gray-500 text-xs mt-5">
                         <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
                     </div>

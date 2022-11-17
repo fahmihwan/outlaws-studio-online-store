@@ -149,7 +149,7 @@
                                         {{ $item->nama }}
                                     </th>
                                     <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
-                                        {{ $item->berat }}
+                                        {{ $item->berat }} gram
                                     </th>
                                     <td class="py-4 px-6">
                                         {{ $item->created_at }}

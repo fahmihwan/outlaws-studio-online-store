@@ -35,19 +35,16 @@
                 Data</a>
         </section>
 
-        {{-- <div class="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  shadow-md bg-white rounded-md p-2 ">
-            <img src="{{ asset('./storage/image-items/QQUQG6udX6Sp0bfFUZiCiBuKIWeitA0sfexlPzcQ.jpg') }}" alt="">
-        </div> --}}
         <div class="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6    rounded-md p-2 ">
-
             @foreach ($items as $item)
                 <a href="/admin/item/{{ $item->id }}"
-                    class="block  mr-3 mb-2   border bg-purple-700 text-white group hover:translate-y-[-2px] hover:duration-300 hover:border-purple-600 ">
+                    class="block  mr-3 mb-2   border bg-purple-900 text-white group hover:translate-y-[-2px] hover:duration-300 hover:border-purple-600 ">
                     <img class="" src="{{ asset('./storage/' . $item->gambar) }}" alt="">
                     <p class="font-bold  text-xs mb-2 px-1 ">{{ $item->nama }} </p>
                     <div class="flex justify-between px-1">
                         <div>
-                            <p class="text-sm  text-yellow-300"><span class="text-xs">Rp</span>{{ $item->harga }}</p>
+                            <p class="text-sm  text-yellow-300"><span class="text-xs">Rp</span>
+                                {{ number_format($item->harga, 0, '', '.') }}</p>
                         </div>
                         <div class="flex items-end pb-1 ">
                             <p class="text-xs pr-1 text-green-300">{{ $item->kategori->nama }}</p>
@@ -62,7 +59,7 @@
                         </div>
                     </div>
                     <div
-                        class="hidden group-hover:block absolute group-hover:duration-300  w-full text-center bg-purple-900">
+                        class="hidden group-hover:block absolute group-hover:duration-300  w-full text-center bg-purple-600">
                         <p class="text-md text-white ">
                             <i class="fa-regular fa-folder-open"></i> manage item
                         </p>

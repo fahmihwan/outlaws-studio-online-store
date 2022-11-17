@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->foreignId('kategori_id');
-            $table->string('harga');
+            $table->integer('harga');
             $table->text('deskripsi');
             $table->integer('stok');
             $table->integer('terjual');

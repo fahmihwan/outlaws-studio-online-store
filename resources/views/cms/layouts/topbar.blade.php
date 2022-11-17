@@ -1,8 +1,11 @@
 <nav class="flex justify-between shadow-md border">
     <div class="">
         {{-- logo --}}
-        <div class="border-x-2 inline-block p-3">
-            <a href="" class="font-bold">Outlaws Dashboard</a>
+        <div class=" inline-block p-3">
+            <a href="" class="font-bold">
+                Outlaws Studio Dashboard
+            </a>
+
         </div>
     </div>
 

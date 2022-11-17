@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\List_;
+use PHPUnit\Framework\MockObject\ReturnValueNotConfiguredException;
 
 class ItemController extends Controller
 {
@@ -102,6 +103,7 @@ class ItemController extends Controller
         $item = Item::with(['kategori:id,nama'])
             ->where('id', $id)
             ->latest()->first();
+        // return $item;
 
 
         return view('cms.pages.item.edit', [
@@ -148,10 +150,51 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            List_ukuran::where('item_id', $id)->delete();
+            Item::destroy($id);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th);
+        }
+
+
+        return redirect('/admin/item');
     }
+
+    public function detroy_list_ukuran($item, $id)
+    {
+
+        try {
+            DB::beginTransaction();
+
+            $item = Item::where('id', $item);
+            $list_item = List_ukuran::where('id', $id);
+            $stok = $item->first()->stok - $list_item->first()->qty;
+
+            $item->update([
+                'stok' => $stok
+            ]);
+
+            $list_item->delete();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+        // List_ukuran::destroy($id);
+        return redirect()->back();
+    }
+
     public function tambah_stok_item(Request $request, $id)
     {
+
         // get first item where id 
         $item = Item::with(['kategori:id,nama'])
             ->where('id', $id)
@@ -160,12 +203,11 @@ class ItemController extends Controller
         // return $item;
 
         // get list_ukuran where item_id
-        $list_ukuran = List_ukuran::with([
-            'ukuran'
-        ])->where('item_id', $id)->latest()->get();
+        $list_ukuran = List_ukuran::with(['ukuran'])->where('item_id', $id)->latest()->get();
 
         // get all ukuran where kategori_id
         $list_ukuran_item = Ukuran::where('kategori_id', $item->kategori_id)->latest()->get();
+
 
         return view('cms.pages.item.tambah_stok', [
             'list_ukuran' => $list_ukuran,
@@ -177,6 +219,7 @@ class ItemController extends Controller
 
     public function store_list_item(Request $request, $id)
     {
+
         $validated = $request->validate([
             'ukuran_id' => 'required',
         ]);

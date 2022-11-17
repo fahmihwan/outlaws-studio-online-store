@@ -58,12 +58,12 @@
 
         <div class=" w-full  flex flex-col-reverse md:flex-row  pt-3 ">
             <div
-                class="w-full mt-5 md:mt-0 md:w-4/6 bg-white rounded  overflow-hidden border-2 border-purple-700 mb-6 md:mb-0">
+                class="w-full mt-5 md:mt-0 md:w-8/12 bg-white rounded  overflow-hidden border-2 border-purple-700 mb-6 md:mb-0">
                 <div class="bg-purple-700  text-white">
                     Tambah Stok {{ $item->kategori->nama }}
                 </div>
                 <div class="pl-2 flex flex-col-reverse md:flex-row h-full">
-                    <div class="w-full md:w-4/6 pt-4  ">
+                    <div class="w-full md:w-3/6 pt-4  ">
                         <form action="/admin/item/{{ $item->id }}/store-stok-item" method="POST"
                             enctype="multipart/form-data">
                             @csrf
@@ -72,19 +72,6 @@
                                         class="font-medium text-gray-500">({{ $item->stok }} item)</span></p>
                             </div>
                             <div class="mb-3">
-                                {{-- <p class="text-lg font-bold">{{ $item->nama }} <span
-                                        class="font-medium text-gray-500">({{ $item->stok }} item)</span></p> --}}
-                                {{-- <a href="" class="text-blue-600 hover:text-blue-700 hover:underline">Tambah Kategori
-                                    Ukuran Untuk
-                                    Item ini</a> --}}
-
-
-                                <!-- Modal toggle -->
-                                {{-- <button
-                                    class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    type="button" data-modal-toggle="authentication-modal">
-                                    Tambah Ukuran
-                                </button> --}}
 
                             </div>
                             <input type="hidden" name="item_id" value="{{ $item->id }}">
@@ -95,10 +82,13 @@
                                     <div for="nama"
                                         class="mb-2 flex justify-between text-sm border-b font-medium text-gray-900 ">
                                         List Ukuran
-                                        <a class="text-blue-600 ml-2 hover:text-blue-700 hover:underline hover:cursor-pointer"
-                                            data-modal-toggle="authentication-modal">
-                                            <i class="fa-solid fa-plus"></i> Tambah Ukuran lainnya
-                                        </a>
+                                        <div>
+                                            <a class="text-blue-600 ml-2 hover:text-blue-700 hover:underline hover:cursor-pointer"
+                                                data-modal-toggle="authentication-modal">
+                                                <i class="fa-solid fa-plus"></i> Tambah Ukuran lainnya
+                                            </a>
+
+                                        </div>
                                     </div>
                                     <div class="grid grid-cols-2 md:grid-cols-4  gap-2">
                                         <?php $i = 1; ?>
@@ -127,7 +117,8 @@
                                 class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Submit</button>
                         </form>
                     </div>
-                    <div class="w-full md:w-2/6 pt-4 px-0 bg-purple-100  ">
+
+                    <div class="w-full md:w-3/6 pt-4 px-0 bg-purple-100  ">
                         <div class="w-full pl-0 md:px-3 pb-0   ">
                             <label for="" class="block mb-2 text-sm font-medium text-gray-900 ">Ukuran yang
                                 terseida
@@ -135,13 +126,18 @@
                             <div class="overflow-x-auto relative">
                                 <table class="text-sm text-left text-gray-500  w-full md:w-full  ">
                                     <tr>
-                                        <th scope="col" class="py-2 bg-black border border-white text-white px-6 ">
+                                        <th scope="col" class="py-2 px-6 bg-black border border-white text-white  ">
                                             Ukuran
                                         </th>
                                         <th scope="col" class="py-2 px-6 border border-white bg-black text-white">
                                             Qty
                                         </th>
+                                        <th scope="col" class="py-2 text-center border border-white bg-black text-white">
+                                            action
+                                        </th>
                                     </tr>
+
+
                                     @foreach ($list_ukuran as $list)
                                         <tr class="border-b border-gray-200 ">
                                             <th scope="row"
@@ -150,6 +146,18 @@
                                             </th>
                                             <td class="py-2 px-6 bg-gray-50">
                                                 {{ $list->qty }}
+                                            </td>
+                                            <td class="py-2  bg-gray-50 text-center">
+                                                <form
+                                                    action="/admin/item/{{ $item->id }}/{{ $list->id }}/hapus_list_ukuran"
+                                                    method="post">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit"
+                                                        onclick="return confirm('jika anda menghapus list ukuran, QTY juga akan ikut terhapus. apakah anda yakin?')"
+                                                        class="text-red-600 ml-2 hover:text-red-700 hover:underline hover:cursor-pointer">
+                                                        <i class="fa-solid fa-trash-can"></i>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -161,6 +169,8 @@
                                         <th scope="col" class="py-2 px-6 bg-black  border border-white text-white">
                                             {{ $item->stok }}
                                         </th>
+                                        <th scope="col" class="py-2  bg-black  border border-white text-white">
+                                        </th>
                                     </tr>
 
                                 </table>
@@ -170,7 +180,7 @@
                 </div>
 
             </div>
-            <div class="w-full md:w-2/6 bg-white py-0 px-2 rounded-sm  ">
+            <div class="w-full md:w-4/12 bg-white py-0 px-2 rounded-sm  ">
                 <div class="p-1 rounded  bg-purple-700 text-white">
                     <div>
                         Detail Gambar

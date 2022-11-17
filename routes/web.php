@@ -13,6 +13,8 @@ use App\Http\Controllers\Toko\CheckoutController;
 use App\Http\Controllers\Toko\CustomerController;
 use App\Http\Controllers\Toko\LandingpageController;
 use App\Http\Controllers\Toko\RajaOngkirController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,16 +71,33 @@ Route::get('/tes', function () {
     ]);
 });
 
+
+// // verify email
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', [AuthUserController::class, 'verification_notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [AuthUserController::class, 'verification_handler'])->middleware(['signed'])->name('verification.verify');
+    Route::post('/email/verification-notification', [AuthUserController::class, 'resend_verification'])->middleware(['throttle:6,1'])->name('verification.send');
+
+    Route::post('/customer/account/logout', [AuthUserController::class, 'logout']);
+});
+
+
+
+
 // user
 Route::middleware(['guest'])->group(function () {
     Route::get('/customer/account/create', [AuthUserController::class, 'register']);
     Route::post('/customer/account/store', [AuthUserController::class, 'store_account']);
     Route::post('/customer/account/authenticate', [AuthUserController::class, 'authenticate']);
     Route::get('/customer/account/login', [AuthUserController::class, 'register_or_login']);
+
+    Route::get('/customer/account/forgotpassword', [AuthUserController::class, 'forgot_password'])->name('password.request');
+    Route::post('/customer/account/forgotpassword', [AuthUserController::class, 'update_password'])->name('password.email');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::post('/customer/account/logout', [AuthUserController::class, 'logout']);
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customer/account', [CustomerController::class, 'account']);
     Route::get('/customer/order-history', [CustomerController::class, 'pesanan']);
     Route::get('/customer/wish-list', [CustomerController::class, 'wish_list']);
@@ -110,7 +129,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');
-Route::get('/list-item', [LandingpageController::class, 'list_item']);
+Route::get('/list-item', [LandingpageController::class, 'list_item'])->name('list_item');
 Route::post('/list-item-ajax', [LandingpageController::class, 'ajax_list_items']);
 Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail_item']);
 
@@ -127,6 +146,7 @@ Route::resource('/admin/item', ItemController::class);
 Route::get('/admin/item/{id}/tambah-stok', [ItemController::class, 'tambah_stok_item']);
 Route::post('/admin/item/{id}/store-stok-item', [ItemController::class, 'store_stok_item']);
 Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_list_item']);
+Route::delete('/admin/item/{item}/{id}/hapus_list_ukuran', [ItemController::class, 'detroy_list_ukuran']);
 
 //list customer
 Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);

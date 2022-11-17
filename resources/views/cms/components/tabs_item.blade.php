@@ -19,9 +19,15 @@
         </a>
     </li>
     <li class="w-full">
-        <a href="/tes#" onclick="return confirm('apakah anda yakin ingin menghapus item ini?')"
-            class="inline-block p-4 w-full bg-white rounded-r-lg hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
-            <i class="fa-solid fa-trash-can"></i> Delete Item
-        </a>
+
+        <form action="/admin/item/{{ $link }}" method="post">
+            @method('DELETE')
+            @csrf
+            <button onclick="return confirm('apakah anda yakin ingin menghapus item ini?')"
+                class="inline-block p-4 w-full bg-white rounded-r-lg hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
+                <i class="fa-solid fa-trash-can"></i>
+                Delete Item
+            </button>
+        </form>
     </li>
 </ul>

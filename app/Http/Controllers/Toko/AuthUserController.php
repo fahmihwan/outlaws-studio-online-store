@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Toko;
 use App\Http\Controllers\Controller;
 use App\Models\Credential;
 use App\Models\User;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class AuthUserController extends Controller
 {
@@ -53,11 +55,14 @@ class AuthUserController extends Controller
                 'credential_id' => $credential_id,
                 'status' => 'active'
             ]);
+
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->withErrors($th->getMessage());
         }
+
 
         return redirect('list-item');
     }
@@ -68,7 +73,7 @@ class AuthUserController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-
+        $validated['status'] = 'active';
         if (Auth::attempt($validated)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
@@ -85,11 +90,54 @@ class AuthUserController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
+        return redirect()->back();
+    }
 
-        return redirect('/list-item');
+
+
+
+
+    // email verificataion
+    public function verification_notice()
+    {
+        return view('toko.pages.auth.verify-email');
+    }
+
+    public function verification_handler(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        return redirect('/customer/account')->with('thanks', 'Terimakasih sudah mendaftar di Outlaws Studio store');
+    }
+
+    public function resend_verification(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('send-link-email', 'cek email anda untuk melakuakn verifikasi!');
+    }
+
+
+
+    // reset password
+    public function forgot_password()
+    {
+        return view('toko.pages.customer.forgot_password');
+    }
+
+    public function update_password(Request $request)
+    {
+
+        dd($request);
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
     }
 }
