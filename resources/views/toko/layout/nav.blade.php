@@ -52,7 +52,7 @@
                             </li>
                             <li>
                                 <a href="/customer/wish-list" class="block py-2 px-4 font-bold hover:bg-gray-100  ">Wish
-                                    List ({{ $count }}
+                                    List ({{ $wish_list_count }}
                                     items)</a>
                             </li>
                             <li>
@@ -114,21 +114,21 @@
                                 <div class="bg-white">
                                     <div class="border flex flex-wrap p-2 ">
                                         <div>
-                                            <img class="w-20" src="{{ asset('./storage/' . $data->item->gambar) }}"
+                                            <img class="w-20" src="{{ asset('./storage/' . $data->gambar) }}"
                                                 alt="">
                                         </div>
                                         <div class="w-[73%] pl-1">
                                             <a href="/list-item/{{ $data->item_id }}/detail-item"
-                                                class="underline font-bold mb-2 inline-block">{{ $data->item->nama }}</a><br>
+                                                class="underline font-bold mb-2 inline-block">{{ $data->nama }}</a><br>
                                             <p class="font-light text-xs p-0 m-0"><span class="text-gray-500">Size:
-                                                </span> {{ $data->ukuran->nama }}</p>
+                                                </span> {{ $data->ukuran }}</p>
                                             <p class="font-light text-xs p-0 m-0">Jumlah {{ $data->qty }}</p>
 
                                             <p class="font-light text-sm py-3 m-0">Rp.
-                                                {{ number_format($data->item->harga, 0, '', '.') }}</p>
+                                                {{ number_format($data->harga, 0, '', '.') }}</p>
                                         </div>
                                         <div class="w-4 text-center float-right">
-                                            <form action="/list-item/cart/{{ $data->id }}/destroy"
+                                            <form action="/list-item/cart/{{ $data->keranjang_id }}/destroy"
                                                 method="POST">
                                                 @method('DELETE')
                                                 @csrf
@@ -154,7 +154,7 @@
                                         Subtotal :
                                     </div>
                                     <div class="font-normal">
-                                        Rp.{{ number_format($total_harga, 0, '', '.') }}
+                                        Rp.{{ number_format($sub_total, 0, '', '.') }}
                                     </div>
                                 </div>
                                 <div class="p-4">
@@ -284,7 +284,8 @@
 
 
                     <div class="text-sm font-medium text-gray-500 mt-0  ">
-                        <a href="" class="text-black text-xs hover:text-red-900 underline"> Lupa Kata
+                        <a href="/customer/account/forgotpassword"
+                            class="text-black text-xs hover:text-red-900 underline"> Lupa Kata
                             Sandi?</a>
                     </div>
                 </form>

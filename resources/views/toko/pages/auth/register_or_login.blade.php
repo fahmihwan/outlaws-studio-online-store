@@ -75,7 +75,8 @@
                             </button>
 
                             <div class="text-sm font-medium text-gray-500 mt-0  text-center pt-5">
-                                <a href="" class="text-black text-xs font-light  hover:text-red-900 underline">
+                                <a href="/customer/account/forgotpassword"
+                                    class="text-black text-xs font-light  hover:text-red-900 underline">
                                     Lupa Kata
                                     Sandi?</a>
                             </div>

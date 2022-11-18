@@ -5,6 +5,7 @@ namespace App\ViewComposers;
 
 use App\Models\Item;
 use App\Models\Keranjang;
+use App\Models\Wish_list;
 use Illuminate\View\View;
 
 class NavbarComposer
@@ -19,19 +20,35 @@ class NavbarComposer
             $data = [
                 'data_cart' => [],
                 'count' => 0,
+                'wish_list_count' => 0
             ];
         } else {
-            $keranjang = Keranjang::with(['item', 'ukuran'])->where('user_id', auth()->user()->id)->latest()->get();
 
-            $total_harga = $keranjang->sum(function ($item) {
-                return $item->qty * $item->item->harga;
+            $keranjang = Keranjang::select([
+                'keranjangs.id as keranjang_id',
+                'gambar',
+                'ukurans.nama as ukuran',
+                'item_id',
+                'items.nama',
+                'qty',
+                'harga'
+            ])
+                ->join('items', 'keranjangs.item_id', '=', 'items.id')
+                ->join('ukurans', 'keranjangs.ukuran_id', '=', 'ukurans.id')
+                ->where('user_id', auth()->user()->id)
+                ->selectRaw('harga * qty as subtotal')
+                ->orderBy('keranjangs.created_at', 'desc')
+                ->get();
+
+            $sub_total =  $keranjang->sum(function ($data) {
+                return $data->subtotal;
             });
-
 
             $data = [
                 'data_cart' => $keranjang,
                 'count' => $keranjang->count(),
-                'total_harga' => $total_harga,
+                'wish_list_count' => Wish_list::where('user_id', auth()->user()->id)->count(),
+                'sub_total' => $sub_total,
             ];
         }
         $items = Item::select('id', 'nama', 'gambar')->get();

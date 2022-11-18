@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Toko;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Kategori;
+use App\Models\Keranjang;
+use App\Models\List_ukuran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
 
 class LandingpageController extends Controller
 {
 
     public function landing_page()
     {
-        // return $token;
+
         return view('toko.pages.landing_page');
     }
 
@@ -74,5 +77,31 @@ class LandingpageController extends Controller
             'item' => $item,
             'select_ukurans' =>  $item->list_ukurans
         ]);
+    }
+
+    public function detail_item_stok_ajax(Request $request)
+    {
+
+
+        if ($request->ajax()) {
+
+            try {
+                if (is_null($request->ukuran_id)) {
+                    // jika tidak ada ukuran_id
+                    $tersisa =  Item::select('stok')->where('id', $request->item_id)->first();
+                } else {
+                    // jika ada item_id && ukuran_id
+                    $tersisa = List_ukuran::select('qty')->where([
+                        ['ukuran_id', '=', $request->ukuran_id],
+                        ['item_id', '=', $request->item_id]
+                    ])->first();
+                } //code...
+            } catch (\Throwable $th) {
+                //throw $th;
+                return $th->getMessage();
+            }
+
+            return $tersisa;
+        }
     }
 }

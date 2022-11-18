@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Toko;
 
-use App\Console\Kernel;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Keranjang;
+use App\Models\List_ukuran;
 use App\Models\Wish_list;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use SebastianBergmann\Diff\Chunk;
+
 
 class Cart_WishlistController extends Controller
 {
     public function store_cart(Request $request, $id)
     {
+
+
         if (!isset(auth()->user()->id)) {
             return redirect('/customer/account/login')->withErrors('Silahkan Login atau Registerasi terlebih dahulu');
         }
@@ -24,9 +27,17 @@ class Cart_WishlistController extends Controller
             'qty' => 'required|numeric',
         ]);
 
+
         try {
             DB::beginTransaction();
             // cek ukuran dan item ada?
+
+            $list_ukuran = List_ukuran::where([
+                ['item_id', '=', $id],
+                ['ukuran_id', '=', $validated['ukuran_id']]
+            ])->first();
+
+
             $cart_check = Keranjang::where([
                 ['user_id', '=', auth()->user()->id],
                 ['item_id', '=', $id],
@@ -35,20 +46,26 @@ class Cart_WishlistController extends Controller
 
             // update qty & price in keranjang;
             if ($cart_check->count() > 0) {
-                $get_data = $cart_check->first();
-                // dd($get_data->qty);
-                Keranjang::where('id', $get_data->id)->update([
-                    'qty' => $get_data->qty + $validated['qty']
+                $data_keranjang = $cart_check->first();
+                $will_update_qty =  $validated['qty'] + $data_keranjang->qty;
+
+                if ($will_update_qty > $list_ukuran->qty) {
+                    throw new Exception('Kamu telah memasukkan ' . $data_keranjang->qty . ' item ke dalam keranjang. Kamu tidak bisa menambah jumlah barang, Pembelian telah mencapai batas maksimum! ', 1);
+                }
+                Keranjang::where('id', $data_keranjang->id)->update([
+                    'qty' => $will_update_qty
                 ]);
             }
 
             // create keranjang
             if ($cart_check->count() == 0) {
+                if ($validated['qty'] > $list_ukuran->qty) {
+                    throw new Exception('Pembelian telah mencapai batas maksimum!', 1);
+                }
                 Keranjang::create([
                     'user_id' => auth()->user()->id,
                     'item_id' => $id,
                     'ukuran_id' => $validated['ukuran_id'],
-                    'total' => '1',
                     'qty' => $validated['qty']
                 ]);
             }
@@ -82,12 +99,14 @@ class Cart_WishlistController extends Controller
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 404);
             }
-            Keranjang::where([
-                ['id', '=', $id],
-                ['user_id', '=', auth()->user()->id]
-            ])->update([
-                'qty' => $request->qty
-            ]);
+
+            self::cek_keranjang($id, $validator, 'ajax');
+            // Keranjang::where([
+            //     ['id', '=', $id],
+            //     ['user_id', '=', auth()->user()->id]
+            // ])->update([
+            //     'qty' => $request->qty
+            // ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Data Berhasil Diudapte!',
@@ -98,20 +117,46 @@ class Cart_WishlistController extends Controller
                 'ukuran_id' => 'required|numeric',
                 'qty' => 'required|numeric',
             ]);
-            Keranjang::where([
+
+            $cek =  self::cek_keranjang($id, $validated, 'non_ajax');
+
+            return redirect()->back()->withErrors($cek);
+        };
+    }
+
+    static function cek_keranjang($id, $validated)
+    {
+        try {
+            DB::beginTransaction();
+            $cart_check = Keranjang::where([
                 ['id', '=', $id],
-                ['user_id', '=', auth()->user()->id]
-            ])->update([
+                ['user_id', '=', auth()->user()->id],
+                ['ukuran_id', '=',  $validated['ukuran_id']],
+            ]);
+            $get_keranjang = $cart_check->first();
+            $list_ukuran = List_ukuran::where([
+                ['item_id', '=', $get_keranjang->item_id],
+                ['ukuran_id', '=', $validated['ukuran_id']]
+            ])->first();
+
+            if ($validated['qty'] > $list_ukuran->qty) {
+                throw new Exception('Kamu telah memasukkan ' . $get_keranjang->qty . ' item ke dalam keranjang. Kamu tidak bisa menambah jumlah barang, Pembelian telah mencapai batas maksimum! ', 1);
+            }
+            // end
+            $cart_check->update([
                 'ukuran_id' => $validated['ukuran_id'],
                 'qty' => $validated['qty']
             ]);
-
-            return redirect('/checkout/cart');
-        };
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $th->getMessage();
+        }
     }
 
     public function edit_cart($id)
     {
+
         $keranjang =   Keranjang::with([
             'item',
             'ukuran:id,nama'
@@ -123,7 +168,6 @@ class Cart_WishlistController extends Controller
         $item = Item::select(['id'])->with([
             'list_ukurans.ukuran:id,nama',
         ])->where('id', $keranjang->item_id)->first();
-
 
 
         return view('toko.pages.checkout.edit_keranjang', [

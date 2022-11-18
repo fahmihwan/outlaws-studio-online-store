@@ -92,7 +92,9 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/customer/account/login', [AuthUserController::class, 'register_or_login']);
 
     Route::get('/customer/account/forgotpassword', [AuthUserController::class, 'forgot_password'])->name('password.request');
-    Route::post('/customer/account/forgotpassword', [AuthUserController::class, 'update_password'])->name('password.email');
+    Route::post('/customer/account/forgotpassword', [AuthUserController::class, 'send_forgot_password_email'])->name('password.email');
+    Route::get('/customer/account/reset-password/{token}', [AuthUserController::class, 'reset_password'])->name('password.reset');
+    Route::post('/customer/account/reset-password', [AuthUserController::class, 'update_password'])->name('password.update');
 });
 
 
@@ -132,7 +134,7 @@ Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');
 Route::get('/list-item', [LandingpageController::class, 'list_item'])->name('list_item');
 Route::post('/list-item-ajax', [LandingpageController::class, 'ajax_list_items']);
 Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail_item']);
-
+Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, 'detail_item_stok_ajax']);
 
 
 

@@ -1,6 +1,7 @@
-<div id="drawer-navigation" {{-- class=" min-h-screen z-20 p-4 overflow-y-auto absolute sm:absolute md:static  bg-purple-900 w-64 overflow-hidden"> --}}
-    class="min-h-screen z-20 p-4  overflow-y-auto absolute sm:absolute md:static  bg-purple-900 w-64 overflow-hidden">
+<div id="drawer-navigation" {{-- class=" min-h-screen z-20 p-4 overflow-y-auto absolute sm:absolute md:static  bg-purple-900 w-64 overflow-hidden"> --}} {{-- class="min-h-screen z-20 p-4  overflow-y-auto absolute sm:absolute md:static  bg-purple-900 w-64 overflow-hidden"> --}}
+    class="min-h-screen z-20 p-4  overflow-y-auto absolute sm:absolute md:static  bg-purple-900  w-64 overflow-hidden">
     <div class="flex justify-end transition-transform ease-in-out duration-1000 ">
+        <span class="text-white w-full flex items-center justify-start pl-2 text-xl " id="text-menu"> Menu </span>
         <button class="hamburger hamburger--spin is-active m-0  bg-white py-1 px-1 rounded-sm " type="button"
             id="hamburger-sidebar" data-sidebar="open">
             <span class="hamburger-box ">

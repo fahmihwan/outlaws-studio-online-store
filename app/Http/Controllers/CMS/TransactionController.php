@@ -27,24 +27,19 @@ class TransactionController extends Controller
             'kurir',
             'pembayaran',
             'alamat',
-            'detail_penjualan.item:id,nama,harga,gambar',
-            'detail_penjualan.ukuran'
         ])->where('id', $id)->first();
 
-
-        // $orders = DB::table('orders')
-        // ->select('department', DB::raw('SUM(price) as total_sales'))
-        // ->groupBy('department')
-        // ->havingRaw('SUM(price) > ?', [2500])
-        // ->get();
-
-
-
-
-        return Detail_penjualan::join('items', 'detail_penjualans.item_id', '=', 'items.id')
-            // ->where('penjualan_id', $id)
-            ->withSum('item', 'harga')
-            ->get();
+        $informasi_pemesanan = Detail_penjualan::select([
+            'gambar',
+            'items.nama as item_nama',
+            'qty',
+            'harga',
+            'kategoris.nama as kategori_nama'
+        ])
+            ->join('items', 'detail_penjualans.item_id', '=', 'items.id')
+            ->join('kategoris', 'items.kategori_id', '=', 'kategoris.id')
+            ->selectRaw('qty * harga as harga_total')
+            ->get()->makeHidden(['deskripsi']);
 
 
         return view(
@@ -53,7 +48,7 @@ class TransactionController extends Controller
                 'penjualan' => $penjualan,
                 'pembayaran' => $penjualan->pembayaran,
                 'kurir' => $penjualan->kurir,
-                'detail_penjualans' => $penjualan->detail_penjualan,
+                'informasi_pemesanan' => $informasi_pemesanan,
                 'alamat' => $penjualan->alamat
             ]
         );

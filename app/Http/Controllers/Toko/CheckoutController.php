@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Mail;
 
-use function PHPUnit\Framework\returnCallback;
 
 class CheckoutController extends Controller
 {
@@ -33,11 +32,9 @@ class CheckoutController extends Controller
             'ukuran:id,nama'
         ])->where('user_id', auth()->user()->id)->latest()->get();
 
-
         $total_keranjang = $items->sum(function ($item) {
             return $item->qty * $item->item->harga;
         });
-
 
 
         return view('toko.pages.checkout.keranjang', [
@@ -46,10 +43,12 @@ class CheckoutController extends Controller
         ]);
     }
 
+
+
+
     public function pengiriman()
     {
         $alamats = Alamat::with('credential:id,alamat_id')->where('user_id', auth()->user()->id)->get();
-
 
         $keranjang = Keranjang::with([
             'item:id,nama,gambar,harga,kategori_id',
@@ -73,13 +72,9 @@ class CheckoutController extends Controller
 
     public function pembayaran()
     {
-
-
         // get session
         $get_sesssion_rajaongkir = session()->get('rajaongkir');
         $get_session_credential = session()->get('rajaongkir_credential');
-
-
 
         if (request('metode_pengiriman') == null || request('ongkir') == null) {
             return redirect()->back()->withErrors('pilih layanan paket');
@@ -96,8 +91,6 @@ class CheckoutController extends Controller
         $sub_total = $keranjang->sum(function ($item) {
             return $item->qty * $item->item->harga;
         });
-
-
 
         $total =  $sub_total +  $get_detail_rajaongkir['cost'][0]['value'];
 

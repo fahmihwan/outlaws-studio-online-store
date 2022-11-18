@@ -57,8 +57,15 @@
         </ol>
     </nav>
 
+
     {{-- resend_email --}}
     @include('toko.components.resend_email_confirmation')
+    @if (session('status'))
+        <div class="bg-green-200 text-green-800 p-2 block ">
+            <i class="fa-solid fa-circle-check"></i>
+            {{ session('status') }}
+        </div>
+    @endif
 @endsection
 
 @section('container')

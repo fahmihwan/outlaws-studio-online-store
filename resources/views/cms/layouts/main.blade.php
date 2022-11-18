@@ -36,9 +36,11 @@
                 if ($(this).hasClass('is-active')) {
                     $('#drawer-navigation').addClass('w-64').removeClass('w-20')
                     $('.sidebar-menu').removeClass('hidden')
+                    $('#text-menu').removeClass('hidden')
                 } else {
                     $('#drawer-navigation').removeClass('w-64').addClass('w-20')
                     $('.sidebar-menu').addClass('hidden')
+                    $('#text-menu').addClass('hidden')
                 }
 
             })

@@ -34,34 +34,48 @@
 @section('container')
     <!-- conetent -->
 
-    @if ($errors->any())
-        <div class="flex p-4 mt-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg " role="alert">
-            <div>
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <span class="font-medium">Ensure that these requirements are met:</span>
-                <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    @endif
 
 
     <div class=" w-full mt-10">
         <!-- sidebar -->
 
+        @if ($errors->any())
+            <div class="flex p-4 mt-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg " role="alert">
+                <div>
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span class="font-medium">Ensure that these requirements are met:</span>
+                    <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
         {{-- informasi  --}}
         <div class=" w-[580px] border  border-gray-400 mx-auto p-5">
-            <h1 class="border-b border-black pb-5 font-semibold text-xl mb-10">Lupa Kata Sandi?</h1>
-            <p class="text-xs mb-3">Ketikkan alamat email anda di bawah ini untuk mendapatkan tautan reset kata sandi. </p>
-            <form action="" method="POST">
+            <h1 class="border-b border-black pb-5 font-semibold text-2xl mb-10">Buat Kata Sandi Baru</h1>
 
+
+            <form action='/customer/account/reset-password' method="POST">
                 @csrf
+                <input type="hidden" name="token" value="{{ $token }}">
                 <div class="mb-6  w-full  ">
                     <label class="mb-2 font-normal block" for="">Email<span class="text-red-600">*</span></label>
-                    <input type="text" name="nama_depan" placeholder="Masukan email anda"
+                    <input type="email" name="email" placeholder="Masukan Email"
+                        class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                </div>
+                <div class="mb-6  w-full  ">
+                    <label class="mb-2 font-normal block" for="">Kata Sandi Baru<span
+                            class="text-red-600">*</span></label>
+                    <input type="password" name="password" placeholder="Masukan kata sandi baru"
+                        class="bg-gray-100 w-full border-b border-x-0 border-t-0">
+                </div>
+
+                <div class="mb-6  w-full  ">
+                    <label class="mb-2 font-normal block" for="">Konfirmasi Kata Sandi Baru<span
+                            class="text-red-600">*</span></label>
+                    <input type="password" name="password_confirmation" placeholder="Masukan konfirmasi kata sandi baru"
                         class="bg-gray-100 w-full border-b border-x-0 border-t-0">
                 </div>
 
@@ -71,7 +85,7 @@
                     hover:bg-white hover:text-black 
                     hover:duration-300
                     ">
-                        Atur Ulang Password
+                        Buat Kata Sandi Baru
                     </button>
                 </div>
             </form>

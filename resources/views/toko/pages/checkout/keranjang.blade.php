@@ -71,8 +71,9 @@
                                             class="select-qty border-t-0  border-x-0 float-right  bg-white border-b border-black"
                                             name="qty-cart" id="">
                                             @if ($item->qty > 10)
-                                                @for ($i = 0; $i < $item->qty; $i++)
-                                                    <option {{ $item->qty == $i && 'selected' }}value="{{ $i }}">
+                                                @for ($i = 1; $i <= $item->qty; $i++)
+                                                    <option {{ $item->qty == $i ? 'selected' : '' }}
+                                                        value="{{ $i }}">
                                                         {{ $i }}</option>
                                                 @endfor
                                             @else
@@ -159,9 +160,10 @@
                         "qty": $(this).val()
                     },
                     success: function(response) {
-                        if (response.success == true) {
-                            window.location.href = '/checkout/cart'
-                        }
+                        console.log(response)
+                        // if (response.success == true) {
+                        //     window.location.href = '/checkout/cart'
+                        // }
                     },
                     error: function(error) {
                         alert('error')
