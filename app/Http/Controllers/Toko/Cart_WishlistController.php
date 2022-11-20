@@ -17,8 +17,6 @@ class Cart_WishlistController extends Controller
 {
     public function store_cart(Request $request, $id)
     {
-
-
         if (!isset(auth()->user()->id)) {
             return redirect('/customer/account/login')->withErrors('Silahkan Login atau Registerasi terlebih dahulu');
         }
@@ -80,6 +78,7 @@ class Cart_WishlistController extends Controller
         return redirect()->back();
     }
 
+
     public function destroy_cart($id)
     {
         Keranjang::where('id', $id)->delete();
@@ -92,65 +91,101 @@ class Cart_WishlistController extends Controller
     {
 
         if ($request->ajax()) {
-            $validator = Validator::make($request->all(), [
-                'qty' => 'required|numeric'
+            $validated = $request->validate([
+                'qty' => 'required|numeric',
             ]);
-
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 404);
-            }
-
-            self::cek_keranjang($id, $validator, 'ajax');
-            // Keranjang::where([
-            //     ['id', '=', $id],
-            //     ['user_id', '=', auth()->user()->id]
-            // ])->update([
-            //     'qty' => $request->qty
-            // ]);
-            return response()->json([
-                'success' => true,
-                'message' => 'Data Berhasil Diudapte!',
-            ]);
+            $response =  self::cek_keranjang($id, $validated, 'ajax');
+            return response()->json($response);
         }
         if (!$request->ajax()) {
             $validated = $request->validate([
                 'ukuran_id' => 'required|numeric',
                 'qty' => 'required|numeric',
             ]);
+            $response = self::cek_keranjang($id, $validated, 'non_ajax');
 
-            $cek =  self::cek_keranjang($id, $validated, 'non_ajax');
-
-            return redirect()->back()->withErrors($cek);
+            if ($response['status'] == false) {
+                return redirect()->back()->withErrors($response['message']);
+            } else {
+                return redirect('/checkout/cart');
+            };
         };
     }
 
-    static function cek_keranjang($id, $validated)
+    static function cek_keranjang($id, $validated, $status_request)
     {
         try {
             DB::beginTransaction();
-            $cart_check = Keranjang::where([
+            $cart_check_first = Keranjang::where([
                 ['id', '=', $id],
                 ['user_id', '=', auth()->user()->id],
-                ['ukuran_id', '=',  $validated['ukuran_id']],
             ]);
-            $get_keranjang = $cart_check->first();
+            $data_keranjang = $cart_check_first->first();
+
             $list_ukuran = List_ukuran::where([
-                ['item_id', '=', $get_keranjang->item_id],
-                ['ukuran_id', '=', $validated['ukuran_id']]
+                ['item_id', '=', $data_keranjang->item_id],
+                ['ukuran_id', '=', $status_request == 'non_ajax' ? $validated['ukuran_id'] : $data_keranjang->ukuran_id]
             ])->first();
 
             if ($validated['qty'] > $list_ukuran->qty) {
-                throw new Exception('Kamu telah memasukkan ' . $get_keranjang->qty . ' item ke dalam keranjang. Kamu tidak bisa menambah jumlah barang, Pembelian telah mencapai batas maksimum! ', 1);
+                throw new Exception('Kamu telah memasukkan ' . $data_keranjang->qty . ' item ke dalam keranjang. Kamu tidak bisa menambah jumlah barang, Pembelian telah mencapai batas maksimum! ', 1);
             }
-            // end
-            $cart_check->update([
-                'ukuran_id' => $validated['ukuran_id'],
-                'qty' => $validated['qty']
-            ]);
+            if ($status_request == 'non_ajax') {
+                // jika ukuran id berbeda dengan sebelumnya true;
+                if ($data_keranjang->ukuran_id != $validated['ukuran_id']) {
+                    // cek jumlah ukuran_id item tersebut ada brp
+                    $cart_check_second = Keranjang::where([
+                        ['user_id', '=', auth()->user()->id],
+                        ['item_id', '=', $data_keranjang->item_id],
+                        ['ukuran_id', '=', $validated['ukuran_id']]
+                    ]);
+                    // jika count sama dgn 1 replace qty true
+                    if ($cart_check_second->count() == 1) {
+                        $get_cart_second = $cart_check_second->first();
+
+                        $list_ukuran = List_ukuran::where([
+                            ['item_id', '=', $data_keranjang->item_id],
+                            ['ukuran_id', '=', $validated['ukuran_id']]
+                        ])->first();
+                        $cekQty = $get_cart_second->qty + $validated['qty'];
+                        if ($cekQty > $list_ukuran->qty) {
+                            throw new Exception('Kamu telah memasukkan ' . $data_keranjang->qty . ' item ke dalam keranjang. Kamu tidak bisa menambah jumlah barang, Pembelian telah mencapai batas maksimum! ', 1);
+                        }
+                        $cart_check_second->update([
+                            'qty' => $cekQty
+                        ]);
+                        // hapus item dengan ukuran id yg sblm nya (ukuran id sama)
+                        $cart_check_first->delete();
+                    }
+                    if ($cart_check_second->count() == 0) {
+                        // update  qty + ukuran
+                        $cart_check_first->update([
+                            'ukuran_id' => $validated['ukuran_id'],
+                            'qty' => $validated['qty']
+                        ]);
+                    }
+                } else {
+                    // update ukuran saja
+                    $cart_check_first->update([
+                        'qty' => $validated['qty'],
+                    ]);
+                }
+            }
+
+            if ($status_request == 'ajax') {
+                $cart_check_first->update([
+                    'qty' => $validated['qty']
+                ]);
+            }
+
             DB::commit();
+            return ['status' => true];
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $th->getMessage();
+            return [
+                'status' => false,
+                'message' => $th->getMessage()
+            ];
         }
     }
 

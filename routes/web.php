@@ -6,6 +6,7 @@ use App\Http\Controllers\CMS\ListCustomerController;
 use App\Http\Controllers\CMS\master_item\KategoriController;
 use App\Http\Controllers\CMS\master_item\UkuranController;
 use App\Http\Controllers\CMS\TransactionController;
+use App\Http\Controllers\HandleNotificationMidtrans;
 use App\Http\Controllers\Toko\AlamatController;
 use App\Http\Controllers\Toko\AuthUserController;
 use App\Http\Controllers\Toko\Cart_WishlistController;
@@ -157,3 +158,9 @@ Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show'])
 // transaction
 Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
 Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
+
+
+// handle notification midtrans
+Route::post('/handle-notif/midtrans', [HandleNotificationMidtrans::class, 'payment_handler']);
+
+

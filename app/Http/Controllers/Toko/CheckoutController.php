@@ -8,6 +8,7 @@ use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Detail_penjualan;
+use App\Models\Item;
 use App\Models\Keranjang;
 use App\Models\Kurir;
 use App\Models\Pembayaran;
@@ -35,7 +36,6 @@ class CheckoutController extends Controller
         $total_keranjang = $items->sum(function ($item) {
             return $item->qty * $item->item->harga;
         });
-
 
         return view('toko.pages.checkout.keranjang', [
             'items' => $items,

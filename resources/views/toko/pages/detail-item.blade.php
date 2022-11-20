@@ -119,7 +119,7 @@
 
                         <div class="mb-4 flex">
                             <button type="submit"
-                                class="border bg-black border-black  text-white hover:bg-white hover:text-black py-3 w-4/5">
+                                class="border bg-black border-black  text-white hover:bg-white duration-300 hover:text-black py-3 w-4/5">
                                 Tambah ke Troli
                             </button>
                             <button
@@ -140,8 +140,6 @@
 @section('script')
     <script>
         $(document).ready(function() {
-
-
             let item_id = {{ Js::from($item->id) }};
             get_stok_tersisa(null)
 

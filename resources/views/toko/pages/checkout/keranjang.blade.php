@@ -160,10 +160,10 @@
                         "qty": $(this).val()
                     },
                     success: function(response) {
-                        console.log(response)
-                        // if (response.success == true) {
-                        //     window.location.href = '/checkout/cart'
-                        // }
+                        if (response.status == false) {
+                            alert(response.message)
+                        }
+                        window.location.href = '/checkout/cart'
                     },
                     error: function(error) {
                         alert('error')
