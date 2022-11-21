@@ -13,7 +13,7 @@ class Penjualan extends Model
 
     public function alamat()
     {
-        return $this->belongsTo(Alamat::class);
+        return $this->belongsTo(Alamat::class)->withTrashed();
     }
 
     public function pembayaran()

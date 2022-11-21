@@ -29,12 +29,10 @@ class Cart_WishlistController extends Controller
         try {
             DB::beginTransaction();
             // cek ukuran dan item ada?
-
             $list_ukuran = List_ukuran::where([
                 ['item_id', '=', $id],
                 ['ukuran_id', '=', $validated['ukuran_id']]
             ])->first();
-
 
             $cart_check = Keranjang::where([
                 ['user_id', '=', auth()->user()->id],

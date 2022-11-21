@@ -87,7 +87,12 @@
                                     <td class="py-4 px-3 text-xs">
                                         <a href="/customer/order-history/{{ $item->id }}/detail-pesanan">Lihat Detail
                                         </a>&nbsp; | &nbsp;
-                                        <a href="">Pesan Ulang </a>
+                                        <form class="inline"
+                                            action="/customer/oerder-history/{{ $item->id }}/pesan_ulang"
+                                            method="POST">
+                                            @csrf
+                                            <button>Pesan Ulang</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

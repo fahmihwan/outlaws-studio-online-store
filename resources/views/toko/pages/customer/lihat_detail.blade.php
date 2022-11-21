@@ -54,7 +54,10 @@
                 <p class="mb-7">{{ $item->tanggal_pembelian }}</p>
 
                 <div class="flex justify-between">
-                    <a href="" class="text-sm">Pesan Ulang</a>
+                    <form class="inline" action="/customer/oerder-history/{{ $item->id }}/pesan_ulang" method="POST">
+                        @csrf
+                        <button>Pesan Ulang</button>
+                    </form>
                     <a href="/customer/order-history/detail/{{ $item->id }}/print" class="text-sm">Cetak Pesanan</a>
                 </div>
 

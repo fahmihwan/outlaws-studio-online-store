@@ -109,12 +109,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-
-
             filterItems()
-
-
-
 
             let checkedKategori = [];
             $('.check-kategori').click(function() {
@@ -182,8 +177,8 @@
                                 '<p class="text-center py-10"> Hasil Tidak di temukan </p>')
                         }
                         response.forEach(e => {
-                            items += `<div class="hover:border border-gray-300">
-                        <a href="/list-item/${e.id}/detail-item">
+                            items += `<div class="">
+                        <a href="/list-item/${e.id}/detail-item" >
                             <img class="object-cover" src="./storage/${e.gambar}" alt="product image">
                         </a>
                         <div class="p-2 border flex justify-between bg-white ">
@@ -195,8 +190,8 @@
                                     ${e.kategori.nama}
                                 </span><br>
                                 ${(e.wish_list == null)?`
-                                                                                                                                                                                                                                                                                                             <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
-                                                                                                                                                                                                                                                                                                            <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
+                                                                                                                                                                                                                                                                                                                                                                         <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
+                                                                                                                                                                                                                                                                                                                                                                        <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
                             </div>
                         </div>
                     </div>`

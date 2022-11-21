@@ -29,6 +29,20 @@
             </li>
         </ol>
     </nav>
+    @if ($errors->any())
+        <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+            role="alert">
+            <div>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span class="font-medium">Ensure that these requirements are met:</span>
+                <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @section('container')
@@ -42,129 +56,166 @@
             <div class="m-2 py-4 ">
                 <h1 class="font-bold text-2xl mb-7">Ubah Informasi Akun</h1>
 
+                <div class="w-full md:w-2/3">
+                    <form class="" action="/customer/address/{{ $almt->id }}/update" method="POST">
+                        @method('PUT')
+                        @csrf
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="nama_depan" class="block mb-1 text-xs font-normal text-gray-900 ">Nama Depan
+                                <span class="text-red-700">*</span></label>
+                            <input type="text" value="{{ $almt->nama_depan }}" name="nama_depan" id="nama_depan"
+                                class=" w-3/4 border border-gray-400   text-gray-900 text-sm  h-8" placeholder="Nama Depan"
+                                required="">
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="nama_belakang" class="block mb-1 text-xs font-normal text-gray-900 ">Nama
+                                Belakang
+                                <span class="text-red-700">*</span></label>
+                            <input type="text" value="{{ $almt->nama_belakang }}" name="nama_belakang" id="nama_belakang"
+                                class=" w-3/4 border border-gray-400   text-gray-900 text-sm  h-8"
+                                placeholder="Nama Belakang" required="">
+                        </div>
 
-                <form class="" action="/customer/account/store" method="POST">
-                    <div class="w-full flex">
-                        <div class="w-1/2 pr-20">
-                            <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">Informasi Akun</h1>
-                            <div class="mb-6  w-full  ">
-                                <label class="mb-2 font-normal block" for="">Nama Depan <span
-                                        class="text-red-600">*</span></label>
-                                <input type="text" name="nama_depan" value="{{ $user->credential->nama_depan }}"
-                                    placeholder="Masukan nama Depan Anda"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
-                            <div class="mb-6 w-full  ">
-                                <label class="mb-2 block" for="">Nama Belakang <span
-                                        class="text-red-600">*</span></label>
-                                <input type="text" name="nama_belakang" value="{{ $user->credential->nama_belakang }}"
-                                    placeholder="Masukan nama Depan Belakang"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
-                            <div class="mb-6 w-full  ">
-                                <label class="mb-2 block" for="">Tanggal Lahir <span
-                                        class="text-red-600">*</span></label>
-                                <div class="flex">
-                                    <select name="tanggal" id="tanggal"
-                                        class="bg-gray-100 mr-3 w-4/12 lg:w-4/12 border-b border-x-0 border-t-0">
-                                        <option value="">Tanggal</option>
-                                    </select>
-                                    <select name="bulan" id="bulan"
-                                        class="bg-gray-100 mr-3 w-4/12 lg:w-6/12 border-b border-x-0 border-t-0">
-                                        <option value="">Bulan</option>
-                                    </select>
-                                    <select name="tahun" id="tahun"
-                                        class="bg-gray-100 w-4/12 lg:w-4/12 border-b border-x-0 border-t-0">
-                                        <option value="">Tahun</option>
+                        <div class=" w-full  mb-2 md:mb-8">
+                            <label for="" class="block mb-1 text-xs font-normal text-gray-900 ">Negara
+                                <span class="text-red-700">*</span></label>
+                            <input type="text" name="" id=""
+                                class=" w-3/4 border border-gray-400 bg-gray-50 text-gray-900 text-sm  h-8"
+                                placeholder="negara" value="Indonesia" readonly required="">
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="provinsi" class="block mb-1 text-xs font-normal text-gray-900 ">Provinsi
+                                <span class="text-red-700">*</span></label>
+                            <select name="provinsi" id="provinsi"
+                                class=" w-3/4 py-0 border border-gray-400  text-gray-900 text-sm  h-8" required>
+                                <option value="{{ $almt->provinsi }}">{{ $almt->provinsi }}</option>
+                            </select>
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="kota" class="block mb-1 text-xs font-normal text-gray-900 ">Kota
+                                <span class="text-red-700">*</span></label>
+                            <select name="kota" id="kota"
+                                class=" w-3/4 py-0 border border-gray-400  text-gray-900 text-sm  h-8" required>
+                                <option value="{{ $almt->kota }}">{{ $almt->kota }}</option>
+                            </select>
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <input type="hidden" id="kota_id" value="{{ $almt->kota_id }}" name="kota_id" readonly
+                                required>
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="kode_pos" class="block mb-1 text-xs font-normal text-gray-900 ">Kode Pos
+                                <span class="text-red-700">*</span> </label>
+                            <input type="text" value="{{ $almt->kode_pos }}" name="kode_pos" id="kode_pos"
+                                class=" w-3/4 border border-gray-400 bg-gray-100   text-gray-900 text-sm  h-8"
+                                placeholder="Kode pos" required readonly>
+                        </div>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="alamat" class="block mb-1 text-xs font-normal text-gray-900 ">Alamat
+                                <span class="text-red-700">* tuliskan alamat secara detail</span></label>
+                            <input type="text" value="{{ $almt->alamat }}" name="alamat" id="alamat"
+                                class=" w-3/4 border  border-gray-400   text-gray-900 text-sm  h-20" placeholder="Alamat"
+                                required="">
+                        </div>
 
-                                    </select>
+                        <div class=" w-full mb-2 md:mb-8">
+                            <label for="nama_depan" class="block mb-1 text-xs font-normal text-gray-900 ">Nomor
+                                Telepon
+                                <span class="text-red-700">*</span></label>
+                            <div class="relative">
+                                <div class="flex absolute text-sm inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                    62
                                 </div>
-                            </div>
-                            <div class="mb-6 w-full ">
-                                <label class="mb-2 block" for="">Jenis kelamin <span
-                                        class="text-red-600">*</span></label>
-                                <select name="jenis_kelamin" id=""
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                                    <option value="{{ $user->credential->jenis_kelamin }}">
-                                        {{ $user->credential->jenis_kelamin }}</option>
-                                    <option value="pria">Pria</option>
-                                    <option value="wanita">Wanita</option>
-                                </select>
-                            </div>
-                            <div class="mb-6 w-full ">
-                                <label class="mb-2 block" for="">Nomor Telepon <span
-                                        class="text-red-600">*</span></label>
-                                <div class="relative">
-                                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                        62
-                                    </div>
-                                    <input type="number" name="telp" id="telp"
-                                        class="bg-gray-100 border-b border-x-0 border-t-0  text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
-                                        placeholder="" value="{{ $user->credential->telp }}">
-                                </div>
-                            </div>
-
-                            <div class="mb-6 w-full lg:w-10/12 ">
-                                <input type="checkbox" class="mr-5" id="ganti-email" value=""> <label
-                                    for="ganti-email"> Ganti
-                                    Email</label><br><br>
-                                <input type="checkbox" class="mr-5" id="gant-sandi"> <label for="gant-sandi"> Ubah Kata
-                                    Sandi</label><br>
-
-
-                            </div>
-                            <div class="mb-6 w-32 ">
-                                <button type="submit"
-                                    class="w-full mb-0  text-white bg-black border-2 border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm px-5 py-3 text-center
-                                hover:bg-white hover:text-black 
-                                hover:duration-300
-                                ">
-                                    Simpan
-                                </button>
+                                <input type="number" value="{{ $almt->telp }}" name="telp" id="telp"
+                                    class="w-3/4 border border-gray-400 pl-9 focus:ring-0  text-gray-900 text-sm h-8 "
+                                    placeholder="">
                             </div>
                         </div>
 
+                        <button
+                            class=" inline-block border border-black p-2 w-40 text-center bg-black text-white hover:bg-white hover:text-black"
+                            type="submit">
+                            Ubah alamat
+                        </button>
+                    </form>
+                </div>
 
-                        {{-- password --}}
-                        <div class="w-1/2">
-                            <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">
-                                Ganti Alamat Email & Password
-                            </h1>
-                            <div class="mb-6 w-full lg:w-10/12 ">
-                                <label class="mb-2 font-normal block" for="">Email <span
-                                        class="text-red-600">*</span></label>
-                                <input type="email" name="email" value="{{ $user->email }}"
-                                    placeholder="Masukan Email Anda"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
-                            <div class="mb-6 w-full lg:w-10/12 ">
-                                <label class="mb-2 font-normal block" for="">Kata Sandi Sekarang<span
-                                        class="text-red-600">*</span></label>
-                                <input type="password" name="password" placeholder="Masukan password Anda"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
-                            <div class="mb-6 w-full lg:w-10/12 ">
-                                <label class="mb-2 font-normal block" for="">Kata Sandi Baru<span
-                                        class="text-red-600">*</span></label>
-                                <input type="password" name="password" placeholder="Masukan password Anda"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
-                            <div class="mb-6 w-full lg:w-10/12 ">
-                                <label class="mb-2 font-normal block" for="">Konfirmasi Kata Sandi <span
-                                        class="text-red-600">*</span></label>
-                                <input type="password" name="confirm_password"
-                                    placeholder="Masukan password Anda kembali"
-                                    class="bg-gray-100 w-full border-b border-x-0 border-t-0">
-                            </div>
 
-                        </div>
-                    </div>
-
-                </form>
             </div>
 
 
 
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        let id_provinsi = '';
+        let id_kota = '';
+        $.ajax({
+            url: '/checkout/alamat-pengiriman/province',
+            type: 'GET',
+            dataType: "json",
+            success: function(res) {
+                let prov = '';
+                $('#provinsi').append(prov)
+                if (res.rajaongkir.status.code != 400) {
+                    let prov = '';
+                    res.rajaongkir.results.forEach(e => {
+                        prov +=
+                            `<option value="${e.province}" data-id="${e.province_id}">${e.province}</option>`;
+                    });
+                    $('#provinsi').append(prov)
+                }
+            },
+            error: function(err) {
+                alert(err)
+            }
+        })
+
+
+        $('#provinsi').change(function() {
+            let id = $(this).find(':selected').attr('data-id')
+            id_provinsi = id;
+            $.ajax({
+                url: `/checkout/alamat-pengiriman/province/${id}/city`,
+                type: 'GET',
+                dataType: "json",
+                success: function(res) {
+                    let kota = ''
+                    $('#kota').html('')
+                    $('#kota').append(`<option disabled> Pilih Kabupate / Kota</option>`)
+                    res.rajaongkir.results.forEach(e => {
+                        kota +=
+                            `<option value="${e.city_name}" data-id="${e.city_id}">${e.city_name}</option>`;
+                    });
+                    $('#kota').append(kota)
+                },
+                error: function(err) {
+                    alert(err)
+                }
+            })
+        })
+
+        $('#kota').change(function() {
+            let id = $(this).find(':selected').attr('data-id')
+            id_kota = id
+            $.ajax({
+                url: `/checkout/alamat-pengiriman/province/${id_kota}/city/${id_provinsi}`,
+                type: 'GET',
+                dataType: "json",
+                success: function(res) {
+                    let result = res.rajaongkir.results;
+                    $('#kota_id').val('')
+                    $('#kode_pos').val('')
+                    $('#kode_pos').val(result.postal_code)
+                    $('#kota_id').val(result.city_id)
+                },
+                error: function(err) {
+                    alert(err)
+                }
+            })
+        })
+    </script>
 @endsection

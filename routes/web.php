@@ -81,7 +81,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer/account/logout', [AuthUserController::class, 'logout']);
 });
 
-
 // user
 Route::middleware(['guest'])->group(function () {
     Route::get('/customer/account/create', [AuthUserController::class, 'register']);
@@ -95,14 +94,18 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/customer/account/reset-password', [AuthUserController::class, 'update_password'])->name('password.update');
 });
 
-
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customer/account', [CustomerController::class, 'account']);
     Route::get('/customer/order-history', [CustomerController::class, 'pesanan']);
     Route::get('/customer/order-history/{id}/detail-pesanan', [CustomerController::class, 'lihat_detail_pesanan']);
+    Route::post('/customer/oerder-history/{id}/pesan_ulang', [CustomerController::class, 'pesan_ulang']);
     Route::get('/customer/wish-list', [CustomerController::class, 'wish_list']);
     Route::get('/customer/address', [CustomerController::class, 'address']);
+    Route::get('/customer/address/create', [CustomerController::class, 'create_address']);
+    Route::delete('/customer/address/{id}/delete', [AlamatController::class, 'delete']);
+    Route::get('/customer/address/{id}/edit', [AlamatController::class, 'edit']);
+    Route::put('/customer/address/{id}/update', [AlamatController::class, 'update']);
+
     Route::get('/customer/account/edit', [CustomerController::class, 'informasi_account']);
     Route::post('/customer/account/update', [AuthUserController::class, 'update_account']);
 

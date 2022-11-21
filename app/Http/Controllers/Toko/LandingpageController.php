@@ -23,20 +23,6 @@ class LandingpageController extends Controller
     public function list_item()
     {
 
-        // $items = Item::select([
-        //     'id', 'nama', 'harga',
-        // ])->filter([
-        //     'filter' => 'desc',
-        //     'isChecked' => []
-        // ])->get();
-        // return $items;
-
-
-        // $items = Item::with('wish_list')->select([
-        //     'id', 'nama', 'harga', 'kategori_id', 'gambar'
-        // ])->with('kategori:id,nama')->latest()->get();
-
-
         return view('toko.pages.list-item', [
             'kategories' => Kategori::all()
         ]);

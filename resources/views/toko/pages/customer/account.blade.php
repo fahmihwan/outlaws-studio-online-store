@@ -105,7 +105,12 @@
                                     <td class="py-4 px-3 text-xs">
                                         <a href="/customer/order-history/{{ $item->id }}/detail-pesanan">Lihat Detail
                                         </a>&nbsp; | &nbsp;
-                                        <a href="">Pesan Ulang </a>
+                                        <form class="inline"
+                                            action="/customer/oerder-history/{{ $item->id }}/pesan_ulang"
+                                            method="POST">
+                                            @csrf
+                                            <button>Pesan Ulang</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -129,27 +134,35 @@
                     </div>
                 </section>
 
-                <section>
+                <section class="mb-40">
+
                     <div class="flex mb-2">
                         <h1 class="font-bold text-2xl mr-10">ALAMAT</h1>
-                        <a href=""
+                        <a href="/customer/address"
                             class="border-2 flex items-center px-10 text-xs border-black hover:bg-black hover:text-white">
                             Pengaturan
                             Alamat
                         </a>
                     </div>
                     <hr class="mb-4">
-                    <h5 class="font-bold text-sm">Alamat Pengiriman</h5>
-                    <p class="text-sm text-gray-600">pak sulthon</p>
-                    <p class="text-sm text-gray-600">maospati, kraton</p>
-                    <p class="text-sm text-gray-600">kab bengkulu 93392</p>
-                    <p class="text-sm text-gray-600">Indonesia</p>
-                    <p class="text-sm text-gray-600">082334338392</p>
+                    @if ($alamat)
+                        <h5 class="font-bold text-sm">Alamat Pengiriman</h5>
+                        <p class="text-sm text-gray-600">{{ $alamat->nama_depan }} {{ $alamat->nama_belakang }}</p>
+                        <p class="text-sm text-gray-600">{{ $alamat->alamat }}</p>
+                        <p class="text-sm text-gray-600">
+                            {{ $alamat->kota }},{{ $alamat->provinsi }},{{ $alamat->kode_pos }}</p>
+                        <p class="text-sm text-gray-600">{{ $alamat->telp }}</p>
+                        <div class="text-gray-500 text-xs mt-5">
+                            <a href="/customer/address/{{ $alamat->id }}/edit" class="underline hover:text-red-900">Ubah
+                                Alamat</a>&nbsp;
+                        </div>
+                    @else
+                        <div>
+                            <p class="text-gray-500">Anda belum memiliki alamat</p>
+                        </div>
+                    @endif
 
 
-                    <div class="text-gray-500 text-xs mt-5">
-                        <a href="" class="underline hover:text-red-900">Ubah Alamat</a>&nbsp;
-                    </div>
                 </section>
 
             </div>
