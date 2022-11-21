@@ -103,7 +103,8 @@
                                         {{ $item->pembayaran->transaction_status }}
                                     </td>
                                     <td class="py-4 px-3 text-xs">
-                                        <a href="">Lihat Detail </a>&nbsp; | &nbsp;
+                                        <a href="/customer/order-history/{{ $item->id }}/detail-pesanan">Lihat Detail
+                                        </a>&nbsp; | &nbsp;
                                         <a href="">Pesan Ulang </a>
                                     </td>
                                 </tr>

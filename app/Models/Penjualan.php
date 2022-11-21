@@ -31,7 +31,7 @@ class Penjualan extends Model
         return $this->belongsTo(Kurir::class);
     }
 
-    public function detail_penjualan()
+    public function detail_penjualans()
     {
         return $this->hasMany(Detail_penjualan::class);
     }

@@ -8,7 +8,7 @@
         </li>
         <li>
             <a href="/customer/order-history"
-                class="border-l-[5px] block px-4 py-3 {{ request()->is('customer/order-history') ? 'border-black bg-gray-200' : 'border-white hover:border-black hover:bg-gray-200 ' }} ">
+                class="border-l-[5px] block px-4 py-3 {{ request()->is('customer/order-history*') ? 'border-black bg-gray-200' : 'border-white hover:border-black hover:bg-gray-200 ' }} ">
                 Pesanan
             </a>
         </li>

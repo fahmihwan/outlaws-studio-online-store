@@ -9,13 +9,13 @@ class HandleNotificationMidtrans extends Controller
 
     public function payment_handler(Request $request){   
 
-        return $request;
+        return $request->getContent();
         // require_once(dirname(__FILE__) . '/Midtrans.php');
         \Midtrans\Config::$isProduction = false;
         // \Midtrans\Config::$serverKey = '<your serverkey>';
         \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
         $notif = new \Midtrans\Notification();
-
+        return $notif;
         $transaction = $notif->transaction_status;
         $type = $notif->payment_type;
         $order_id = $notif->order_id;

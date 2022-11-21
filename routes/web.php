@@ -6,7 +6,7 @@ use App\Http\Controllers\CMS\ListCustomerController;
 use App\Http\Controllers\CMS\master_item\KategoriController;
 use App\Http\Controllers\CMS\master_item\UkuranController;
 use App\Http\Controllers\CMS\TransactionController;
-use App\Http\Controllers\HandleNotificationMidtrans;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Toko\AlamatController;
 use App\Http\Controllers\Toko\AuthUserController;
 use App\Http\Controllers\Toko\Cart_WishlistController;
@@ -78,11 +78,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', [AuthUserController::class, 'verification_notice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthUserController::class, 'verification_handler'])->middleware(['signed'])->name('verification.verify');
     Route::post('/email/verification-notification', [AuthUserController::class, 'resend_verification'])->middleware(['throttle:6,1'])->name('verification.send');
-
     Route::post('/customer/account/logout', [AuthUserController::class, 'logout']);
 });
-
-
 
 
 // user
@@ -103,15 +100,16 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customer/account', [CustomerController::class, 'account']);
     Route::get('/customer/order-history', [CustomerController::class, 'pesanan']);
+    Route::get('/customer/order-history/{id}/detail-pesanan', [CustomerController::class, 'lihat_detail_pesanan']);
     Route::get('/customer/wish-list', [CustomerController::class, 'wish_list']);
     Route::get('/customer/address', [CustomerController::class, 'address']);
     Route::get('/customer/account/edit', [CustomerController::class, 'informasi_account']);
+    Route::post('/customer/account/update', [AuthUserController::class, 'update_account']);
 
     Route::post('/list-item/cart/{id}', [Cart_WishlistController::class, 'store_cart']);
     Route::delete('/list-item/cart/{id}/destroy', [Cart_WishlistController::class, 'destroy_cart']);
     Route::post('/list-item/wish_list/{id}', [Cart_WishlistController::class, 'store_wishlist']);
     Route::delete('/list-item/wish_list/{id}/destroy', [Cart_WishlistController::class, 'destroy_wish_list']);
-
     // checkout
     Route::get('/checkout/pengiriman', [CheckoutController::class, 'pengiriman']);
     Route::put('/checkout/pengiriman/{id_alamat}/set_alamat_primary', [CheckoutController::class, 'set_alamat_primary_customer']);
@@ -137,8 +135,6 @@ Route::post('/list-item-ajax', [LandingpageController::class, 'ajax_list_items']
 Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail_item']);
 Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, 'detail_item_stok_ajax']);
 
-
-
 // admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 Route::resource('/admin/master-item/kategori', KategoriController::class);
@@ -159,8 +155,5 @@ Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show'])
 Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
 Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
 
-
-// handle notification midtrans
-Route::post('/handle-notif/midtrans', [HandleNotificationMidtrans::class, 'payment_handler']);
-
-
+// print pdf 
+Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);

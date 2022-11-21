@@ -7,7 +7,6 @@ use App\Models\Alamat;
 use App\Models\Penjualan;
 use App\Models\User;
 use App\Models\Wish_list;
-use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -37,6 +36,36 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function lihat_detail_pesanan($id)
+    {
+        $item = Penjualan::with([
+            'alamat',
+            'pembayaran:id,transaction_status,code_bank',
+            'detail_penjualans.item',
+            'detail_penjualans.ukuran',
+            'detail_penjualans.item.kategori',
+            'kurir',
+            'alamat'
+        ])->where([
+            ['user_id', '=', auth()->user()->id],
+            ['id', '=', $id]
+        ])->first();
+
+        $subTotal = $item->detail_penjualans->sum(function ($q) {
+            return $q->qty * $q->item->harga;
+        });
+
+        return view('toko.pages.customer.lihat_detail', [
+            'item' => $item,
+            'detail_penjualans' => $item->detail_penjualans,
+            'pengiriman' => $item->kurir,
+            'sub_total' => $subTotal,
+            'total' => $item->total,
+            'alamat' => $item->alamat,
+            'pembayaran' => $item->pembayaran->code_bank
+        ]);
+    }
+
     public function wish_list()
     {
         $data =  Wish_list::with('item')
@@ -46,6 +75,7 @@ class CustomerController extends Controller
             'items' => $data
         ]);
     }
+
     public function address()
     {
         $alamats = Alamat::where('user_id', auth()->user()->id)->get();
@@ -53,13 +83,19 @@ class CustomerController extends Controller
             'alamats' => $alamats
         ]);
     }
+
     public function informasi_account()
     {
+
         $users = User::with('credential')->Where('id', auth()->user()->id)->first();
-        // return $users->credential->tanggal_lahir;
+
+
+        $tanggal = explode('-', $users->credential->tanggal_lahir);
 
         return view('toko.pages.customer.informasi_account', [
-            'user' => $users
+            'user' => $users,
+            'date' => $tanggal,
+            'telp' => explode('+', $users->credential->telp)[1]
         ]);
     }
 }

@@ -41,20 +41,26 @@
         <div class=" md:w-full px-10 ">
             <div class="m-2 py-4 ">
                 <h1 class="font-bold text-2xl mb-7">Alamat</h1>
-
                 <h1 class="font-bold text-2xl pb-5 border-b-2">ALAMAT</h1>
             </div>
-            <div class="mb-5">
-                <h1 class="font-bold mb-4">Alamat Pengiriman</h1>
-                <p class="font-light text-sm pb-2">fahmi Ihwan</p>
-                <p class="font-light text-sm pb-2">magetan</p>
-                <p class="font-light text-sm pb-2">Amlapura/Amlapura, Bali, 63392</p>
-                <p class="font-light text-sm pb-2">82334331234</p>
-                <a href="" class="underline text-xs hover:text-red-500">Ubah Alamat Pengiriman</a>
-            </div>
-            <div class="">
-                <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">Alamat Tambahan</h1>
 
+            <div class="flex">
+                @foreach ($alamats as $almt)
+                    <div class="mb-5 mr-5">
+                        <h1 class="font-bold mb-4">Alamat Pengiriman</h1>
+                        <p class="font-light text-sm pb-2">{{ $almt->nama_depan }} {{ $almt->nama_belakang }}</p>
+                        <p class="font-light text-sm pb-2">{{ $almt->alamat }}</p>
+                        <p class="font-light text-sm pb-2">{{ $almt->kota }}, {{ $almt->provinsi }}, {{ $almt->kode_pos }}
+                        </p>
+                        <p class="font-light text-sm pb-2">{{ $almt->telp }}</p>
+                        <a href="" class="underline text-xs hover:text-red-500">Ubah Alamat Pengiriman</a>
+                    </div>
+                @endforeach
+            </div>
+
+
+            <div class="">
+                <h1 class="font-bold text-2xl pb-5 border-b-2 mb-10">Alamat Tambahan </h1>
                 <div class="">
                     <table class="w-full text-left text-gray-500  text-xs">
                         <thead class="text-xs text-gray-900  ">

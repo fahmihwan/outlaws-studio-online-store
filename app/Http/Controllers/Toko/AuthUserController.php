@@ -69,6 +69,59 @@ class AuthUserController extends Controller
         return redirect('list-item');
     }
 
+
+    public function update_account(Request $request)
+    {
+
+        $user =  User::where('id', auth()->user()->id)->first();
+        $rules = [
+            'nama_depan' => 'required',
+            'nama_belakang' => 'required',
+            'tanggal' => 'required|numeric',
+            'bulan' => 'required|numeric',
+            'tahun' => 'required|numeric',
+            'jenis_kelamin' => 'required',
+            'telp' => 'numeric',
+        ];
+        $validated = $request->validate($rules);
+        if ($request->ganti_email) {
+            $validated['email'] = $request->email;
+        }
+        if ($request->ganti_password) {
+            if ($request->new_password != $request->confirm_password) {
+                return redirect()->back()->withErrors('Password and Confirm Password must be equal');
+            }
+            $validated['password'] = Hash::make($request->new_password);
+        }
+
+        // cek katasandi lama
+        if ($request->ganti_email !== null || $request->ganti_password !== null) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return redirect()->back()->withErrors('old password must is correct');
+            }
+        }
+
+        try {
+            DB::beginTransaction();
+            $user->update($validated);
+            Credential::where('id', auth()->user()->id)->update([
+                'nama_depan' => $validated['nama_depan'],
+                'nama_belakang' => $validated['nama_belakang'],
+                'tanggal_lahir' => $validated['tahun'] . '-' . $validated['bulan'] . '-' . $validated['tanggal'],
+                'jenis_kelamin' => $validated['jenis_kelamin'],
+                'telp' =>  $validated['telp']
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+        return redirect()->back();
+    }
+
+
+
     public function authenticate(Request $request)
     {
         $validated =  $request->validate([
