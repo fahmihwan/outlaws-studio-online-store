@@ -4,11 +4,7 @@ namespace App\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Detail_penjualan;
-use App\Models\Item;
-use App\Models\Keranjang;
 use App\Models\Penjualan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {

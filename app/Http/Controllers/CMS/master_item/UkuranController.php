@@ -5,10 +5,21 @@ namespace App\Http\Controllers\CMS\master_item;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use App\Models\Ukuran;
+use App\Services\KategoriService;
+use App\Services\UkuranService;
+use Exception;
 use Illuminate\Http\Request;
 
 class UkuranController extends Controller
 {
+
+    private $ukuranService, $kategoriService;
+    public function __construct(UkuranService $ukuranService, KategoriService $kategoriService)
+    {
+        $this->ukuranService = $ukuranService;
+        $this->kategoriService = $kategoriService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,12 +27,9 @@ class UkuranController extends Controller
      */
     public function index()
     {
-        $items = Ukuran::with('kategori:id,nama')->latest()->get();
-
-
         return view('cms.pages.master_item.ukuran.index', [
-            'kategories' => Kategori::latest()->get(),
-            'items' => $items
+            'kategories' => $this->kategoriService->getKategoriLatest(),
+            'items' => $this->ukuranService->getUkuranLatest()
         ]);
     }
 
@@ -43,12 +51,12 @@ class UkuranController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama' => 'required',
-            'kategori_id' => 'required|numeric'
-        ]);
+        try {
+            $this->ukuranService->storeUkuran($request);
+        } catch (Exception $e) {
+            return redirect()->back($e->getMessage());
+        }
 
-        Ukuran::create($validated);
         return redirect('/admin/master-item/ukuran');
     }
 
@@ -71,9 +79,10 @@ class UkuranController extends Controller
      */
     public function edit($id)
     {
+
         return view('cms.pages.master_item.ukuran.edit', [
-            'item' =>  Ukuran::with('kategori')->where('id', $id)->first(),
-            'kategories' => Kategori::latest()->get()
+            'item' =>  $this->ukuranService->find_ukuran_and_kategori($id),
+            'kategories' => $this->kategoriService->getKategoriLatest()
         ]);
     }
 

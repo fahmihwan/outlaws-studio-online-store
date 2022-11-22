@@ -5,7 +5,7 @@
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
-                Laporan
+                Kelola Transaksi
             </div>
             <div>
                 <ol class="inline-flex items-center space-x-1 md:space-x-3  ">

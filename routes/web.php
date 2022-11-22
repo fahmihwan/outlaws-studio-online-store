@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CMS\AuthAdminController;
 use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\ItemController;
 use App\Http\Controllers\CMS\ListCustomerController;
 use App\Http\Controllers\CMS\master_item\KategoriController;
 use App\Http\Controllers\CMS\master_item\UkuranController;
+use App\Http\Controllers\CMS\ReportController;
 use App\Http\Controllers\CMS\TransactionController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Toko\AlamatController;
@@ -139,6 +141,12 @@ Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail
 Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, 'detail_item_stok_ajax']);
 
 // admin
+Route::get('/admin/auth/dashboard/login', [AuthAdminController::class, 'login']);
+Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
+Route::resource('/admin/auth', AuthAdminController::class);
+
+
+// dashboard master
 Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 Route::resource('/admin/master-item/kategori', KategoriController::class);
 Route::resource('/admin/master-item/ukuran', UkuranController::class);
@@ -157,6 +165,8 @@ Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show'])
 // transaction
 Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
 Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
+
+Route::get('/admin/laporan', [ReportController::class, 'index']);
 
 // print pdf 
 Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);

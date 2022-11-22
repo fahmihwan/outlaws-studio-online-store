@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class AuthAdminController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +16,8 @@ class AuthAdminController extends Controller
     public function index()
     {
         //
+        // list akun di dashboard
+        return view('cms.pages.setting_account.index');
     }
 
     /**
@@ -24,7 +27,9 @@ class AuthAdminController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('cms.pages.setting_account.create');
+        // create akun
     }
 
     /**
@@ -35,7 +40,9 @@ class AuthAdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $request;
+        return dd($request);
+        //tambah akun
     }
 
     /**
@@ -46,7 +53,7 @@ class AuthAdminController extends Controller
      */
     public function show($id)
     {
-        //
+        //detail akun
     }
 
     /**
@@ -57,7 +64,7 @@ class AuthAdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        //edit akun
     }
 
     /**
@@ -69,7 +76,7 @@ class AuthAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //update akun
     }
 
     /**
@@ -80,6 +87,16 @@ class AuthAdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //hapus akun
+    }
+
+    public function login()
+    {
+        return view('cms.pages.auth.index');
+    }
+
+    public function authenticate(Request $request)
+    {
+        dd($request);
     }
 }

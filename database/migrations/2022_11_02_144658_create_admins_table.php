@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
+            $table->string('nama');
             $table->string('username')->unique();
+            $table->enum('hak_akses', ['owner', 'karyawan']);
             $table->string('password');
-            $table->foreignId('credential_id');
+            $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -7,15 +7,26 @@ use App\Models\Item;
 use App\Models\Kategori;
 use App\Models\List_ukuran;
 use App\Models\Ukuran;
-use Exception;
+use App\Services\ItemService;
+use App\Services\KategoriService;
+use App\Services\UkuranService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\List_;
-use PHPUnit\Framework\MockObject\ReturnValueNotConfiguredException;
 
 class ItemController extends Controller
 {
+
+    protected $itemService;
+    protected $ukuranService;
+    protected $kategoriService;
+    public function __construct(ItemService $itemService, UkuranService $ukuranService, KategoriService $kategoriService)
+    {
+        $this->itemService = $itemService;
+        $this->ukuranService = $ukuranService;
+        $this->kategoriService = $kategoriService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,9 +34,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with(['kategori:id,nama'])->latest()->get();
         return view('cms.pages.item.index', [
-            'items' => $items
+            'items' => $this->itemService->item_with_kategori()
         ]);
     }
 
@@ -37,11 +47,9 @@ class ItemController extends Controller
     public function create()
     {
 
-        $kategori = Kategori::latest()->get();
-        $ukuran = Ukuran::latest()->get();
         return view('cms.pages.item.create', [
-            'kategories' => $kategori,
-            'ukurans' => $ukuran
+            'kategories' => $this->kategoriService->getKategoriLatest(),
+            'ukurans' => $this->ukuranService->getUkuranLatest()
         ]);
     }
 
