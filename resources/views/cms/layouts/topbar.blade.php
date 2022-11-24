@@ -18,16 +18,21 @@
     <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
         data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom"
         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 129px, 0px);">
-        <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+        <ul class="py-1 text-sm text-gray-700 " aria-labelledby="dropdownDefault">
             <li>
-                <a href="/admin/auth"
-                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Setting
+                <a href="/admin/auth" class="block py-2 px-4 hover:bg-gray-100  ">Setting
                     Account</a>
             </li>
             <li>
-                <a href="#"
-                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign
-                    out</a>
+                <form action="/admin/auth/dashboard/logout" method="POST">
+                    @csrf
+                    <button class="py-2 px-4 hover:bg-gray-100 inline-block w-full text-left  ">
+                        Sign out
+                    </button>
+                </form>
+                {{-- <a href="/admin/auth/dashboard/login"
+                    class="block py-2 px-4 hover:bg-gray-100  ">Sign
+                    out</a> --}}
             </li>
         </ul>
     </div>

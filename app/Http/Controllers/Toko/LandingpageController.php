@@ -22,7 +22,6 @@ class LandingpageController extends Controller
 
     public function list_item()
     {
-
         return view('toko.pages.list-item', [
             'kategories' => Kategori::all()
         ]);

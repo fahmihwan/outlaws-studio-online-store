@@ -24,15 +24,142 @@
             </div>
         </nav>
 
-        <div class="w-full shadow-md bg-white rounded-md p-3 ">
+        <div class="w-full flex">
+            <div class="w-3/5">
+                <div class="mb-5 flex">
+                    <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
+                        <div class="text-white">
+                            <p>Transaksi Bulan ini</p>
+                            <span class="font-bold">20</span>
+                        </div>
+                    </div>
+                    <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
+                        <div class="text-white">
+                            <p>Produk Terjual Bulan ini</p>
+                            <span class="font-bold">20</span>
+                        </div>
+                    </div>
+                    <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
+                        <div class="text-white">
+                            <p>Jumlah Pengguna</p>
+                            <span class="font-bold">20</span>
+                        </div>
+                    </div>
 
-            Dashboard <br>
-            Dashboard <br>
-            Dashboard <br>
-            Dashboard <br>
-            Dashboard <br>
-            Dashboard
+                </div>
+
+                <div class="w-full shadow-md bg-white rounded-md p-3 ">
+
+                    Dashboard <br>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="w-2/5">
+                <div class="bg-white shadow-md rounded-md mx-3">
+                    <div class="p-5">
+                        <h1 class="font-bold mb-5 ">Transaksi Baru</h1>
+                        <div class=" h-96 overflow-scroll rounded-lg  px-5 bg-gray-50">
+                            <ul>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
+                                        class=" ">fahmiihwan86@gmail.com</a> <span
+                                        class="text-gray-400">2022-02-12</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
         </div>
+
     </div>
+@endsection
+
+
+@section('script')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 @endsection

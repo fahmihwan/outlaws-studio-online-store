@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 
 class AuthAdminController extends Controller
 {
@@ -15,9 +20,10 @@ class AuthAdminController extends Controller
      */
     public function index()
     {
-        //
         // list akun di dashboard
-        return view('cms.pages.setting_account.index');
+        return view('cms.pages.setting_account.index', [
+            'users' => Admin::all()
+        ]);
     }
 
     /**
@@ -27,9 +33,7 @@ class AuthAdminController extends Controller
      */
     public function create()
     {
-
         return view('cms.pages.setting_account.create');
-        // create akun
     }
 
     /**
@@ -40,9 +44,24 @@ class AuthAdminController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
-        return dd($request);
-        //tambah akun
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required',
+            'username' => 'required',
+            'hak_akses' => 'required',
+            'password' => 'required_with:confirm_password|same:confirm_password'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->messages());
+        }
+        Admin::create([
+            'nama' => $request->nama,
+            'username' => $request->username,
+            'hak_akses' => $request->hak_akses,
+            'password' => Hash::make($request->password)
+        ]);
+        return redirect('/admin/auth');
     }
 
     /**
@@ -64,7 +83,10 @@ class AuthAdminController extends Controller
      */
     public function edit($id)
     {
-        //edit akun
+
+        return view('cms.pages.setting_account.edit', [
+            'user' => Admin::find($id)
+        ]);
     }
 
     /**
@@ -76,7 +98,27 @@ class AuthAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //update akun
+        if (isset($request->check)) {
+            $rules = [
+                'nama' => 'required',
+                'username' => 'required|unique:admins',
+                'hak_akses' => 'required',
+                'password' => 'required_with:confirm_password|same:confirm_password'
+            ];
+
+            if (!Hash::check($request->old_password, Admin::find($id)->password)) {
+                return redirect()->back()->withErrors('old password is correct');
+            }
+        } else {
+            $rules = [
+                'nama' => 'required',
+                'username' => 'required',
+                'hak_akses' => 'required'
+            ];
+        }
+        $validated = $request->validate($rules);
+        Admin::where('id', $id)->update($validated);
+        return redirect('/admin/auth');
     }
 
     /**
@@ -87,7 +129,8 @@ class AuthAdminController extends Controller
      */
     public function destroy($id)
     {
-        //hapus akun
+        Admin::destroy($id);
+        return redirect()->back();
     }
 
     public function login()
@@ -97,6 +140,29 @@ class AuthAdminController extends Controller
 
     public function authenticate(Request $request)
     {
-        dd($request);
+
+        $validated = $this->validate($request, [
+            'username'   => 'required',
+            'password' => 'required|min:6'
+        ]);
+
+
+        if (Auth::guard('webadmin')->attempt($validated)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/auth');
+        }
+    }
+
+    public function logout($request)
+    {
+        Auth::guard('webadmin')->logout();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        return redirect()->back();
+    }
+
+    public function demo()
+    {
+        return view('welcome');
     }
 }

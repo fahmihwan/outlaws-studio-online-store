@@ -20,6 +20,7 @@ class ItemController extends Controller
     protected $itemService;
     protected $ukuranService;
     protected $kategoriService;
+
     public function __construct(ItemService $itemService, UkuranService $ukuranService, KategoriService $kategoriService)
     {
         $this->itemService = $itemService;
@@ -161,7 +162,6 @@ class ItemController extends Controller
 
         try {
             DB::beginTransaction();
-
             List_ukuran::where('item_id', $id)->delete();
             Item::destroy($id);
 

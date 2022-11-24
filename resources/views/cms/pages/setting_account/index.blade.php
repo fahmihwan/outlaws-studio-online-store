@@ -61,6 +61,9 @@
                                     Username
                                 </th>
                                 <th scope="col" class="py-3 px-6">
+                                    Akses
+                                </th>
+                                <th scope="col" class="py-3 px-6">
                                     Created at
                                 </th>
                                 <th scope="col" class="py-3 px-6">
@@ -72,28 +75,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($items as $item)
+                            @foreach ($users as $user)
                                 <tr class="bg-white hover:bg-gray-50 ">
                                     <td class="p-4 w-4">
                                         {{ $loop->iteration }}
                                     </td>
                                     <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
-                                        {{ $item->nama }}
+                                        {{ $user->nama }}
                                     </th>
                                     <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
-                                        {{ $item->berat }} gram
+                                        {{ $user->username }}
+                                    </th>
+                                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
+                                        {{ $user->hak_akses }}
                                     </th>
                                     <td class="py-4 px-6">
-                                        {{ $item->created_at }}
+                                        {{ $user->created_at }}
                                     </td>
                                     <td class="py-4 px-6">
-                                        {{ $item->updated_at }}
+                                        {{ $user->updated_at }}
                                     </td>
 
                                     <td class="py-4 px-6 flex">
-                                        <a href="/admin/master-item/kategori/{{ $item->id }}/edit"
+                                        <a href="/admin/auth/{{ $user->id }}/edit"
                                             class="font-medium text-blue-600  hover:underline mr-3">Edit</a> |
-                                        <form method="POST" action="/admin/master-item/kategori/{{ $item->id }}">
+                                        <form method="POST" action="/admin/auth/{{ $user->id }}">
                                             @method('delete')
                                             @csrf
                                             <button type="submit"
@@ -101,7 +107,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
 
 
                         </tbody>

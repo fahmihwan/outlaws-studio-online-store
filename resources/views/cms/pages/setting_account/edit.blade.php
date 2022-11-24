@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('cms.layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+@section('style')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .mylabel {
@@ -24,12 +19,9 @@
             z-index: 1051;
         }
     </style>
-</head>
+@endsection
 
-<body>
-
-
-
+@section('container')
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
@@ -73,49 +65,60 @@
         @endif
 
         <div class="border w-full md:w-full lg:w-1/2 p-3 bg-white">
-            <form action="/admin/auth" method="POST" enctype="multipart/form-data">
+            <form action="/admin/auth/{{ $user->id }}" method="POST">
+                @method('PUT')
                 @csrf
                 <div class="mb-4">
-                    <label for="nama"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
+                    <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 ">Nama</label>
                     <input type="text" id="nama"
                         class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                        placeholder="nama" required name="nama">
+                        placeholder="nama" required name="nama" value="{{ $user->nama }}">
                 </div>
                 <div class="w-full flex">
                     <div class="mb-4 w-1/2 mr-3">
-                        <label for="username"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Username</label>
+                        <label for="username" class="block mb-2 text-sm font-medium text-gray-900 ">Username</label>
                         <input type="text" id="username"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                            placeholder="username" required name="username">
+                            placeholder="username" required name="username" value="{{ $user->username }}">
                     </div>
                     <div class="mb-4 w-1/2">
-                        <label for="hak_akses"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hak
+                        <label for="hak_akses" class="block mb-2 text-sm font-medium text-gray-900 ">Hak
                             Akses</label>
                         <select id="hak_akses" name="hak_akses"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
-                            <option selected disabled> pilih hak akses </option>
+                            <option value="{{ $user->hak_akses }}">{{ $user->hak_akses }}</option>
                             <option value="owner">owner</option>
                             <option value="karyawan">karyawan</option>
                         </select>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <label for="password"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password</label>
-                    <input type="password" id="password"
-                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                        placeholder="password" required name="password">
+                <div id="hide-password" class="hidden">
+                    <div class="mb-4">
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Password Lama</label>
+                        <input type="password" id="password"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                            placeholder="password" name="old_password">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                        <input type="password" id="password"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                            placeholder="password" name="password">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">confirm
+                            password</label>
+                        <input type="password" id="password"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                            placeholder="password" name="confirm_password">
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="password"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">confirm
-                        password</label>
-                    <input type="password" id="password"
-                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                        placeholder="password" required name="confirm_password">
+                <div class="flex items-center mb-4">
+                    <input id="ganti-password" type="checkbox" name="check"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500   focus:ring-2  ">
+                    <label for="ganti-password" class="ml-2 text-sm font-medium text-gray-900 ">Ganti
+                        Password</label>
                 </div>
                 <button type="submit"
                     class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
@@ -130,7 +133,22 @@
 
     </div>
 
+@endsection
 
-</body>
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#ganti-password').click(function() {
+                if ($('#ganti-password').is(":checked")) {
+                    $('#hide-password').removeClass('hidden')
+                } else {
+                    $('#hide-password').addClass('hidden')
+                }
 
-</html>
+            })
+
+        })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endsection

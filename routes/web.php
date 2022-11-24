@@ -142,6 +142,7 @@ Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, '
 
 // admin
 Route::get('/admin/auth/dashboard/login', [AuthAdminController::class, 'login']);
+Route::post('/admin/auth/dashboard/logout', [AuthAdminController::class, 'logout']);
 Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
 Route::resource('/admin/auth', AuthAdminController::class);
 
@@ -170,3 +171,5 @@ Route::get('/admin/laporan', [ReportController::class, 'index']);
 
 // print pdf 
 Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);
+
+Route::get('demo-admin', [AuthAdminController::class, 'demo']);
