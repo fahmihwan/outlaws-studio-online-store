@@ -2,19 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Transaction_accepted_mail;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Midtrans\Config;
+use Midtrans\Notification;
 
 class HandleNotificationMidtrans extends Controller
 {
 
     public function payment_handler(Request $request)
     {
-        require_once dirname(__FILE__) . '/../../../vendor/midtrans/midtrans-php/Midtrans.php';
-        \Midtrans\Config::$isProduction = false;
-        \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
-        $notif = new \Midtrans\Notification();
+
+        $email=  Pembayaran::select('email')->leftJoin('penjualans', 'pembayarans.id', '=', 'penjualans.pembayaran_id')
+            ->leftJoin('users', 'penjualans.user_id', '=', 'users.id')
+            ->where('code_order', $request->order_id)
+            ->first()->email;
+
+        // require_once dirname(__FILE__) . '/../../../vendor/midtrans/midtrans-php/Midtrans.php';
+        
+        
+        // \Midtrans\Config::$isProduction = false;
+        // \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
+        // $notif = new \Midtrans\Notification();
+
+        Config::$isProduction = false;
+        Config::$serverKey = env('SERVER_KEY_MIDTRANS');
+        $notif = new Notification();
+
+
 
         $transaction = $notif->transaction_status;
         $type = $notif->payment_type;
@@ -35,6 +52,7 @@ class HandleNotificationMidtrans extends Controller
             }
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
+            Mail::to($email)->send(new Transaction_accepted_mail());
             self::updateStatus($order_id, $transaction);
             echo "Transaction order_id: " . $order_id . " successfully transfered using " . $type;
         } else if ($transaction == 'pending') {

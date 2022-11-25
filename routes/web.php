@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
+use function Ramsey\Uuid\v1;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,6 +76,10 @@ Route::get('/tes', function () {
     ]);
 });
 
+
+Route::get('/tes', function () {
+    return view('toko.layout.email.transaction_accepted');
+});
 
 // // verify email
 Route::middleware(['auth:web'])->group(function () {

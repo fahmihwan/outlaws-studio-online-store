@@ -25,8 +25,7 @@ class TransactionController extends Controller
             'pembayaran',
             'alamat'
         ])->where('id', $id)
-            ->whereNot('status_pembelian', [])->first();
-
+            ->whereNot('status_pembelian', [''])->first();
 
         $informasi_pemesanan = Detail_penjualan::select([
             'gambar',

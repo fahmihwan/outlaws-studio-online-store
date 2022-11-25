@@ -66,7 +66,7 @@ class AuthUserController extends Controller
         }
 
 
-        return redirect('/');
+        return redirect('/')->with('status', 'anda berhasil registerasi, silahkan Login');
     }
 
 

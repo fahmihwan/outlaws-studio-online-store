@@ -14,6 +14,8 @@ use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
 class LandingpageController extends Controller
 {
 
+
+
     public function landing_page()
     {
 
