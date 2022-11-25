@@ -39,13 +39,37 @@
 
 
         <div class="flex flex-col-reverse md:flex-row">
+            <div class="w-full rounded mt-3 mb-6 md:mb-0 px-2">
+                <div class="flex items-center justify-between mb-5">
+                    <h1 class="text-4xl">Status Order : <span
+                            class="text-orange-400">{{ $penjualan->status_pembelian }}</span></h1>
+                    <div class="">
+                        <form action="/admin/list-transaction/konfirmasi" method="POST">
+                            @csrf
+                            <button name="status_pembelian" value="confirmed"
+                                class="bg-green-500 disabled:opacity-75    text-white p-2 rounded">
+                                Confirm
+                            </button>
+                            <button name="status_pembelian" value="pending"
+                                class="bg-orange-400 disabled:opacity-75  text-white p-2 rounded">
+                                Pending
+                            </button>
+                            <button name="status_pembelian" value="rejected"
+                                class="bg-red-600 disabled:opacity-75 text-white p-2 rounded">
+                                Reject
+                            </button>
+                        </form>
 
+                    </div>
+
+                </div>
+
+
+                <h1 class="font-bold">Detail Order Customer : </h1>
+            </div>
         </div>
-
-
         <div class="flex flex-col-reverse md:flex-row">
             <div class="w-full md:w-1/2 bg-white rounded mt-3 mb-6 md:mb-0 px-2">
-
 
                 {{-- informasi pembelian --}}
                 <div class="overflow-x-auto border-2 border-purple-700  shadow-md rounded mb-5 ">

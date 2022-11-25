@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('kurir_id');
             $table->integer('qty');
             $table->integer('total');
+            $table->enum('status_pengiriman', ['confirmed', 'rejected', 'pending']);
             $table->foreignId('user_id');
             $table->timestamps();
         });

@@ -36,23 +36,22 @@
                                 <th scope="col" class="p-4">
                                     No
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Nomor Pesanan
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Tanggal
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Email
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Total
                                 </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Status <br>
-                                    Pembayaran
+                                <th scope="col" class="py-3 ">
+                                    data<br>
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Action
                                 </th>
                             </tr>
@@ -60,25 +59,29 @@
                         <tbody>
                             @foreach ($items as $item)
                                 <tr class="bg-white hover:bg-gray-50 ">
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->nota }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->tanggal_pembelian }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->user->email }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         Rp. {{ number_format($item->total, 0, '', '.') }}
                                     </td>
-                                    <td class="py-4 px-2">
-                                        {{ $item->pembayaran->transaction_status }}
+                                    <td class="py-4 ">
+                                        <ul class="list-disc list-inside">
+                                            @foreach ($item->detail_penjualans as $item)
+                                                <li>{{ $item->item->nama }}</li>
+                                            @endforeach
+                                        </ul>
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         <a href="/admin/list-transaction/{{ $item->id }}/detail"
                                             class="underline text-blue-500">Lihat Detail</a>
                                     </td>

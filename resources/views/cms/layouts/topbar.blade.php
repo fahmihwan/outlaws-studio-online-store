@@ -11,7 +11,8 @@
 
     <button id="dropdownDefault" data-dropdown-toggle="dropdown"
         class="text-black  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center "
-        type="button">Hey, Sulthon
+        type="button"> <span class="mr-1 text-gray-400">{{ Auth::guard('webadmin')->user()->hak_akses }}</span>
+        <span>{{ Auth::guard('webadmin')->user()->nama }}</span>
         <i class="ml-2 fa-solid fa-caret-down"></i>
     </button>
     <!-- Dropdown menu -->
@@ -24,9 +25,9 @@
                     Account</a>
             </li>
             <li>
-                <form action="/admin/auth/dashboard/logout" method="POST">
+                <form method="POST" action="/admin/auth/dashboard/logout">
                     @csrf
-                    <button class="py-2 px-4 hover:bg-gray-100 inline-block w-full text-left  ">
+                    <button type="submit" class="py-2 px-4 hover:bg-gray-100 inline-block w-full text-left  ">
                         Sign out
                     </button>
                 </form>

@@ -67,8 +67,6 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
-
-
         return view('cms.pages.master_item.kategori.edit', [
             'item' => Kategori::where('id', $id)->first()
         ]);
@@ -83,6 +81,7 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
             'nama' => 'required',
             'berat' => 'required|numeric'

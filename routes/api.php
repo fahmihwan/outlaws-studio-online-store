@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // handle notification midtrans
-Route::post('/handle-notif/midtrans', [HandleNotificationMidtrans::class, 'payment_handler']);
+Route::post('/handle-notif/midtrans',
+[HandleNotificationMidtrans::class, 'payment_handler']);

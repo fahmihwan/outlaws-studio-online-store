@@ -66,7 +66,7 @@ class AuthUserController extends Controller
         }
 
 
-        return redirect('list-item');
+        return redirect('/');
     }
 
 
@@ -129,9 +129,10 @@ class AuthUserController extends Controller
             'password' => 'required',
         ]);
         $validated['status'] = 'active';
-        if (Auth::attempt($validated)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+        if (Auth::guard('web')->attempt($validated)) {
+            // $request->session()->regenerate();
+            // return redirect()->intended('/');
+            return redirect('/');
         }
         return redirect('/customer/account/login')->withErrors('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.');
     }
@@ -144,9 +145,9 @@ class AuthUserController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        Auth::guard('web')->logout();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
         return redirect()->back();
     }
 
@@ -197,7 +198,6 @@ class AuthUserController extends Controller
 
     public  function reset_password($token)
     {
-
         return view('toko.pages.auth.reset_password', ['token' => $token]);
     }
 

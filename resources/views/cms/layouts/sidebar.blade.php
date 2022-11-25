@@ -41,7 +41,7 @@
             </li>
             <li>
                 <a href="/admin/list-transaction"
-                    class="flex {{ request()->is('admin/list-transaction*') ? 'bg-white text-black' : 'text-gray-200' }}  items-center py-2 px-3 text-base font-normal text-gray-200 rounded-lg  hover:bg-gray-100 hover:text-black ">
+                    class="flex {{ request()->is('admin/list-transaction*') ? 'bg-white text-black' : 'text-gray-200' }}  items-center py-2 px-3 text-base font-normal  rounded-lg  hover:bg-gray-100 hover:text-black ">
                     <div class="mr-3">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </div>

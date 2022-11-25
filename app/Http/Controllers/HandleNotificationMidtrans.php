@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Midtrans\Config;
 
 class HandleNotificationMidtrans extends Controller
 {
 
-    public function payment_handler(Request $request){   
-
-        return $request->getContent();
-        // require_once(dirname(__FILE__) . '/Midtrans.php');
+    public function payment_handler(Request $request)
+    {
+        require_once dirname(__FILE__) . '/../../../vendor/midtrans/midtrans-php/Midtrans.php';
         \Midtrans\Config::$isProduction = false;
-        // \Midtrans\Config::$serverKey = '<your serverkey>';
         \Midtrans\Config::$serverKey = env('SERVER_KEY_MIDTRANS');
         $notif = new \Midtrans\Notification();
-        return $notif;
+
         $transaction = $notif->transaction_status;
         $type = $notif->payment_type;
         $order_id = $notif->order_id;
@@ -35,20 +35,31 @@ class HandleNotificationMidtrans extends Controller
             }
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
+            self::updateStatus($order_id, $transaction);
             echo "Transaction order_id: " . $order_id . " successfully transfered using " . $type;
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
+            self::updateStatus($order_id, $transaction);
             echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
         } else if ($transaction == 'deny') {
             // TODO set payment status in merchant's database to 'Denied'
+            self::updateStatus($order_id, $transaction);
             echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
         } else if ($transaction == 'expire') {
+            self::updateStatus($order_id, $transaction);
             // TODO set payment status in merchant's database to 'expire'
             echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is expired.";
         } else if ($transaction == 'cancel') {
+            self::updateStatus($order_id, $transaction);
             // TODO set payment status in merchant's database to 'Denied'
             echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.";
         }
     }
-}
 
+    static function updateStatus($order_id, $transaction)
+    {
+        Pembayaran::where('code_order', $order_id)->update([
+            'transaction_status' => $transaction
+        ]);
+    }
+}

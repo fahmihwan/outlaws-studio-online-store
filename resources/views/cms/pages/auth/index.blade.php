@@ -17,10 +17,23 @@
 
         <div class="shadow-md w-96 bg-purple-900 rounded-lg">
             <div class="m-4 bg-purple-900 p-5 rounded-lg">
-                <div class="pb-10">
+                <div class="pb-10 ">
                     <h1 class="text-white font-bold text-center text-2xl ">Login </h1>
                     <p class="text-center text-white text-sm">Dashboard Outlaws Studio</p>
                 </div>
+                @if ($errors->any())
+                    <div class="flex p-2 mb-4 text-sm text-red-700 bg-red-100 rounded-lg " role="alert">
+                        <div>
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span class="font-medium">Ensure that these requirements are met:</span>
+                            <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
                 <form action="/admin/auth/dashboard/authenticate" method="POST">
                     @csrf
                     <div class="mb-6">

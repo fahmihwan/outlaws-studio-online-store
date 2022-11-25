@@ -76,7 +76,7 @@ Route::get('/tes', function () {
 
 
 // // verify email
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
     Route::get('/email/verify', [AuthUserController::class, 'verification_notice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthUserController::class, 'verification_handler'])->middleware(['signed'])->name('verification.verify');
     Route::post('/email/verification-notification', [AuthUserController::class, 'resend_verification'])->middleware(['throttle:6,1'])->name('verification.send');
@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // user
-Route::middleware(['guest'])->group(function () {
+Route::middleware(['guest:web', 'preventBack'])->group(function () {
     Route::get('/customer/account/create', [AuthUserController::class, 'register']);
     Route::post('/customer/account/store', [AuthUserController::class, 'store_account']);
     Route::post('/customer/account/authenticate', [AuthUserController::class, 'authenticate']);
@@ -96,7 +96,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/customer/account/reset-password', [AuthUserController::class, 'update_password'])->name('password.update');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth:web', 'verified', 'preventBack'])->group(function () {
     Route::get('/customer/account', [CustomerController::class, 'account']);
     Route::get('/customer/order-history', [CustomerController::class, 'pesanan']);
     Route::get('/customer/order-history/{id}/detail-pesanan', [CustomerController::class, 'lihat_detail_pesanan']);
@@ -134,42 +134,49 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout/pembayaran/pay', [CheckoutController::class, 'pay']);
 });
 
-Route::get('/', [LandingpageController::class, 'landing_page'])->name('login');
+Route::get('/', [LandingpageController::class, 'landing_page'])->name('user.login');
 Route::get('/list-item', [LandingpageController::class, 'list_item'])->name('list_item');
 Route::post('/list-item-ajax', [LandingpageController::class, 'ajax_list_items']);
 Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail_item']);
 Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, 'detail_item_stok_ajax']);
 
 // admin
-Route::get('/admin/auth/dashboard/login', [AuthAdminController::class, 'login']);
-Route::post('/admin/auth/dashboard/logout', [AuthAdminController::class, 'logout']);
-Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
-Route::resource('/admin/auth', AuthAdminController::class);
 
+Route::middleware(['guest:webadmin', 'preventBack'])->group(function () {
+    Route::get('/admin/auth/dashboard/login', [AuthAdminController::class, 'login'])->name('admin.login');
+    Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
+});
 
-// dashboard master
-Route::get('/admin/dashboard', [DashboardController::class, 'index']);
-Route::resource('/admin/master-item/kategori', KategoriController::class);
-Route::resource('/admin/master-item/ukuran', UkuranController::class);
+Route::middleware(['auth:webadmin'])->group(function () {
+    Route::post('/admin/auth/dashboard/logout', [AuthAdminController::class, 'logout']);
+    // Route::resource('/admin/auth', AuthAdminController::class);
 
-// item
-Route::resource('/admin/item', ItemController::class);
-Route::get('/admin/item/{id}/tambah-stok', [ItemController::class, 'tambah_stok_item']);
-Route::post('/admin/item/{id}/store-stok-item', [ItemController::class, 'store_stok_item']);
-Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_list_item']);
-Route::delete('/admin/item/{item}/{id}/hapus_list_ukuran', [ItemController::class, 'detroy_list_ukuran']);
+    // dashboard master
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('/admin/master-item/kategori', KategoriController::class);
+    Route::resource('/admin/master-item/ukuran', UkuranController::class);
 
-//list customer
-Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);
-Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show']);
+    // item
+    Route::resource('/admin/item', ItemController::class);
+    Route::get('/admin/item/{id}/tambah-stok', [ItemController::class, 'tambah_stok_item']);
+    Route::post('/admin/item/{id}/store-stok-item', [ItemController::class, 'store_stok_item']);
+    Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_list_item']);
+    Route::delete('/admin/item/{item}/{id}/hapus_list_ukuran', [ItemController::class, 'detroy_list_ukuran']);
 
-// transaction
-Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
-Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
+    //list customer
+    Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);
+    Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show']);
 
-Route::get('/admin/laporan', [ReportController::class, 'index']);
+    // transaction
+    Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
+    Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
+    Route::post('/admin/list-transaction/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);
 
-// print pdf 
-Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);
+    Route::get('/admin/laporan', [ReportController::class, 'index']);
 
+    // print pdf 
+    Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);
+});
+// demo
 Route::get('demo-admin', [AuthAdminController::class, 'demo']);
+Route::resource('/admin/auth', AuthAdminController::class);

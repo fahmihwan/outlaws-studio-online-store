@@ -5,13 +5,14 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\Detail_penjualan;
 use App\Models\Penjualan;
+use Illuminate\Http\Request;
+
 
 class TransactionController extends Controller
 {
     public function index()
     {
         $items = Penjualan::with(['pembayaran:id,transaction_status', 'user:id,email'])->get();
-
         return view('cms.pages.transaction.index', [
             'items' => $items
         ]);
@@ -22,8 +23,10 @@ class TransactionController extends Controller
         $penjualan = Penjualan::with([
             'kurir',
             'pembayaran',
-            'alamat',
-        ])->where('id', $id)->first();
+            'alamat'
+        ])->where('id', $id)
+            ->whereNot('status_pembelian', [])->first();
+
 
         $informasi_pemesanan = Detail_penjualan::select([
             'gambar',
@@ -34,19 +37,21 @@ class TransactionController extends Controller
         ])
             ->join('items', 'detail_penjualans.item_id', '=', 'items.id')
             ->join('kategoris', 'items.kategori_id', '=', 'kategoris.id')
+            ->where('detail_penjualans.penjualan_id', $id)
             ->selectRaw('qty * harga as harga_total')
             ->get()->makeHidden(['deskripsi']);
 
+        return view('cms.pages.transaction.detail_pembelian', [
+            'penjualan' => $penjualan,
+            'pembayaran' => $penjualan->pembayaran,
+            'kurir' => $penjualan->kurir,
+            'informasi_pemesanan' => $informasi_pemesanan,
+            'alamat' => $penjualan->alamat
+        ]);
+    }
 
-        return view(
-            'cms.pages.transaction.detail_pembelian',
-            [
-                'penjualan' => $penjualan,
-                'pembayaran' => $penjualan->pembayaran,
-                'kurir' => $penjualan->kurir,
-                'informasi_pemesanan' => $informasi_pemesanan,
-                'alamat' => $penjualan->alamat
-            ]
-        );
+    public function konfirmasi_pembelian(Request $request)
+    {
+        dd($request);
     }
 }

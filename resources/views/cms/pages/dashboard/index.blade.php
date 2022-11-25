@@ -30,19 +30,19 @@
                     <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
                         <div class="text-white">
                             <p>Transaksi Bulan ini</p>
-                            <span class="font-bold">20</span>
+                            <span class="font-bold">{{ $transaksi_bulanan }}</span>
                         </div>
                     </div>
                     <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
                         <div class="text-white">
                             <p>Produk Terjual Bulan ini</p>
-                            <span class="font-bold">20</span>
+                            <span class="font-bold">{{ $produk_terjual }}</span>
                         </div>
                     </div>
                     <div class="bg-purple-800 w-1/3 mr-2 rounded shadow-md p-3">
                         <div class="text-white">
                             <p>Jumlah Pengguna</p>
-                            <span class="font-bold">20</span>
+                            <span class="font-bold">{{ $jumlah_pengguna }}</span>
                         </div>
                     </div>
 
@@ -57,74 +57,25 @@
             <div class="w-2/5">
                 <div class="bg-white shadow-md rounded-md mx-3">
                     <div class="p-5">
-                        <h1 class="font-bold mb-5 ">Transaksi Baru</h1>
+                        <h1 class="font-bold mb-5 ">Transaksi minggu ini</h1>
                         <div class=" h-96 overflow-scroll rounded-lg  px-5 bg-gray-50">
-                            <ul>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                                <li class="pb-2 mb-3 border-b border-purple-400 flex justify-between"><a href=""
-                                        class=" ">fahmiihwan86@gmail.com</a> <span
-                                        class="text-gray-400">2022-02-12</span>
-                                </li>
-                            </ul>
+                            <table class="w-full text-sm  ">
+                                <tr class="border-b">
+                                    <th class="text-start ">Tgl</th>
+                                    <th class="text-start ">Email</th>
+                                    <th class="text-start ">Status</th>
+                                </tr>
+                                @foreach ($transasksi_minggu as $transaksi)
+                                    <tr>
+                                        <td class="pb-2">{{ date('d', strtotime($transaksi->date)) }}</td>
+                                        <td><a href="/admin/list-transaction/{{ $transaksi->id }}/detail"
+                                                class="text-blue-600 underline">{{ $transaksi->email }}</a>
+                                        </td>
+                                        <td class="{{ $transaksi->pesan }}">{{ $transaksi->transaction_status }}</td>
+                                    </tr>
+                                @endforeach
+
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -142,15 +93,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const ctx = document.getElementById('myChart');
-
+        let chart = {{ Js::from($chart) }};
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: chart.chart_month,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
+                    label: 'payment success',
+                    data: chart.chart_count.count_success,
+                    borderWidth: 2,
+                    borderColor: '#4bde97',
+                }, {
+                    label: 'payment fail',
+                    data: chart.chart_count.count_fail,
+                    borderWidth: 2,
+                    borderColor: '#da291c',
                 }]
             },
             options: {

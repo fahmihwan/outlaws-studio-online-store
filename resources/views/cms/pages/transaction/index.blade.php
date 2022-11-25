@@ -36,23 +36,23 @@
                                 <th scope="col" class="p-4">
                                     No
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Nomor Pesanan
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Tanggal
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Email
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Total
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Status <br>
                                     Pembayaran
                                 </th>
-                                <th scope="col" class="py-3 px-6">
+                                <th scope="col" class="py-3 ">
                                     Action
                                 </th>
                             </tr>

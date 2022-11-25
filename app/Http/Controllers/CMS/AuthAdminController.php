@@ -140,25 +140,26 @@ class AuthAdminController extends Controller
 
     public function authenticate(Request $request)
     {
-
         $validated = $this->validate($request, [
             'username'   => 'required',
             'password' => 'required|min:6'
         ]);
 
-
         if (Auth::guard('webadmin')->attempt($validated)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/admin/auth');
+            // $request->session()->regenerate();
+            return redirect()->intended('/admin/dashboard');
         }
+        return redirect()->back()->withErrors('Login Error!!.');
     }
 
-    public function logout($request)
+    public function logout(Request $request)
     {
+
+
         Auth::guard('webadmin')->logout();
         // $request->session()->invalidate();
         // $request->session()->regenerateToken();
-        return redirect()->back();
+        return redirect('/admin/auth/dashboard/login');
     }
 
     public function demo()

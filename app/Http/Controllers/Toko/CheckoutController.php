@@ -234,6 +234,7 @@ class CheckoutController extends Controller
                     'kurir_id' => $kurir_id,
                     'qty' => $sum_qty_keranjang,
                     'total' => $gross_amount,
+                    'status_pengiriman' => 'pending',
                     'user_id' => auth()->user()->id,
                 ])->id;
 

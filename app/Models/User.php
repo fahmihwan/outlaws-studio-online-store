@@ -20,6 +20,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
      *
      * @var array<int, string>
      */
+
+    // protected $guard = ['users'];
     protected $fillable = [
         'email',
         'password',
