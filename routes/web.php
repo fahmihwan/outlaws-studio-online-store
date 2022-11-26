@@ -16,6 +16,9 @@ use App\Http\Controllers\Toko\CheckoutController;
 use App\Http\Controllers\Toko\CustomerController;
 use App\Http\Controllers\Toko\LandingpageController;
 use App\Http\Controllers\Toko\RajaOngkirController;
+use App\Models\Detail_penjualan;
+use App\Models\Pembayaran;
+use App\Models\Penjualan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -78,7 +81,29 @@ Route::get('/tes', function () {
 
 
 Route::get('/tes', function () {
-    return view('toko.layout.email.transaction_accepted');
+
+    $pembayaran =  Pembayaran::select(['penjualans.id', 'email', 'code_order', 'nota', 'total', 'tarif'])
+        ->leftJoin('penjualans', 'pembayarans.id', '=', 'penjualans.pembayaran_id')
+        ->leftJoin('users', 'penjualans.user_id', '=', 'users.id')
+        ->join('kurirs', 'penjualans.kurir_id', '=', 'kurirs.id')
+        ->where('code_order', '19182151')
+        ->first();
+
+    $detail_penjualans = Detail_penjualan::select([
+        'detail_penjualans.id',
+        'items.nama as nama',
+        'ukurans.nama as ukuran',
+        'qty'
+    ])
+        ->join('items', 'detail_penjualans.item_id', '=', 'items.id')
+        ->join('ukurans', 'detail_penjualans.ukuran_id', '=', 'ukurans.id')
+        ->where('penjualan_id', $pembayaran->id)->get();
+    // return $data;
+
+    return view('toko.layout.email.transaction_accepted', [
+        'pembayaran' => $pembayaran,
+        'detail_penjualan' => $detail_penjualans
+    ]);
 });
 
 // // verify email
@@ -176,9 +201,11 @@ Route::middleware(['auth:webadmin'])->group(function () {
     // transaction
     Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
     Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
-    Route::post('/admin/list-transaction/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);
+    Route::put('/admin/list-transaction/{id}/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);
 
-    Route::get('/admin/laporan', [ReportController::class, 'index']);
+    Route::get('/admin/laporan/confirmed', [ReportController::class, 'confirmed']);
+    Route::get('/admin/laporan/rejected', [ReportController::class, 'rejected']);
+    Route::get('/admin/laporan/failed', [ReportController::class, 'failed']);
 
     // print pdf 
     Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);

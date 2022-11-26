@@ -5,18 +5,20 @@
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
-                Kelola Transaksi
+                Laporan
             </div>
             <div>
                 <ol class="inline-flex items-center space-x-1 md:space-x-3  ">
                     <li class="inline-flex items-center">
                         <a href="#" class="inline-flex items-center text-sm font-medium  hover:text-gray-900">
-                            kelola transaksi
+                            Laporan
                         </a>
                     </li>
                 </ol>
             </div>
         </nav>
+
+        @include('cms.components.tabs_laporan')
 
         <div class="w-full shadow-md bg-white  rounded-md p-2 ">
             <div class="text-sm font-medium  text-gray-500   ">

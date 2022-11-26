@@ -5,18 +5,20 @@
     <div class="w-full px-2 ">
         <nav class="flex justify-between mb-4 p-2 bg-white shadow-md text-black rounded-md" aria-label="Breadcrumb ">
             <div class="font-bold text-2xl text-gray-700">
-                Kelola Transaksi
+                Laporan
             </div>
             <div>
                 <ol class="inline-flex items-center space-x-1 md:space-x-3  ">
                     <li class="inline-flex items-center">
                         <a href="#" class="inline-flex items-center text-sm font-medium  hover:text-gray-900">
-                            kelola transaksi
+                            Laporan
                         </a>
                     </li>
                 </ol>
             </div>
         </nav>
+
+        @include('cms.components.tabs_laporan')
 
         <div class="w-full shadow-md bg-white  rounded-md p-2 ">
             <div class="text-sm font-medium  text-gray-500   ">
@@ -46,11 +48,10 @@
                                     Email
                                 </th>
                                 <th scope="col" class="py-3 ">
-                                    Status <br> Pengiriman
+                                    Total
                                 </th>
                                 <th scope="col" class="py-3 ">
-                                    Status <br>
-                                    Pembayaran
+                                    data<br>
                                 </th>
                                 <th scope="col" class="py-3 ">
                                     Action
@@ -60,43 +61,29 @@
                         <tbody>
                             @foreach ($items as $item)
                                 <tr class="bg-white hover:bg-gray-50 ">
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->nota }}
                                     </td>
-                                    <td class="py-4 px-2">
-                                        {{ $item->created_at->diffForHumans() }}
+                                    <td class="py-4 ">
+                                        {{ $item->tanggal_pembelian }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->user->email }}
                                     </td>
-                                    {{-- <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         Rp. {{ number_format($item->total, 0, '', '.') }}
-                                    </td> --}}
-                                    <td class="py-4 px-2">
-                                        <span
-                                            class="
-                                                @switch($item->status_pengiriman)
-                                                    @case('confirmed')  {{ 'text-green-500' }} @break
-                                                    @case('rejected')  {{ 'text-red-500' }} @break
-                                                    @default {{ 'text-orange-400' }} @break
-                                                @endswitch                                            
-                                            ">{{ $item->status_pengiriman }}</span>
                                     </td>
-                                    <td class="py-4 px-2">
-                                        <span @class([
-                                            'text-red-600' => true,
-                                            'text-green-500' =>
-                                                $item->pembayaran->transaction_status == 'capture' ||
-                                                $item->pembayaran->transaction_status == 'settlement',
-                                            'text-orange-400' => $item->pembayaran->transaction_status == 'pendding',
-                                        ])>
-                                            {{ $item->pembayaran->transaction_status }}
-                                        </span>
+                                    <td class="py-4 ">
+                                        <ul class="list-disc list-inside">
+                                            @foreach ($item->detail_penjualans as $item)
+                                                <li>{{ $item->item->nama }}</li>
+                                            @endforeach
+                                        </ul>
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         <a href="/admin/list-transaction/{{ $item->id }}/detail"
                                             class="underline text-blue-500">Lihat Detail</a>
                                     </td>

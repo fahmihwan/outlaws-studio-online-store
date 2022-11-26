@@ -58,7 +58,7 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/laporan"
+                <a href="/admin/laporan/confirmed"
                     class="flex {{ request()->is('admin/laporan*') ? 'bg-white text-black' : 'text-gray-200' }} items-center py-2 px-3 text-base font-normal rounded-lg  hover:bg-gray-100 hover:text-black ">
                     <div class="mr-3">
                         <i class="fa-solid fa-file-circle-check"></i>

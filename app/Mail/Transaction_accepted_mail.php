@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class Transaction_accepted_mail extends Mailable
 {
@@ -18,9 +19,12 @@ class Transaction_accepted_mail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    protected $pembayaran, $detail_penjualans;
+    // protected $data;
+    public function __construct($pembayaran, $detail_penjualans)
     {
-        //
+        $this->pembayaran = $pembayaran;
+        $this->detail_penjualans = $detail_penjualans;
     }
 
     /**
@@ -31,7 +35,8 @@ class Transaction_accepted_mail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Transaction Accepted Mail',
+            from: new Address('outlawsstuido@gmail.com', 'outlaws studio'),
+            subject: 'Invoice Payment Confirmation',
         );
     }
 
@@ -43,7 +48,11 @@ class Transaction_accepted_mail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'toko.layout.email.transaction_accepted',
+            with: [
+                'pembayaran' => $this->pembayaran,
+                'detail_penjualan' => $this->detail_penjualans
+            ]
         );
     }
 
