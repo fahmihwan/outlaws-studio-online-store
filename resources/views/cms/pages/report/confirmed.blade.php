@@ -20,6 +20,33 @@
 
         @include('cms.components.tabs_laporan')
 
+
+        <div class="w-full shadow-md bg-white  rounded-md p-2  mb-3">
+            <form action="/admin/laporan-confirmed/print" method="POST">
+                @csrf
+                <div class="mb-4 w-1/2 flex items-end">
+                    <div class="w-1/2 mr-3">
+                        <label for="start_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            Start date</label>
+                        <input type="date" id="start_date"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                            value="" required name="start_date">
+                    </div>
+                    <div class="w-1/2 mr-3">
+                        <label for="end_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            End date</label>
+                        <input type="date" id="end_date"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                            value="" required name="end_date">
+                    </div>
+                    <button type="submit"
+                        class="text-white h-10 bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
+                        <i class="fa-solid fa-print"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <div class="w-full shadow-md bg-white  rounded-md p-2 ">
             <div class="text-sm font-medium  text-gray-500   ">
 
@@ -29,7 +56,6 @@
                     <div class="mb-3 font-bold flex justify-between  items-center ">
                         List Transaksi
                     </div>
-
 
                     {{-- table --}}
                     <table class="w-full text-sm text-left text-gray-500 ">
@@ -78,19 +104,20 @@
                                     </td>
                                     <td class="py-4 ">
                                         <ul class="list-disc list-inside">
-                                            @foreach ($item->detail_penjualans as $item)
-                                                <li>{{ $item->item->nama }}</li>
+                                            @foreach ($item->detail_penjualans as $child)
+                                                <li>{{ $child->item->nama }}</li>
                                             @endforeach
                                         </ul>
                                     </td>
                                     <td class="py-4 ">
-                                        <a href="/admin/list-transaction/{{ $item->id }}/detail"
-                                            class="underline text-blue-500">Lihat Detail</a>
+                                        <a href="/admin/report-transaction/{{ $item->id }}/detail"
+                                            class="underline text-blue-500">
+                                            Lihat Detail
+                                        </a>
+
                                     </td>
                                 </tr>
                             @endforeach
-
-
 
                         </tbody>
                     </table>

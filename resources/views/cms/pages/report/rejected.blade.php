@@ -78,14 +78,18 @@
                                     </td>
                                     <td class="py-4 ">
                                         <ul class="list-disc list-inside">
-                                            @foreach ($item->detail_penjualans as $item)
-                                                <li>{{ $item->item->nama }}</li>
+                                            @foreach ($item->detail_penjualans as $child)
+                                                <li>{{ $child->item->nama }}</li>
                                             @endforeach
                                         </ul>
                                     </td>
                                     <td class="py-4 ">
-                                        <a href="/admin/list-transaction/{{ $item->id }}/detail"
-                                            class="underline text-blue-500">Lihat Detail</a>
+                                        {{-- <a href="/admin/list-transaction/{{ $item->id }}/detail"
+                                            class="underline text-blue-500">Lihat Detail</a> --}}
+                                        <a href="/admin/report-transaction/{{ $item->id }}/detail"
+                                            class="underline text-blue-500">
+                                            Lihat Detail
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

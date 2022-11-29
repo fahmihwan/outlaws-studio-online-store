@@ -35,4 +35,15 @@ class Penjualan extends Model
     {
         return $this->hasMany(Detail_penjualan::class);
     }
+
+    // public function scopeFilter($query, array $filters)
+    // {
+    //     return $query->with([
+    //         'buku:id,judul',
+    //         'anggota:id,nama,role_id',
+    //         'anggota.role:id,nama',
+    //         'petugas:id,credential_id',
+    //         'petugas.credential:id,nama',
+    //     ])->whereDate('tanggal_pinjam', '>=', $filters['start_date'])->whereDate('tanggal_pinjam', '<=', $filters['end_date']);
+    // }
 }

@@ -6,18 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Detail_penjualan;
 use App\Models\Penjualan;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
     public function index()
     {
-        $today_date = Carbon::now()->addDays(-7)->toDateTimeString();
+        // $today_date = Carbon::now()->addDays(-7)->toDateTimeString();
 
         $items = Penjualan::with(['pembayaran:id,transaction_status', 'user:id,email'])
             // ->whereBetween('created_at', [$start, $end])
-            ->where('created_at', '>=', $today_date)
+
+            // ->where('created_at', '>=', $today_date)
+            ->where('status_pengiriman', 'pending')
             ->latest()->get();
         return view('cms.pages.transaction.index', [
             'items' => $items
@@ -26,14 +29,11 @@ class TransactionController extends Controller
 
     public function detail_pembelian($id)
     {
-
-
         $penjualan = Penjualan::with([
             'kurir',
             'pembayaran',
             'alamat'
         ])->where('id', $id)
-            // ->whereIn('status_pengiriman', ['pending','rejected','pending'])
             ->first();
 
         $informasi_pemesanan = Detail_penjualan::select([
@@ -59,11 +59,32 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function konfirmasi_pembelian(Request $reques, $id)
+    public function konfirmasi_pembelian(Request $request, $id)
     {
-        Penjualan::where('id', $id)->update([
-            'status_pengiriman' => $reques->status_pengiriman
-        ]);
-        return redirect()->back();
+
+        try {
+            DB::beginTransaction();
+            $transaction_status = Penjualan::select('transaction_status')->where('penjualans.id', $id)
+                ->join('pembayarans', 'pembayarans.id', '=', 'penjualans.pembayaran_id')->first()->transaction_status;
+
+            if ($request->status_pengiriman == 'rejected') {
+                Penjualan::where('id', $id)->update(['status_pengiriman' => $request->status_pengiriman]);
+            }
+
+            if ($request->status_pengiriman == 'confirmed') {
+                if ($transaction_status == 'settlement' || $transaction_status == 'capture') {
+                    Penjualan::where('id', $id)->update(['status_pengiriman' => $request->status_pengiriman]);
+                } else {
+                    throw new Exception("user belum melakukan transaksi");
+                }
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+
+        return redirect('/admin/list-transaction');
     }
 }

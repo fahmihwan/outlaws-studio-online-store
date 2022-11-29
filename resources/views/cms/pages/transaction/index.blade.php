@@ -33,25 +33,27 @@
                     <table class="w-full text-sm text-left text-gray-500 ">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                             <tr>
-                                <th scope="col" class="p-4">
+                                <th scope="col" class="p-2">
                                     No
                                 </th>
-                                <th scope="col" class="py-3 ">
+                                <th scope="col" class="py-3">
                                     Nomor Pesanan
+                                </th>
+                                <th scope="col" class="py-3 ">
+                                    Status
+                                    Pembayaran
                                 </th>
                                 <th scope="col" class="py-3 ">
                                     Tanggal
                                 </th>
+
                                 <th scope="col" class="py-3 ">
                                     Email
                                 </th>
-                                <th scope="col" class="py-3 ">
+                                {{-- <th scope="col" class="py-3 ">
                                     Status <br> Pengiriman
-                                </th>
-                                <th scope="col" class="py-3 ">
-                                    Status <br>
-                                    Pembayaran
-                                </th>
+                                </th> --}}
+
                                 <th scope="col" class="py-3 ">
                                     Action
                                 </th>
@@ -60,32 +62,13 @@
                         <tbody>
                             @foreach ($items as $item)
                                 <tr class="bg-white hover:bg-gray-50 ">
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         {{ $item->nota }}
                                     </td>
-                                    <td class="py-4 px-2">
-                                        {{ $item->created_at->diffForHumans() }}
-                                    </td>
-                                    <td class="py-4 px-2">
-                                        {{ $item->user->email }}
-                                    </td>
-                                    {{-- <td class="py-4 px-2">
-                                        Rp. {{ number_format($item->total, 0, '', '.') }}
-                                    </td> --}}
-                                    <td class="py-4 px-2">
-                                        <span
-                                            class="
-                                                @switch($item->status_pengiriman)
-                                                    @case('confirmed')  {{ 'text-green-500' }} @break
-                                                    @case('rejected')  {{ 'text-red-500' }} @break
-                                                    @default {{ 'text-orange-400' }} @break
-                                                @endswitch                                            
-                                            ">{{ $item->status_pengiriman }}</span>
-                                    </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
                                         <span @class([
                                             'text-red-600' => true,
                                             'text-green-500' =>
@@ -96,9 +79,32 @@
                                             {{ $item->pembayaran->transaction_status }}
                                         </span>
                                     </td>
-                                    <td class="py-4 px-2">
+                                    <td class="py-4 ">
+                                        {{ $item->created_at->diffForHumans() }}
+                                    </td>
+
+                                    <td class="py-4 ">
+                                        {{ $item->user->email }}
+                                    </td>
+                                    {{-- <td class="py-4 px-2">
+                                        Rp. {{ number_format($item->total, 0, '', '.') }}
+                                    </td> --}}
+                                    {{-- <td class="py-4 px-2"> --}}
+                                    {{-- <span
+                                            class="
+                                                @switch($item->status_pengiriman)
+                                                    @case('confirmed')  {{ 'text-green-500' }} @break
+                                                    @case('rejected')  {{ 'text-red-500' }} @break
+                                                    @default {{ 'text-orange-400' }} @break
+                                                @endswitch                                            
+                                            ">{{ $item->status_pengiriman }}</span> --}}
+                                    {{-- </td> --}}
+
+                                    <td class="py-4">
                                         <a href="/admin/list-transaction/{{ $item->id }}/detail"
-                                            class="underline text-blue-500">Lihat Detail</a>
+                                            class="underline text-white rounded bg-purple-700 p-2 ">
+                                            <i class="fa-solid fa-truck-fast"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

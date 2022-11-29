@@ -26,46 +26,68 @@
             </div>
         </nav>
 
-
-
         <section class="flex justify-between mb-2">
             <div>
             </div>
-            <a href="/admin/list-transaction"
-                class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </a>
+            @if (request()->is('admin/list-transaction/*'))
+                <a href="/admin/list-transaction"
+                    class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </a>
+            @endif
+
+            @if (request()->is('admin/report-transaction/*'))
+                <a href="/admin/laporan/confirmed"
+                    class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </a>
+            @endif
         </section>
-
-
+        @if ($errors->any())
+            <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                role="alert">
+                <div>
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span class="font-medium">Ensure that these requirements are met:</span>
+                    <ul class="mt-1.5 ml-4 text-red-700 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
 
         <div class="flex flex-col-reverse md:flex-row">
             <div class="w-full rounded mt-3 mb-6 md:mb-0 px-2">
                 <div class="flex items-center justify-between mb-5">
                     <h1 class="text-4xl">Status Pengiriman : <span
-                            class="text-orange-400">{{ $penjualan->status_pengiriman }}</span></h1>
+                            @class([
+                                'text-green-500' => $penjualan->status_pengiriman == 'confirmed',
+                                'text-orange-400' => $penjualan->status_pengiriman == 'pending',
+                                'text-red-600' => $penjualan->status_pengiriman == 'rejected',
+                            ])>{{ $penjualan->status_pengiriman }}</span></h1>
                     <div class="">
-                        <form action="/admin/list-transaction/{{ $id }}/konfirmasi" method="POST">
-                            @method('PUT')
-                            @csrf
-                            <button onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
-                                name="status_pengiriman" value="confirmed"
-                                class="bg-green-500 disabled:opacity-75    text-white p-2 rounded">
-                                Confirm
-                            </button>
-
-                            <button onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
-                                name="status_pengiriman" value="rejected"
-                                class="bg-red-600 disabled:opacity-75 text-white p-2 rounded">
-                                Reject
-                            </button>
-                        </form>
-
+                        @if (request()->is('admin/list-transaction/*'))
+                            <form action="/admin/list-transaction/{{ $id }}/konfirmasi" method="POST">
+                                @method('PUT')
+                                @csrf
+                                <button
+                                    onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
+                                    name="status_pengiriman" value="confirmed"
+                                    class="bg-green-500 disabled:opacity-75    text-white p-2 rounded">
+                                    Confirm
+                                </button>
+                                <button
+                                    onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
+                                    name="status_pengiriman" value="rejected"
+                                    class="bg-red-600 disabled:opacity-75 text-white p-2 rounded">
+                                    Reject
+                                </button>
+                            </form>
+                        @endif
                     </div>
-
                 </div>
-
-
                 <h1 class="font-bold">Detail Order Customer : </h1>
             </div>
         </div>

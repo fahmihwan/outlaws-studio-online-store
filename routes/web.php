@@ -163,6 +163,9 @@ Route::middleware(['auth:web', 'verified', 'preventBack'])->group(function () {
     Route::post('/alamat', [AlamatController::class, 'store']);
     Route::get('/checkout/pembayaran', [CheckoutController::class, 'pembayaran']);
     Route::post('/checkout/pembayaran/pay', [CheckoutController::class, 'pay']);
+
+    // print 
+    Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);
 });
 
 Route::get('/', [LandingpageController::class, 'landing_page'])->name('user.login');
@@ -205,11 +208,16 @@ Route::middleware(['auth:webadmin'])->group(function () {
 
     Route::get('/admin/laporan/confirmed', [ReportController::class, 'confirmed']);
     Route::get('/admin/laporan/rejected', [ReportController::class, 'rejected']);
-    Route::get('/admin/laporan/failed', [ReportController::class, 'failed']);
+    Route::get('/admin/report-transaction/{id}/detail', [ReportController::class, 'detail']);
+
 
     // print pdf 
-    Route::get('/customer/order-history/detail/{id}/print', [PdfController::class, 'print_pesanan_user']);
+    Route::post('/admin/laporan-confirmed/print', [PdfController::class, 'print_admin_laporan_confirmed']);
+    Route::post('/admin/laporan-rejected/print', [PdfController::class, 'print_admin_laporan_rejected']);
 });
+
+
+
 // demo
 Route::get('demo-admin', [AuthAdminController::class, 'demo']);
 Route::resource('/admin/auth', AuthAdminController::class);

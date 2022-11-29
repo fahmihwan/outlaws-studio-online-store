@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AdminReportExport;
 
 class PdfController extends Controller
 {
+
     public function print_pesanan_user($id)
     {
 
@@ -41,5 +43,27 @@ class PdfController extends Controller
         return $pdf->download('invoice.pdf');
 
         // return view('', );
+    }
+
+    public function print_admin_laporan_confirmed(Request $request)
+    {
+
+        return Excel::download(new AdminReportExport, 'users.xlsx');
+        // return view('print_pdf.print_admin_laporan_confirmed');
+
+        $items = Penjualan::with([
+            'pembayaran:id,transaction_status',
+            'user:id,email',
+            'detail_penjualans.item:id,nama'
+        ])
+            ->where('status_pengiriman', 'confirmed')
+            // ->whereBetween('tanggal_pembelian', [$request->start_date, $request->end_date])
+            ->get();
+
+        return $items;
+    }
+    public function print_admin_laporan_rejected(Request $request)
+    {
+        return $request;
     }
 }
