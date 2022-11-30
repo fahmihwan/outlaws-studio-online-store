@@ -24,4 +24,14 @@ class ListCustomerController extends Controller
             'user' => $user
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+
+        User::where('id', $id)->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->back();
+    }
 }

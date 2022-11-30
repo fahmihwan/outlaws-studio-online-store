@@ -56,12 +56,15 @@
                     <div class="mb-3 font-bold flex justify-between  items-center ">
                         List Kategori
 
+
                         <!-- Modal toggle -->
-                        <button
-                            class="block text-xs font-sm text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center "
-                            type="button" data-modal-toggle="authentication-modal">
-                            Tambah Data <i class="fa-solid fa-plus"></i>
-                        </button>
+                        @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                            <button
+                                class="block text-xs font-sm text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center "
+                                type="button" data-modal-toggle="authentication-modal">
+                                Tambah Data <i class="fa-solid fa-plus"></i>
+                            </button>
+                        @endif
 
                         <!-- Main modal -->
                         <div id="authentication-modal" tabindex="-1" aria-hidden="true"
@@ -100,13 +103,9 @@
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
                                                     required="" autocomplete="off" placeholder="berat (gram)">
                                             </div>
-
-
-
                                             <button type="submit"
                                                 class="w-full text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
                                                 Submit</button>
-
                                         </form>
                                     </div>
                                 </div>
@@ -134,9 +133,11 @@
                                 <th scope="col" class="py-3 px-6">
                                     Updated at
                                 </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Action
-                                </th>
+                                @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                                    <th scope="col" class="py-3 px-6">
+                                        Action
+                                    </th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -157,17 +158,18 @@
                                     <td class="py-4 px-6">
                                         {{ $item->updated_at }}
                                     </td>
-
-                                    <td class="py-4 px-6 flex">
-                                        <a href="/admin/master-item/kategori/{{ $item->id }}/edit"
-                                            class="font-medium text-blue-600  hover:underline mr-3">Edit</a> |
-                                        <form method="POST" action="/admin/master-item/kategori/{{ $item->id }}">
-                                            @method('delete')
-                                            @csrf
-                                            <button type="submit"
-                                                class="font-medium text-red-600  hover:underline ml-3">Hapus</button>
-                                        </form>
-                                    </td>
+                                    @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                                        <td class="py-4 px-6 flex">
+                                            <a href="/admin/master-item/kategori/{{ $item->id }}/edit"
+                                                class="font-medium text-blue-600  hover:underline mr-3">Edit</a> |
+                                            <form method="POST" action="/admin/master-item/kategori/{{ $item->id }}">
+                                                @method('delete')
+                                                @csrf
+                                                <button type="submit"
+                                                    class="font-medium text-red-600  hover:underline ml-3">Hapus</button>
+                                            </form>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
 

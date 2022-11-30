@@ -16,14 +16,8 @@ use App\Http\Controllers\Toko\CheckoutController;
 use App\Http\Controllers\Toko\CustomerController;
 use App\Http\Controllers\Toko\LandingpageController;
 use App\Http\Controllers\Toko\RajaOngkirController;
-use App\Models\Detail_penjualan;
-use App\Models\Pembayaran;
-use App\Models\Penjualan;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
-use function Ramsey\Uuid\v1;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,77 +29,6 @@ use function Ramsey\Uuid\v1;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/tes', function () {
-    $json = [
-        "status_code" => "201",
-        "status_message" => "Success, Bank Transfer transaction is created",
-        "transaction_id" => "be03df7d-2f97-4c8c-a53c-8959f1b67295",
-        "order_id" => "1571823229",
-        "merchant_id" => "G812785002",
-        "gross_amount" => "44000.00",
-        "currency" => "IDR",
-        "payment_type" => "bank_transfer",
-        "transaction_time" => "2019-10-23 16:33:49",
-        "transaction_status" => "pending",
-        "va_numbers" => [
-            [
-                "bank" => "bca",
-                "va_number" => "812785002"
-            ]
-        ],
-        "fraud_status" => "accept"
-    ];
-
-    // $json = [
-    //     "status_code" => "201",
-    //     "status_message" => "OK,
-    //      Mandiri Bill transaction is successful",
-    //     "transaction_id" => "abb2d93f-dae3-4183-936d-4145423ad72f",
-    //     "order_id" => "1571823332",
-    //     "merchant_id" => "G812785002",
-    //     "gross_amount" => "44000.00",
-    //     "currency" => "IDR",
-    //     "payment_type" => "echannel",
-    //     "transaction_time" => "2019-10-23 16:35:31",
-    //     "transaction_status" => "pending",
-    //     "fraud_status" => "accept",
-    //     "bill_key" => "778347787706",
-    //     "biller_code" => "70012"
-    // ];
-
-    return view('toko.layout.email.bill_email', [
-        'data' => $json
-    ]);
-});
-
-
-Route::get('/tes', function () {
-
-    $pembayaran =  Pembayaran::select(['penjualans.id', 'email', 'code_order', 'nota', 'total', 'tarif'])
-        ->leftJoin('penjualans', 'pembayarans.id', '=', 'penjualans.pembayaran_id')
-        ->leftJoin('users', 'penjualans.user_id', '=', 'users.id')
-        ->join('kurirs', 'penjualans.kurir_id', '=', 'kurirs.id')
-        ->where('code_order', '19182151')
-        ->first();
-
-    $detail_penjualans = Detail_penjualan::select([
-        'detail_penjualans.id',
-        'items.nama as nama',
-        'ukurans.nama as ukuran',
-        'qty'
-    ])
-        ->join('items', 'detail_penjualans.item_id', '=', 'items.id')
-        ->join('ukurans', 'detail_penjualans.ukuran_id', '=', 'ukurans.id')
-        ->where('penjualan_id', $pembayaran->id)->get();
-    // return $data;
-
-    return view('toko.layout.email.transaction_accepted', [
-        'pembayaran' => $pembayaran,
-        'detail_penjualan' => $detail_penjualans
-    ]);
-});
-
 // // verify email
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/email/verify', [AuthUserController::class, 'verification_notice'])->name('verification.notice');
@@ -175,45 +98,79 @@ Route::get('/list-item/{id}/detail-item', [LandingpageController::class, 'detail
 Route::post('/list-item/detail-item-stok-ajax', [LandingpageController::class, 'detail_item_stok_ajax']);
 
 // admin
-
 Route::middleware(['guest:webadmin', 'preventBack'])->group(function () {
     Route::get('/admin/auth/dashboard/login', [AuthAdminController::class, 'login'])->name('admin.login');
     Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
 });
 
+
+// Halaman Dashboard
 Route::middleware(['auth:webadmin'])->group(function () {
     Route::post('/admin/auth/dashboard/logout', [AuthAdminController::class, 'logout']);
-    // Route::resource('/admin/auth', AuthAdminController::class);
 
     // dashboard master
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('/admin/master-item/kategori', KategoriController::class);
-    Route::resource('/admin/master-item/ukuran', UkuranController::class);
 
-    // item
-    Route::resource('/admin/item', ItemController::class);
-    Route::get('/admin/item/{id}/tambah-stok', [ItemController::class, 'tambah_stok_item']);
-    Route::post('/admin/item/{id}/store-stok-item', [ItemController::class, 'store_stok_item']);
-    Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_list_item']);
-    Route::delete('/admin/item/{item}/{id}/hapus_list_ukuran', [ItemController::class, 'detroy_list_ukuran']);
+    // master - KATEGORI
+    Route::controller(KategoriController::class)->group(function () {
+        Route::get('/admin/master-item/kategori', 'index')->middleware('hak_akses_dashboard:karyawan,owner');
+        Route::post('/admin/master-item/kategori', 'store')->middleware('hak_akses_dashboard:karyawan');
+        Route::get('/admin/master-item/kategori/{id}/edit', 'edit')->middleware('hak_akses_dashboard:karyawan');
+        Route::put('/admin/master-item/kategori/{id}', 'update')->middleware('hak_akses_dashboard:karyawan');
+        Route::delete('/admin/master-item/kategori/{id}', 'destroy')->middleware('hak_akses_dashboard:karyawan');
+    });
+
+    // master - UKURAN
+    Route::controller(UkuranController::class)->group(function () {
+        Route::get('/admin/master-item/ukuran', 'index')->middleware('hak_akses_dashboard:karyawan,owner');
+        Route::post('/admin/master-item/ukuran', 'store')->middleware('hak_akses_dashboard:karyawan');
+        Route::get('/admin/master-item/ukuran/{id}/edit', 'edit')->middleware('hak_akses_dashboard:karyawan');
+        Route::put('/admin/master-item/ukuran/{id}', 'update')->middleware('hak_akses_dashboard:karyawan');
+        Route::delete('/admin/master-item/ukuran/{id}', 'destroy')->middleware('hak_akses_dashboard:karyawan');
+    });
+
+    // item (CUSTOME ROUTES IN RESOURCE CONTROLLER)
+    Route::controller(ItemController::class)->group(function () {
+        Route::get('/admin/item', 'index')->middleware('hak_akses_dashboard:karyawan,owner');
+        Route::post('/admin/item', 'store')->middleware('hak_akses_dashboard:karyawan,owner');
+        Route::get('/admin/item/create', 'create')->middleware('hak_akses_dashboard:karyawan');
+        Route::get('/admin/item/{id}/show', 'show')->middleware('hak_akses_dashboard:karyawan,owner');
+        Route::get('/admin/item/{id}/edit', 'edit')->middleware('hak_akses_dashboard:karyawan');
+        Route::put('/admin/item/{id}', 'update')->middleware('hak_akses_dashboard:karyawan');
+        Route::delete('/admin/item/{id}', 'destroy')->middleware('hak_akses_dashboard:karyawan');
+    });
+    Route::middleware(['hak_akses_dashboard:karyawan'])->group(function () {
+        Route::get('/admin/item/{id}/tambah-stok', [ItemController::class, 'tambah_stok_item']);
+        Route::post('/admin/item/{id}/store-stok-item', [ItemController::class, 'store_stok_item']);
+        Route::post('/admin/item/{id}/store-list-item', [ItemController::class, 'store_list_item']);
+        Route::delete('/admin/item/{item}/{id}/hapus_list_ukuran', [ItemController::class, 'detroy_list_ukuran']);
+    });
+
+    // transaction
+    Route::middleware(['hak_akses_dashboard:karyawan'])->group(function () {
+        Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
+        Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
+        Route::put('/admin/list-transaction/{id}/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);
+    });
+
 
     //list customer
     Route::get('/admin/list-customer', [ListCustomerController::class, 'index']);
     Route::get('/admin/list-customer/{id}', [ListCustomerController::class, 'show']);
+    Route::put('/admin/list-customer/{id}', [ListCustomerController::class, 'update']);
 
-    // transaction
-    Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
-    Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
-    Route::put('/admin/list-transaction/{id}/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);
-
-    Route::get('/admin/laporan/confirmed', [ReportController::class, 'confirmed']);
-    Route::get('/admin/laporan/rejected', [ReportController::class, 'rejected']);
-    Route::get('/admin/report-transaction/{id}/detail', [ReportController::class, 'detail']);
-
+    // laporan  
+    Route::middleware(['hak_akses_dashboard:owner'])->group(function () {
+        Route::get('/admin/laporan/confirmed', [ReportController::class, 'confirmed']);
+        Route::get('/admin/laporan/rejected', [ReportController::class, 'rejected']);
+        Route::get('/admin/report-transaction/{id}/detail', [ReportController::class, 'detail']);
+    });
 
     // print pdf 
-    Route::post('/admin/laporan-confirmed/print', [PdfController::class, 'print_admin_laporan_confirmed']);
-    Route::post('/admin/laporan-rejected/print', [PdfController::class, 'print_admin_laporan_rejected']);
+    Route::middleware(['hak_akses_dashboard:owner'])->group(function () {
+        Route::post('/admin/laporan-confirmed/print', [PdfController::class, 'print_admin_laporan_confirmed']);
+        Route::post('/admin/laporan-rejected/print', [PdfController::class, 'print_admin_laporan_rejected']);
+    });
 });
 
 

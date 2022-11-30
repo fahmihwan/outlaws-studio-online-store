@@ -29,15 +29,17 @@
                 <label for="">Cari :</label>
                 <input class="rounded border-gray-300" type="text" placeholder="Search...">
             </div>
-            <a href="/admin/item/create"
-                class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
-                <i class="fa-solid fa-plus"></i> Tambah
-                Data</a>
+            @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                <a href="/admin/item/create"
+                    class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
+                    <i class="fa-solid fa-plus"></i> Tambah
+                    Data</a>
+            @endif
         </section>
 
         <div class="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6    rounded-md p-2 ">
             @foreach ($items as $item)
-                <a href="/admin/item/{{ $item->id }}"
+                <a href="/admin/item/{{ $item->id }}/show"
                     class="block  mr-3 mb-2   border bg-purple-900 text-white group hover:translate-y-[-2px] hover:duration-300 hover:border-purple-600 ">
                     <img class="" src="{{ asset('./storage/' . $item->gambar) }}" alt="">
                     <p class="font-bold  text-xs mb-2 px-1 ">{{ $item->nama }} </p>

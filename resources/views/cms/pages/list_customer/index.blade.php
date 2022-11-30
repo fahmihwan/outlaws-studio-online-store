@@ -26,7 +26,6 @@
         <div class="w-full shadow-md bg-white  rounded-md p-2 ">
             <div class="text-sm font-medium  text-gray-500   ">
 
-
                 {{-- header --}}
                 <div class="overflow-x-auto relative :rounded-lg">
                     <div class="mb-3 font-bold flex justify-between  items-center ">

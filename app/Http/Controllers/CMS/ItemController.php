@@ -23,6 +23,10 @@ class ItemController extends Controller
 
     public function __construct(ItemService $itemService, UkuranService $ukuranService, KategoriService $kategoriService)
     {
+        // dd($this->middleware('hak_akses_dashboard:owner')->only(['index']));
+        // $this->middleware('hak_akses_dashboard:owner')->only('index');
+
+
         $this->itemService = $itemService;
         $this->ukuranService = $ukuranService;
         $this->kategoriService = $kategoriService;
@@ -285,32 +289,4 @@ class ItemController extends Controller
         }
         return redirect()->back();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // tambah stok
-    // $list_ukuran = [];
-    // $count_stok = 0;
-    // for ($i = 0; $i < count($validated['ukuran-nama']); $i++) {
-    //     $list_ukuran[] = [
-    //         'ukuran_id' => $validated['ukuran-nama'][$i],
-    //         'item_id' => 1,
-    //         'qty' => $validated['ukuran_qty'][$i],
-    //     ];
-    //     $count_stok += $validated['ukuran_qty'][$i];
-    // }
-    // dd($list_ukuran);
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

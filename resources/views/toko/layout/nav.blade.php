@@ -36,7 +36,7 @@
                         <button id="dropdownDefault" data-dropdown-toggle="dropdown"
                             class="block py-2 pr-4 font-extrabold text-sm  pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
                             type="button">
-                            Hey, {{ auth()->user()->credential->nama_depan }} &nbsp;
+                            Hey, {{ auth()->guard('web')->user()->credential->nama_depan }} &nbsp;
                             <i class="text-lg fa-regular fa-user"></i>
                             </svg>
                         </button>

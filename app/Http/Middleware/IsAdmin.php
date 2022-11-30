@@ -17,6 +17,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+
+        // dd($request);
         // dd($request);
         // if (!$request->expectsJson()) {
         //     return route('login');
