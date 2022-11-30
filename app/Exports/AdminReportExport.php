@@ -2,33 +2,30 @@
 
 namespace App\Exports;
 
-use App\Models\Penjualan;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\FromView;
+use Illuminate\Contracts\View\View;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
-class AdminReportExport implements FromCollection, FromQuery, WithMapping
+class AdminReportExport implements FromView
 {
-    public function collection()
+    protected $title;
+    protected $datas;
+    protected $periode;
+    public function __construct($datas, $periode, $title)
     {
-        // return Penjualan::all();
-        $items = Penjualan::with([
-            'pembayaran:id,transaction_status',
-            'user:id,email',
-            'detail_penjualans.item:id,nama'
-        ])
-            ->where('status_pengiriman', 'confirmed')
-            // ->whereBetween('tanggal_pembelian', [$request->start_date, $request->end_date])
-            ->get();
-
-        $this->map($items);
+        $this->title = $title;
+        $this->datas = $datas;
+        $this->periode = $periode;
     }
-    public function map($data): array
+
+    public function view(): View
     {
-        return [
-            $data->pembayaran->transaction_status
-            // Date::dateTimeToExcel($invoice->created_at),
-        ];
+        return view('print_pdf.print_admin_laporan_confirmed', [
+            'title' => $this->title,
+            'periode' => $this->periode,
+            'current_date' => Carbon::now()->format('d-m-Y H:i:s'),
+            'items' => $this->datas
+        ]);
     }
 }

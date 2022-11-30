@@ -130,6 +130,7 @@ class AuthUserController extends Controller
         ]);
         $validated['status'] = 'active';
         if (Auth::guard('web')->attempt($validated)) {
+
             // $request->session()->regenerate();
             // return redirect()->intended('/');
             return redirect('/');

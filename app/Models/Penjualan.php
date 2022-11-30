@@ -36,14 +36,24 @@ class Penjualan extends Model
         return $this->hasMany(Detail_penjualan::class);
     }
 
-    // public function scopeFilter($query, array $filters)
-    // {
-    //     return $query->with([
-    //         'buku:id,judul',
-    //         'anggota:id,nama,role_id',
-    //         'anggota.role:id,nama',
-    //         'petugas:id,credential_id',
-    //         'petugas.credential:id,nama',
-    //     ])->whereDate('tanggal_pinjam', '>=', $filters['start_date'])->whereDate('tanggal_pinjam', '<=', $filters['end_date']);
-    // }
+
+    // filter rerport penjualan
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['periode'] ?? false, function ($q, $p) use ($filters) {
+            return $q->with([
+                'pembayaran:id,transaction_status',
+                'user:id,email',
+                'detail_penjualans.item:id,nama'
+            ])->where('status_pengiriman', $filters['status_pengiriman'])
+                ->whereBetween('tanggal_pembelian', [$p['start_date'], $p['end_date']]);
+        }, function ($q) use ($filters) {
+            return $q->with([
+                'pembayaran:id,transaction_status',
+                'user:id,email',
+                'detail_penjualans.item:id,nama'
+            ])
+                ->where('status_pengiriman', $filters['status_pengiriman']);
+        });
+    }
 }

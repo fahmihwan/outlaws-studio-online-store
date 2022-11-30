@@ -5,36 +5,66 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\Detail_penjualan;
 use App\Models\Penjualan;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AdminReportExport;
 
 
 class ReportController extends Controller
 {
     public function confirmed()
     {
-        $items = Penjualan::with([
-            'pembayaran:id,transaction_status',
-            'user:id,email',
-            'detail_penjualans.item:id,nama'
-        ])
-            ->where('status_pengiriman', 'confirmed')
-            ->get();
+
+        $data =  Penjualan::filter(['status_pengiriman' => 'confirmed'])->get();
+
+        if (request('search')) {
+            $data = Penjualan::filter(['status_pengiriman' => 'confirmed', 'periode' => request(['start_date', 'end_date'])])->get();
+            if ($data->count() == 0) {
+                return redirect()->back()->withErrors('data tidak ada pada periode tersebut');
+            }
+        }
+        if (request('print')) {
+            $data = Penjualan::filter(['status_pengiriman' => 'confirmed', 'periode' => request(['start_date', 'end_date'])])->get();
+            if ($data->count() == 0) {
+                return redirect()->back()->withErrors('data tidak ada pada periode tersebut');
+            }
+            $periode = [
+                'start_date' => request('start_date'),
+                'end_date' => request('end_date'),
+            ];
+            $title = "Laporan Confirmed";
+            return Excel::download(new AdminReportExport($data, $periode, $title), 'Laporan Confirmed.xlsx');
+        }
 
         return view('cms.pages.report.confirmed', [
-            'items' => $items
+            'items' => $data
         ]);
     }
+
+
     public function rejected()
     {
-        $items = Penjualan::with([
-            'pembayaran:id,transaction_status',
-            'user:id,email',
-            'detail_penjualans.item:id,nama'
-        ])
-            ->where('status_pengiriman', 'rejected')
-            ->get();
+        $data =  Penjualan::filter(['status_pengiriman' => 'rejected'])->get();
+        if (request('search')) {
+            $data = Penjualan::filter(['status_pengiriman' => 'rejected', 'periode' => request(['start_date', 'end_date'])])->get();
+            if ($data->count() == 0) {
+                return redirect()->back()->withErrors('data tidak ada pada periode tersebut');
+            }
+        }
+        if (request('print')) {
+            $data = Penjualan::filter(['status_pengiriman' => 'rejected', 'periode' => request(['start_date', 'end_date'])])->get();
+            if ($data->count() == 0) {
+                return redirect()->back()->withErrors('data tidak ada pada periode tersebut');
+            }
+            $periode = [
+                'start_date' => request('start_date'),
+                'end_date' => request('end_date'),
+            ];
+            $title = "Laporan Rejected";
+            return Excel::download(new AdminReportExport($data, $periode, $title), 'Laporan Rejected.xlsx');
+        }
 
         return view('cms.pages.report.rejected', [
-            'items' => $items
+            'items' => $data
         ]);
     }
 
