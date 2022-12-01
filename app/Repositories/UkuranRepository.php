@@ -16,7 +16,7 @@ class UkuranRepository
 
     public function get()
     {
-        $items = Ukuran::with('kategori:id,nama')->latest()->get();
+        $items = Ukuran::with('kategori:id,nama')->paginate(5);
         return $items;
     }
 

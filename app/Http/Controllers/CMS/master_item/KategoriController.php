@@ -16,9 +16,8 @@ class KategoriController extends Controller
      */
     public function index()
     {
-
         return view('cms.pages.master_item.kategori.index', [
-            'items' =>  Kategori::latest()->get()
+            'items' =>  Kategori::latest()->paginate(5)
         ]);
     }
 

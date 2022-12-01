@@ -59,7 +59,7 @@
                     <span class="sidebar-menu flex-1  whitespace-nowrap">List Customer </span>
                 </a>
             </li>
-            @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+            @if (auth()->guard('webadmin')->user()->hak_akses == 'owner')
                 <li>
                     <a href="/admin/laporan/confirmed"
                         class="flex {{ request()->is('admin/laporan*') ? 'bg-white text-black' : 'text-gray-200' }} items-center py-2 px-3 text-base font-normal rounded-lg  hover:bg-gray-100 hover:text-black ">

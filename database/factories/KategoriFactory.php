@@ -17,7 +17,8 @@ class KategoriFactory extends Factory
     public function definition()
     {
         return [
-            'nama' => $this->faker->randomElement(['jaket', 'kaos'])
+            'nama' => $this->faker->name(),
+            'berat' => $this->faker->numberBetween()
         ];
     }
 }

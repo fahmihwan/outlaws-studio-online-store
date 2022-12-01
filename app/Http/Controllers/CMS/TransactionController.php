@@ -14,14 +14,10 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        // $today_date = Carbon::now()->addDays(-7)->toDateTimeString();
-
         $items = Penjualan::with(['pembayaran:id,transaction_status', 'user:id,email'])
-            // ->whereBetween('created_at', [$start, $end])
-
-            // ->where('created_at', '>=', $today_date)
             ->where('status_pengiriman', 'pending')
-            ->latest()->get();
+            ->latest()->paginate(5);
+
         return view('cms.pages.transaction.index', [
             'items' => $items
         ]);

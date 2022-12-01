@@ -25,9 +25,6 @@
                 </ol>
             </div>
         </nav>
-
-
-
         <section class="flex justify-between mb-2">
             <div>
             </div>
@@ -36,7 +33,6 @@
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </a>
         </section>
-
 
         <div class="flex flex-col-reverse md:flex-row">
             <div class="w-full md:w-4/6 bg-white rounded mt-3 mb-6 md:mb-0">
@@ -89,11 +85,13 @@
                                         </div>
                                         {{ $user->status }}
                                     </span>
-                                    <button
-                                        class="block text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center  "
-                                        type="button" data-modal-toggle="popup-modal">
-                                        Edit Status Account
-                                    </button>
+                                    @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                                        <button
+                                            class="block text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center  "
+                                            type="button" data-modal-toggle="popup-modal">
+                                            Edit Status Account
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

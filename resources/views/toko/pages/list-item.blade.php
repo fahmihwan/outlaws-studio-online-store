@@ -39,6 +39,7 @@
                     <div class="flex items-center p-2 border-b-2 mb-3">
                         <span class="flex-1 ml-3 whitespace-nowrap">Kategori</span>
                         <br>
+
                     </div>
                     <ul class="px-5">
                         @foreach ($kategories as $kategori)
@@ -79,8 +80,11 @@
                     {{-- <span class="text-xs">Sepatu <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
                     {{-- <span class="text-xs">Hodie <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
                     {{-- <span class="text-xs">Kaos <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
+
+
+
+
                 </div>
-                {{-- <span class="text-xs">Hapus Semua</span></span> --}}
             </div>
             <form class="flex items-center">
                 <label for="countries" class="block mr-3  text-sm font-medium text-gray-900 dark:text-gray-400">Sort
@@ -182,7 +186,8 @@
                             <img class="object-cover" src="./storage/${e.gambar}" alt="product image">
                         </a>
                         <div class="p-2 border flex justify-between bg-white ">
-                            <div class="">${e.nama} <br>
+                            <div class=""> 
+                                <span class="block text-ellipsis w-36 whitespace-nowrap overflow-hidden">${e.nama}</span>
                                 <span class="text-gray-400">Rp ${ (e.harga/1000).toFixed(3)}</span>
                             </div>
                             <div class="text-right">
@@ -190,8 +195,8 @@
                                     ${e.kategori.nama}
                                 </span><br>
                                 ${(e.wish_list == null)?`
-                                                                                                                                                                                                                                                                                                                                                                         <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
-                                                                                                                                                                                                                                                                                                                                                                        <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
+     <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
+     <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
                             </div>
                         </div>
                     </div>`

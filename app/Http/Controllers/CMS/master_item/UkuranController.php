@@ -27,6 +27,7 @@ class UkuranController extends Controller
      */
     public function index()
     {
+        // return $this->ukuranService->getUkuranLatest();
         return view('cms.pages.master_item.ukuran.index', [
             'kategories' => $this->kategoriService->getKategoriLatest(),
             'items' => $this->ukuranService->getUkuranLatest()
