@@ -64,8 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'isAdmin' => \App\Http\Middleware\IsAdmin::class,
         'preventBack' => \App\Http\Middleware\PreventBack::class,
-        'hak_akses_dashboard' => \App\Http\Middleware\Hak_akses_dashboard::class
+        'hak_akses_dashboard' => \App\Http\Middleware\Hak_akses_dashboard::class,
+        'isSuspend' => \App\Http\Middleware\IsSuspend::class
     ];
 }

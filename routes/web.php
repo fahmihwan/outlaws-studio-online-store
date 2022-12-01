@@ -103,7 +103,6 @@ Route::middleware(['guest:webadmin', 'preventBack'])->group(function () {
     Route::post('/admin/auth/dashboard/authenticate', [AuthAdminController::class, 'authenticate']);
 });
 
-
 // Halaman Dashboard
 Route::middleware(['auth:webadmin'])->group(function () {
     Route::post('/admin/auth/dashboard/logout', [AuthAdminController::class, 'logout']);

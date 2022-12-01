@@ -58,6 +58,7 @@
     </nav>
 
 
+
     {{-- resend_email --}}
     @include('toko.components.resend_email_confirmation')
     @if (session('status'))

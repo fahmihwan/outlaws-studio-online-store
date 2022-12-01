@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class IsSuspend
 {
     /**
      * Handle an incoming request.
@@ -17,15 +16,10 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->user()->status == 'suspend') {
 
-        // dd($request);
-        // dd($request);
-        // if (!$request->expectsJson()) {
-        //     return route('login');
-        // }
-        // if (Auth::guard('webadmin')->user()->hak_akses) {
-        //     return $next($request);
-        // }
-        return redirect('/admin/auth/dashboard/login')->with('error', "Only admin can access!");
+            return redirect()->back()->with('status', 'er');
+        }
+        return $next($request);
     }
 }

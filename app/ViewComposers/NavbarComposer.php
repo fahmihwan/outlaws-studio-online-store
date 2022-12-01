@@ -6,6 +6,7 @@ namespace App\ViewComposers;
 use App\Models\Item;
 use App\Models\Keranjang;
 use App\Models\Wish_list;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NavbarComposer
@@ -20,7 +21,8 @@ class NavbarComposer
             $data = [
                 'data_cart' => [],
                 'count' => 0,
-                'wish_list_count' => 0
+                'wish_list_count' => 0,
+                'isSuspend' => false
             ];
         } else {
 
@@ -44,11 +46,12 @@ class NavbarComposer
                 return $data->subtotal;
             });
 
+
             $data = [
                 'data_cart' => $keranjang,
                 'count' => $keranjang->count(),
                 'wish_list_count' => Wish_list::where('user_id', auth()->user()->id)->count(),
-                'sub_total' => $sub_total,
+                'sub_total' => $sub_total
             ];
         }
         $items = Item::select('id', 'nama', 'gambar')->get();
