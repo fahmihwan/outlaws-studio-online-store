@@ -146,7 +146,7 @@ Route::middleware(['auth:webadmin'])->group(function () {
     });
 
     // transaction
-    Route::middleware(['hak_akses_dashboard:karyawan'])->group(function () {
+    Route::middleware(['hak_akses_dashboard:karyawan,owner'])->group(function () {
         Route::get("/admin/list-transaction", [TransactionController::class, 'index']);
         Route::get("/admin/list-transaction/{id}/detail", [TransactionController::class, 'detail_pembelian']);
         Route::put('/admin/list-transaction/{id}/konfirmasi', [TransactionController::class, 'konfirmasi_pembelian']);

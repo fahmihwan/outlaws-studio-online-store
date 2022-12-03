@@ -77,8 +77,6 @@
                 </section>
 
                 <!-- form -->
-
-
                 <section>
                     <form action="/list-item/cart/{{ $item->id }}" method="POST">
                         @csrf
@@ -122,12 +120,13 @@
                                 class="border bg-black border-black  text-white hover:bg-white duration-300 hover:text-black py-3 w-4/5">
                                 Tambah ke Troli
                             </button>
-                            <button
+                            <button id="submit-wishlist"  data-id={{$item->id}}
                                 class="border bg-black border-l-white border-black text-white text-xl hover:text-2xl black w-1/5">
                                 <i class="far fa-heart "></i>
                             </button>
                         </div>
                     </form>
+                    {{-- /list-item/cart/{id} --}}
 
 
                 </section>
@@ -138,8 +137,30 @@
 
 
 @section('script')
+{{-- /list-item/wish_list/{id} --}}
     <script>
         $(document).ready(function() {
+            $('#submit-wishlist').click(function(e){
+                e.preventDefault()  
+                const id = $(this).attr('data-id');
+                $.ajax({
+                    url:`/list-item/wish_list/${id}`,
+                    type:'POST',
+                    dataType:'json',
+                    data:{
+                        _token: '{{ csrf_token() }}',
+                        id: id,
+                    },success:function(response){
+                        alert('item ditambahkan ke wishlist')
+                        window.location.reload()
+                    },error:function(error){
+                        alert('item ditambahkan ke wishlist')
+                        window.location.reload()
+                    }
+                })
+            })
+
+
             let item_id = {{ Js::from($item->id) }};
             get_stok_tersisa(null)
 
@@ -154,7 +175,7 @@
                         ukuran_id: ukuran_id
                     },
                     success: function(response) {
-                        console.log(response)
+
                         if (response.qty) {
                             $('#stok-item').text(response.qty)
                         }

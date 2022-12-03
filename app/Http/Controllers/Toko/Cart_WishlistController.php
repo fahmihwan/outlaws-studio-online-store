@@ -213,7 +213,7 @@ class Cart_WishlistController extends Controller
     public function store_wishlist(Request $request)
     {
         $check = Wish_list::where([
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->guard('web')->user()->id,
             'item_id' => $request->id
         ])->count();
 

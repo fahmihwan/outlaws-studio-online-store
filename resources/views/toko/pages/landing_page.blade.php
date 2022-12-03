@@ -1,6 +1,7 @@
 @extends('toko.layout.main')
 
 @section('styles')
+
     <style>
         /* ---- particles.js container ---- */
         #particles-js {
@@ -72,20 +73,35 @@
 @section('container')
     {{-- This account is not confirmed. Click Here to resend confirmation email. --}}
     <div class="w-full  ">
-        {{-- <div class="h-96 text-center absolute w-full " id="particles-js"></div> --}}
         <div id="particles-js"></div>
         <div class=" w-full border-b h-96 flex justify-center items-center">
+          <div class="text-center">
+            <h1 class="text-white mb-10 text-4xl ">Outlaws Studio Store</h1>
             <a href="/list-item"
                 class="border-white border w-56 text-center hover:bg-white hover:text-black duration-300 font-light  text-white p-3 text-3xl">
                 Shop now</a>
+          </div>
         </div>
+        
+
     </div>
+
+   
 @endsection
 
 @section('script')
     <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
     <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+
+  
+  
+  
+
     <script>
+      $('.your-class').slick({
+        setting-name: setting-value
+      });
+
         particlesJS("particles-js", {
             "particles": {
                 "number": {

@@ -30,10 +30,20 @@
             <div>
             </div>
             @if (request()->is('admin/list-transaction/*'))
-                <a href="/admin/list-transaction"
+               @if (auth()->guard('webadmin')->user()->hak_akses == 'owner')
+                <a href="/admin/dashboard"
+                class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+                 </a>
+               @endif
+               
+                 @if (auth()->guard('webadmin')->user()->hak_akses == 'karyawan')
+                    <a href="/admin/list-transaction"
                     class="bg-purple-600 hover:bg-white hover:text-black border hover:duration-200 hover:border-purple-600 text-white p-2 rounded">
                     <i class="fa-solid fa-arrow-left"></i> Kembali
-                </a>
+                    </a>
+                 @endif
+               
             @endif
 
             @if (request()->is('admin/report-transaction/*'))
@@ -69,22 +79,24 @@
                             ])>{{ $penjualan->status_pengiriman }}</span></h1>
                     <div class="">
                         @if (request()->is('admin/list-transaction/*'))
-                            <form action="/admin/list-transaction/{{ $id }}/konfirmasi" method="POST">
-                                @method('PUT')
-                                @csrf
-                                <button
-                                    onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
-                                    name="status_pengiriman" value="confirmed"
-                                    class="bg-green-500 disabled:opacity-75    text-white p-2 rounded">
-                                    Confirm
-                                </button>
-                                <button
-                                    onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
-                                    name="status_pengiriman" value="rejected"
-                                    class="bg-red-600 disabled:opacity-75 text-white p-2 rounded">
-                                    Reject
-                                </button>
-                            </form>
+                           @if (auth()->guard('webadmin')->user()->hak_akses != 'owner')
+                           <form action="/admin/list-transaction/{{ $id }}/konfirmasi" method="POST">
+                            @method('PUT')
+                            @csrf
+                            <button
+                                onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
+                                name="status_pengiriman" value="confirmed"
+                                class="bg-green-500 disabled:opacity-75    text-white p-2 rounded">
+                                Confirm
+                            </button>
+                            <button
+                                onclick="return confirm('perubahan status tidak dapat dibatalkan, apakah anda yakin?')"
+                                name="status_pengiriman" value="rejected"
+                                class="bg-red-600 disabled:opacity-75 text-white p-2 rounded">
+                                Reject
+                            </button>
+                        </form>
+                           @endif
                         @endif
                     </div>
                 </div>
