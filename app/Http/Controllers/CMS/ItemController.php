@@ -119,6 +119,7 @@ class ItemController extends Controller
         // return $item;
 
 
+
         return view('cms.pages.item.edit', [
             'item' => $item,
             'link' => $id,
@@ -152,7 +153,7 @@ class ItemController extends Controller
 
         Item::where('id', $id)->update($validated);
 
-        return redirect('/admin/item/' . $id);
+        return redirect('/admin/item/' . $id . '/show');
     }
 
     /**

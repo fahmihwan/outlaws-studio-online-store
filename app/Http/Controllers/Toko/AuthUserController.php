@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMailVerifyJob;
 use App\Models\Credential;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -170,6 +171,10 @@ class AuthUserController extends Controller
 
     public function resend_verification(Request $request)
     {
+
+
+
+
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('send-link-email', 'cek email anda untuk melakuakn verifikasi!');

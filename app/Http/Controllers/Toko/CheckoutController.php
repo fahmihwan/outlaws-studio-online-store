@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Toko;
 
-use App\Console\Kernel;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use App\Mail\Bill_mail;
 use App\Models\Alamat;
 use App\Models\Credential;
 use App\Models\Detail_penjualan;
-use App\Models\Item;
 use App\Models\Keranjang;
 use App\Models\Kurir;
 use App\Models\Pembayaran;
@@ -164,6 +163,7 @@ class CheckoutController extends Controller
             ->where('user_id', auth()->user()->id)
             ->get();
 
+
         $user = User::with([
             'credential.alamat',
         ])->where('id', auth()->user()->id)
@@ -245,11 +245,6 @@ class CheckoutController extends Controller
                         'ukuran_id' => $krj['ukuran_id'],
                         'qty' => $krj['qty']
                     ]);
-
-                    Keranjang::where([
-                        'user_id' => auth()->user()->id,
-                        'item_id' => $krj->item_id
-                    ])->delete();
                 }
                 DB::commit();
             } catch (\Throwable $th) {
@@ -258,6 +253,19 @@ class CheckoutController extends Controller
                 return redirect()->back()->withErrors($th->getMessage());
             }
 
+
+            // dd($keranjang);
+            $data = [
+                'response' => $response_success,
+                'batas_akhir_pembayaran' => $batas_akhir_pembayaran,
+                'user' => $user,
+                'keranjang' => $keranjang,
+                'pengiriman' => $get_session_credential['code'] . ' - ' . $get_session_credential['service'] . ' ' . $get_detail_rajaongkir['description'],
+                'ongkir' => $get_detail_rajaongkir['cost'][0]['value'],
+                'sub_total' => $sub_total['sub_total']
+            ];
+            // with QUEUE
+            // SendEmailJob::dispatch($data);
 
             Mail::to(auth()->user()->email)->send(new Bill_mail([
                 'response' => $response_success,
@@ -269,18 +277,7 @@ class CheckoutController extends Controller
                 'sub_total' => $sub_total['sub_total']
             ]));
 
-            return view('toko.layout.transaksi_success', [
-                'nomor_order' => $nota,
-                'status_pesanan' => $response_success['transaction_status'],
-                'nominal_pesanan' => $gross_amount,
-                'metode_pembayaran' => $request->bank,
-                'batas_akhir_pembayaran' => $batas_akhir_pembayaran,
-                'kode_pembayaran' => [
-                    'va_number' => isset($response_success['va_numbers']) != null ? $response_success['va_numbers'][0]['va_number'] : null,
-                    'bill_key' => isset($response_success['bill_key']) != null ? $response_success['bill_key'] : null,
-                    'biller_code' => isset($response_success['biller_code']) != null ? $response_success['biller_code'] : null
-                ]
-            ]);
+            return view('toko.layout.transaksi_success_ini');
         }
     }
 

@@ -54,7 +54,8 @@
                     Home
                 </a>
             </li>
-
+            {{-- <img src="{{ './storage/' . 'image-items/r9wxbZp3hLKZZqgVhlkNb89hHVXr0yg1n9bvRvFm.jpg' }}" style="width: 100px;"
+            alt=""> --}}
         </ol>
     </nav>
 
@@ -79,7 +80,9 @@
             <h1 class="text-white mb-10 text-4xl ">Outlaws Studio Store</h1>
             <a href="/list-item"
                 class="border-white border w-56 text-center hover:bg-white hover:text-black duration-300 font-light  text-white p-3 text-3xl">
-                Shop now</a>
+                Shop now
+        
+            </a>
           </div>
         </div>
         

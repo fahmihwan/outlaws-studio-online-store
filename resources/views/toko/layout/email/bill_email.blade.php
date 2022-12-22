@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +31,6 @@
         </div>
 
 
-        {{-- va number clear --}}
         @if (isset($data['response']['va_numbers']) != null)
             <div class="paragraf">
                 <p style="font-weight: bold">Berikut kode pembayaran rekening virtual: </p>
@@ -105,9 +105,20 @@
             <hr style="margin-top: 10px">
             @foreach ($data['keranjang'] as $item)
                 <div style="display: flex; border-bottom: 1px solid rgb(192, 192, 192);">
-                    {{-- <img src="{{ $message->embed('./img-tes/1.jpg') }}" style="width: 100px;" alt=""> --}}
-                    <img src="{{ $message->embed('./storage/' . $item->item->gambar) }}" style="width: 100px;"
-                        alt="">
+
+                    {{-- 1. berhasil mengirimkan email dengan gambar tanpa queue job, tp terjadi error jika melalui queue job --}}
+                    {{-- jika melalui queue job: error unable to open path --}}
+                    <img src="{{ $message->embed('./storage/' . $item->item->gambar) }}" style="width: 100px;"  alt="">
+              
+                    {{-- 2. berhasil mengirimkan email tapi gambar tidak terbaca di direcotry melalui queue job--}}
+                    <img src="{{ 'storage/'. base64_encode($item->item->gambar) }}" style="width: 100px;"  alt="">
+
+
+
+                    {{-- <img src="{{ $message->embed('storage/'. base64_encode($item->item->gambar)) }}" style="width: 100px;"  alt=""> --}}
+
+
+
                     <div style="padding: 5px">
                         <p>{{ $item->item->nama }}</p>
                         <p>ukuran {{ $item->ukuran->nama }} </p>
@@ -145,4 +156,4 @@
     </div>
 </body>
 
-</html>
+</html> 

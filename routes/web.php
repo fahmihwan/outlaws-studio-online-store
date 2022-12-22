@@ -172,8 +172,6 @@ Route::middleware(['auth:webadmin'])->group(function () {
     });
 });
 
-
-
 // demo
 Route::get('demo-admin', [AuthAdminController::class, 'demo']);
 Route::resource('/admin/auth', AuthAdminController::class);
