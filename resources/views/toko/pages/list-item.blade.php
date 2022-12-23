@@ -6,7 +6,6 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900  ">
-                    {{-- <a href="#" class="inline-flex items-center text-sm font-medium text-white hover:text-gray-900  "> --}}
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
@@ -29,9 +28,22 @@
 @endsection
 
 @section('sidebar-kategori')
-    <aside class="md:w-80 border-r-2  transition-width" id="sidebar" aria-label="Sidebar">
-        <button class="p-4 flex justify-between font-light  w-full btn-filter-toggle">
-            <span class="text-sm">Sembunyikan Filter </span><i class="fa-solid fa-bars"></i>
+    <aside
+        class="w-96 bg-white md:w-80 border-r-2 absolute md:static shadow-lg shadow-slate-800 md:shadow-none transition-width"
+        id="sidebar" aria-label="Sidebar">
+        <button class="p-4 flex justify-between font-light  w-full btn-filter-toggle ">
+            <span class="text-sm"><span class="">Sembunyikan Filter</span>
+            </span>
+
+            <i class="fa-solid fa-bars hidden md:block"></i>
+
+            <svg aria-hidden="true" class="w-5 h-5 block md:hidden" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"></path>
+            </svg>
+
         </button>
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 h-full rounded ">
             <ul class="space-y-2">
@@ -39,7 +51,6 @@
                     <div class="flex items-center p-2 border-b-2 mb-3">
                         <span class="flex-1 ml-3 whitespace-nowrap">Kategori</span>
                         <br>
-
                     </div>
                     <ul class="px-5">
                         @foreach ($kategories as $kategori)
@@ -73,16 +84,13 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
-                <span class="font-bold mr-3 p-4">
+                <span class="font-bold mr-3 text-sm p-4">
                     <span id="jumlah-data">0</span> Hasil
                 </span>
                 <div id="render-kategori">
                     {{-- <span class="text-xs">Sepatu <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
                     {{-- <span class="text-xs">Hodie <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
                     {{-- <span class="text-xs">Kaos <button class="hapus-kategori font-bold text-red-600 pl-1 pr-5">x</button></span> --}}
-
-
-
 
                 </div>
             </div>
@@ -195,8 +203,8 @@
                                     ${e.kategori.nama}
                                 </span><br>
                                 ${(e.wish_list == null)?`
-     <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
-     <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
+                                                                                                                                                                                                             <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
+                                                                                                                                                                                                             <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
                             </div>
                         </div>
                     </div>`

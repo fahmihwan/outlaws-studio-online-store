@@ -53,10 +53,11 @@
                 <div class=" w-full md:w-5/6 border">
                     @forelse ($items as $item)
                         <div class="flex m-5 bg-gray-100 p-2">
-                            <div class="w-1/5  md:w-2/12 flex justify-center m-2 ">
-                                <img class="" src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
+                            <div class="w-32  md:w-2/12  flex justify-center m-2 ">
+                                <img class="w-32 h-32 md:w-auto md:h-auto "
+                                    src="{{ asset('./storage/' . $item->item->gambar) }}" alt="">
                             </div>
-                            <div class="w-4/5 md:w-10/12 pl-10 pt-3 flex justify-between">
+                            <div class=" md:w-10/12 pl-0 md:pl-10 pt-3 flex justify-between">
                                 <div class="w-1/2">
                                     <a href="" class="underline">{{ $item->item->nama }}</a>
                                     <p class="text-xs mt-2"><span class="text-gray-500">Size </span>:
@@ -85,7 +86,7 @@
                                             @endif
                                         </select>
                                     </div>
-                                    <div class="float-right  mt-5">
+                                    <div class="float-right flex md:block w-52 md:w-full items-center  mt-5">
                                         <a href="" class="text-xs mr-3 font-semibold underline">SAVE FOR LATER</a>
                                         <a href="/checkout/cart/{{ $item->id }}/edit-cart"
                                             class="text-xs mr-3 font-semibold underline">UBAH</a>
