@@ -108,7 +108,7 @@
             </form>
         </div>
         <!-- content -->
-        <div class=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-full  p-2 bg-gray-100" id="content-items">
+        <div class=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 min:h-screen  p-2 bg-gray-100" id="content-items">
 
             {{-- render content javascript --}}
 
@@ -203,8 +203,8 @@
                                     ${e.kategori.nama}
                                 </span><br>
                                 ${(e.wish_list == null)?`
-                                                                                                                                                                                                             <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
-                                                                                                                                                                                                             <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
+                                                                                                                                                                                                                                                                                 <button type="submit" class="wish-list-off mr-2" data-id="${e.id}"><i class="text-xl far fa-heart"></i></button>`: `
+                                                                                                                                                                                                                                                                                 <button type="submit" class="wish-list-on mr-2" data-id="${e.id}"> <i class="fa-solid fa-heart text-xl"></i></button>`}
                             </div>
                         </div>
                     </div>`

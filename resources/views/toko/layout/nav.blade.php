@@ -5,18 +5,6 @@
             <span class="self-center md:text-xl font-semibold whitespace-nowrap text-md "> Outlaws Studio</span>
         </a>
 
-        {{-- hamburger nav --}}
-        {{-- <button data-collapse-toggle="mega-menu-full" type="button"
-            class="inline-flex  items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:block hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
-            aria-controls="mega-menu-full" aria-expanded="false">
-            <span class="sr-only">Open main menu</span>
-            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"></path>
-            </svg>
-        </button> --}}
 
         {{-- cari --}}
 
@@ -56,7 +44,7 @@
 
                 {{-- if success login --}}
                 @auth
-                    <button id="dropdownDefault" data-dropdown-toggle="dropdown"
+                    <button id="dropdownDefault" data-dropdown-toggle="dropdown-twice"
                         class="block  font-extrabold text-sm  text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
                         type="button">
                         Hey, {{ auth()->guard('web')->user()->credential->nama_depan }} &nbsp;
@@ -64,7 +52,7 @@
                         </svg>
                     </button>
 
-                    <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow "
+                    <div id="dropdown-twice" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow "
                         data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom"
                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 490px, 0px);">
                         <ul class="py-1 text-sm text-gray-700 " aria-labelledby="dropdownDefault">
@@ -90,9 +78,6 @@
                 @endauth
             </div>
 
-
-
-
         </div>
 
 
@@ -116,7 +101,7 @@
 
                     {{-- if success login --}}
                     @auth
-                        <button id="dropdownDefault" data-dropdown-toggle="dropdown"
+                        <button id="dropdownDefault-twice" data-dropdown-toggle="dropdown"
                             class="block py-2 pr-4 font-extrabold text-sm  pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
                             type="button">
                             Hey, {{ auth()->guard('web')->user()->credential->nama_depan }} &nbsp;
@@ -128,7 +113,7 @@
                     <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow "
                         data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom"
                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 490px, 0px);">
-                        <ul class="py-1 text-sm text-gray-700 " aria-labelledby="dropdownDefault">
+                        <ul class="py-1 text-sm text-gray-700 " aria-labelledby="dropdownDefault-twice">
                             <li>
                                 <a href="/customer/account" class="block py-2 px-4 font-bold hover:bg-gray-100  ">Akun
                                     Saya</a>
@@ -375,12 +360,12 @@
                     let elemetsSearch = ''
                     $('#search-items').html('')
                     resultItems.forEach(e => {
-                        elemetsSearch += `<div class="w-5/12 mb-5">
+                        elemetsSearch += `<a href="list-item/${e.id}/detail-item" class="w-5/12 mb-5">
                             <img src="{{ asset('./storage/${e.gambar}') }}" alt="">
                             <article class="text-center text-xl ">
                             ${e.nama}
                             </article>
-                            </div>`
+                            </a>`
                         $('#search-items').html(elemetsSearch)
                     });
 
