@@ -145,6 +145,7 @@ class AuthAdminController extends Controller
             'password' => 'required|min:6'
         ]);
 
+
         if (Auth::guard('webadmin')->attempt($validated)) {
             // $request->session()->regenerate();
             return redirect()->intended('/admin/dashboard');

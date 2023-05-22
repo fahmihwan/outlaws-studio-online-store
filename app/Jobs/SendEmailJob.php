@@ -34,8 +34,8 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
 
-        // Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($this->data));
-        Mail::to('fahmiihwan86@gmail.com')->queue(new Bill_mail($this->data));
+        Mail::to('fahmiihwan86@gmail.com')->send(new Bill_mail($this->data));
+        // Mail::to('fahmiihwan86@gmail.com')->queue(new Bill_mail($this->data));
 
 
 
